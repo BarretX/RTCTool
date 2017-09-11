@@ -49,11 +49,9 @@ public class Main {
 	public static void main(String[] args) 
 	{
 		String repositoryURI ="https://ccmclm.rockwellautomation.com/ccm";
-		//String userId = "JMa7";
-	    //String password = "WelcomeLaneMa00";
 	    
-	    String userId = "yzhai";
-	    String password = "ZYT1017rockwell";
+	    String userId = "**";
+	    String password = "**";
 	    LoginHandler handler=new LoginHandler(userId,password,repositoryURI);
 	    
 	    ITeamRepository repository=handler.login();
@@ -146,6 +144,7 @@ public class Main {
 	        			Label label=new Label(i,0,needAttributeList.get(i));
 	        			sheet.addCell(label);
 	        		}
+	        		
 	        		
 	        		for(int i=0;i<resultList.size();i++)
 	        		{
