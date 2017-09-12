@@ -49,7 +49,7 @@ public class Main {
 	{
 		String repositoryURI ="https://ccmclm.rockwellautomation.com/ccm";
 	    
-	    String userId = "JMa7";
+	    String userId = "axiong3";
 	    String password = "**";
 	    LoginHandler handler=new LoginHandler(userId,password,repositoryURI);
 	    

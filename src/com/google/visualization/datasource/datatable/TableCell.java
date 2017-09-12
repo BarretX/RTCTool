@@ -16,6 +16,7 @@ package com.google.visualization.datasource.datatable;
 
 import com.google.common.collect.Maps;
 import com.google.visualization.datasource.datatable.value.BooleanValue;
+import com.google.visualization.datasource.datatable.value.IntValue;
 import com.google.visualization.datasource.datatable.value.NumberValue;
 import com.google.visualization.datasource.datatable.value.TextValue;
 import com.google.visualization.datasource.datatable.value.Value;
@@ -157,6 +158,10 @@ public class TableCell {
   public TableCell(double value) {
     this.value = new NumberValue(value);
   }
+  
+  public TableCell(int value) {
+	    this.value = new IntValue(value);
+	  }
 
   /**
    * Returns the inner value of this cell.

@@ -28,6 +28,7 @@ import com.google.visualization.datasource.datatable.TableRow;
 import com.google.visualization.datasource.datatable.value.BooleanValue;
 import com.google.visualization.datasource.datatable.value.DateTimeValue;
 import com.google.visualization.datasource.datatable.value.DateValue;
+import com.google.visualization.datasource.datatable.value.IntValue;
 import com.google.visualization.datasource.datatable.value.NumberValue;
 import com.google.visualization.datasource.datatable.value.TimeOfDayValue;
 import com.google.visualization.datasource.datatable.value.Value;
@@ -383,6 +384,9 @@ public class JsonRenderer {
         case NUMBER:
           valueJson.append(((NumberValue) value).getValue());
           break;
+        case INT:
+            valueJson.append(((IntValue) value).getValue());
+            break;
         case TEXT:
           valueJson.append("\"");
           valueJson.append(EscapeUtil.jsonEscape(value.toString()));

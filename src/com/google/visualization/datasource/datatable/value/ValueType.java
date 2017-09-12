@@ -29,6 +29,7 @@ import java.util.Map;
 public enum ValueType {
   BOOLEAN("BOOLEAN"),
   NUMBER("NUMBER"),
+  INT("NUMBER"),
   TEXT("STRING"),
   DATE("DATE"),
   TIMEOFDAY("TIMEOFDAY"),
@@ -106,6 +107,8 @@ public enum ValueType {
       ret = new TextValue((String) value);
     } else if ((this == NUMBER) && (value instanceof Number)) {
         ret = new NumberValue(((Number) value).doubleValue());
+    } else if ((this == INT) && (value instanceof Integer)) {
+        ret = new IntValue(((Number) value).intValue());
     } else if ((this == BOOLEAN) && (value instanceof Boolean)) {
         ret = ((Boolean) value).booleanValue() ? BooleanValue.TRUE
                 : BooleanValue.FALSE;
