@@ -3,7 +3,6 @@ package Main;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class Main {
 	{
 		String repositoryURI ="https://ccmclm.rockwellautomation.com/ccm";
 	    
-	    String userId = "**";
+	    String userId = "JMa7";
 	    String password = "**";
 	    LoginHandler handler=new LoginHandler(userId,password,repositoryURI);
 	    
@@ -970,9 +969,24 @@ public class Main {
 				InsertItem.add(String.valueOf(IMPACT_24));
 				InsertItem.add(String.valueOf(IMPACT_16));
 				InsertItem.add(String.valueOf(15));
-				InsertItem.add(String.valueOf(RC_ACTIVE+1));
-				
+				InsertItem.add(String.valueOf(RC_ACTIVE+1));				
 				ResultData.add(InsertItem);	
+				
+				//Record the data in the excel
+				jxl.Workbook wb=Workbook.getWorkbook(new File("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls"));
+				WritableWorkbook book=Workbook.createWorkbook(new File("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls"),wb);
+				
+				WritableSheet sheet=book.getSheet(0);
+				int rsRows = sheet.getRows(); 
+				sheet.addCell(new Label(0,rsRows,sdf2.format(Today.getTime())));
+				sheet.addCell(new Label(1,rsRows,String.valueOf(RC_ACTIVE)));
+				sheet.addCell(new Label(2,rsRows,String.valueOf(IMPACT_24)));
+				sheet.addCell(new Label(3,rsRows,String.valueOf(IMPACT_16)));
+				sheet.addCell(new Label(4,rsRows,String.valueOf(15)));
+				sheet.addCell(new Label(5,rsRows,String.valueOf(RC_ACTIVE+1)));
+				
+				book.write();
+				book.close();				
 			 }				
 		}
 		catch (Exception e) {   
