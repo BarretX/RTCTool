@@ -17,7 +17,7 @@ public class AttributeValue {
 		m_AttributeAsString = new AttributeToString(repository,monitor,projectArea);
 	}
 
-	public  String getValueByDisplyName(IWorkItem workItem,IAttribute iAttribute)
+	public  String getValueByDisplyName(ITeamRepository repository,IWorkItem workItem,IAttribute iAttribute)
 	{
 		String value = "";
 		try {
@@ -90,6 +90,10 @@ public class AttributeValue {
 					if(iAttribute.getDisplayName().equalsIgnoreCase("Resolution"))
 					{
 						return m_AttributeAsString.ResolutionAttribueValue(workItem);
+					}
+					if(iAttribute.getDisplayName().equalsIgnoreCase("Planned for"))
+					{
+						return m_AttributeAsString.getWorkItemPlannedFor(repository,workItem);
 					}
 					value = valueObject.toString();
 			}

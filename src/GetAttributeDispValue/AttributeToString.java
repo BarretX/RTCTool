@@ -322,4 +322,21 @@ public class AttributeToString {
 		}
 		return Resolution;
 	}
+	
+	public String getWorkItemPlannedFor(ITeamRepository repository, IWorkItem workItem) {
+		 if(null == workItem.getTarget())
+		     return "Unassigned";
+		 String plannedFor=null;
+		 try {
+			 IIteration iteration = (IIteration) repository.itemManager().fetchCompleteItem(workItem.getTarget(), IItemManager.DEFAULT, monitor);
+			 plannedFor = iteration.getLabel();
+			 while(null != iteration.getParent()){
+			     iteration = (IIteration) repository.itemManager().fetchCompleteItem(iteration.getParent(), IItemManager.DEFAULT, monitor);
+			     plannedFor = iteration.getLabel() + "/" + plannedFor;
+			 }
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return plannedFor; 
+	}
 }

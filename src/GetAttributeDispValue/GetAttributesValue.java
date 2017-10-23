@@ -82,13 +82,42 @@ public class GetAttributesValue {
 				 List<String> tmplist = new ArrayList<>();
 				 for(IAttribute iAttribute : needIAttributes)
 				 {
-					 tmplist.add(m_AttributeValue.getValueByDisplyName(workItem, iAttribute));
+					 tmplist.add(m_AttributeValue.getValueByDisplyName(repository, workItem, iAttribute));
 				 }
 				 valueListReturn.add(tmplist);
 			}	
 		}catch (TeamRepositoryException e) {
 			e.printStackTrace();
 		}
+		return valueListReturn;
+	}
+	public List<List<String>> GetPointNeedAttribute
+	(
+			ITeamRepository repository,
+			IProgressMonitor monitor,
+			IProjectArea projectArea ,
+			List<IWorkItem> ChildList,
+			List<String> needAttributesName
+	)
+	{
+		List<List<String>> valueListReturn = new ArrayList<List<String>>();
+		List<IAttribute> needIAttributes = new ArrayList<>();
+			for(String displyName : needAttributesName)
+			{
+				if(displyName==null)
+					throw new IllegalArgumentException("displyName does not have");
+				needIAttributes.add(allAttributeMap.get(displyName));
+			}
+			
+			 for(IWorkItem workItem:ChildList)
+			 {
+				 List<String> tmplist = new ArrayList<>();
+				 for(IAttribute iAttribute : needIAttributes)
+				 {
+					 tmplist.add(m_AttributeValue.getValueByDisplyName(repository, workItem, iAttribute));
+				 }
+				 valueListReturn.add(tmplist);
+			}	
 		return valueListReturn;
 	}
 }
