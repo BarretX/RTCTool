@@ -40,10 +40,9 @@ import com.ibm.team.workitem.common.query.IResolvedResult;
 import Charts.Chart;
 import Charts.ColumnChart;
 import Charts.LineChart;
+import EagleEyeAPI.ConstString;
 
-public class Main {
-	private static String front="http://apcndaekbhost:8080";
-	//private static String front="http://10.108.178.43:9000";
+public class Main_ORG {
 	
 	public static void main(String[] args) 
 	{
@@ -134,7 +133,7 @@ public class Main {
 	    		//Save all data
 	    		try
 	    		{	        		
-	        		//打开一个文件的副本，并且指定数据写回到源文件
+	        		//æ‰“å¼€ä¸€ä¸ªæ–‡ä»¶çš„å‰¯æœ¬ï¼Œå¹¶ä¸”æŒ‡å®šæ•°æ�®å†™å›žåˆ°æº�æ–‡ä»¶
 	        		WritableWorkbook book =Workbook.createWorkbook(new File("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Anomaly Metrics_S5KA.xls"));
 	        		WritableSheet sheet=book.createSheet("sourcedata_S5KA", 0);
 	        		
@@ -182,8 +181,8 @@ public class Main {
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 	    		}
 	    		
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Weekly：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Weekly：\n"+front+"/#!/charts/"+ Set_Shippable_RC_Weekly(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Weeklyï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Weeklyï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Weekly(X_Data,Y3_Data));
 	    	    
 	    	    ResultData.clear();
 	    	    X_Data.clear();
@@ -198,8 +197,8 @@ public class Main {
 	    			Y2_Data.add(Integer.parseInt(tmpList3.get(4)));
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(7)));	    			
 	    		}
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Sprint：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Sprint：\n"+front+"/#!/charts/"+ Set_Shippable_RC_Sprint(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Sprintï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Sprintï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Sprint(X_Data,Y3_Data));
 	    	    
 	    	   
 	    	    
@@ -216,8 +215,8 @@ public class Main {
 	    			Y2_Data.add(Integer.parseInt(tmpList3.get(2)));
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 	    		}
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Monthly：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Monthly：\n"+front+"/#!/charts/"+ Set_Shippable_RC_Monthly(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Monthlyï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Monthlyï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Monthly(X_Data,Y3_Data));
 	    	    
 	    	  //calculate the anomaly count created in every week
 	    	   /*(0)Sprint;(1)S5KA Incoming;(2)S5KA Fixed; (3)S5KA Incoming total; (4)S5KA Fixed total
@@ -247,10 +246,10 @@ public class Main {
 	    			Y2_Data_4.add(Integer.parseInt(tmpList3.get(8)));
 	    		}
 	    		
-	    	    System.out.println("S5KA Runrate(all anomaly)：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1));
-	    	    System.out.println("S5KA Stability(all anomaly)：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2));
-	    	    System.out.println("S5KA Runrate(RC)：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3));
-	    	    System.out.println("S5KA Stability(RC)：\n"+front+"/#!/charts/"+ Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4));
+	    	    System.out.println("S5KA Runrate(all anomaly)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1));
+	    	    System.out.println("S5KA Stability(all anomaly)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2));
+	    	    System.out.println("S5KA Runrate(RC)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3));
+	    	    System.out.println("S5KA Stability(RC)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4));
 	    	}
 	    	
 		} catch (Exception e) {
@@ -882,22 +881,22 @@ public class Main {
 		jxl.Workbook readwb=null;
 		try
 		{
-			//构建Workbook对象，只读Workbook对象
-			//直接从本地文件创建Workbook
+			//æž„å»ºWorkbookå¯¹è±¡ï¼Œå�ªè¯»Workbookå¯¹è±¡
+			//ç›´æŽ¥ä»Žæœ¬åœ°æ–‡ä»¶åˆ›å»ºWorkbook
 			InputStream instream = new FileInputStream("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls");
 			readwb=Workbook.getWorkbook(instream);
 			
-			//Sheet的下标是从0开始
-			//获取第一张Sheet表
+			//Sheetçš„ä¸‹æ ‡æ˜¯ä»Ž0å¼€å§‹
+			//èŽ·å�–ç¬¬ä¸€å¼ Sheetè¡¨
 			Sheet readsheet=readwb.getSheet(0);
 			 
-	        //获取Sheet表中所包含的总列数   	  
+	        //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»åˆ—æ•°   	  
 	           int rsColumns = readsheet.getColumns();   
 	  
-	           //获取Sheet表中所包含的总行数   
+	           //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»è¡Œæ•°   
 	       int rsRows = readsheet.getRows(); 
 	       
-	     //获取指定单元格的对象引用   并更新元数据列表（添加历史数据）	           
+	     //èŽ·å�–æŒ‡å®šå�•å…ƒæ ¼çš„å¯¹è±¡å¼•ç”¨   å¹¶æ›´æ–°å…ƒæ•°æ�®åˆ—è¡¨ï¼ˆæ·»åŠ åŽ†å�²æ•°æ�®ï¼‰	           
 	       for (int i = 1; i < rsRows; i++)   	 
 	        {   
 	    	   ArrayList<String> InsertItem=new ArrayList<String>();
@@ -920,17 +919,17 @@ public class Main {
 	            readwb.close();    
 	       } 
 		
-		//获取最后的更新时间
+		//èŽ·å�–æœ€å�Žçš„æ›´æ–°æ—¶é—´
 		try
 		{
-			Date tempDate=sdf2.parse(ResultData.get(ResultData.size()-1).get(0));//最后一行最后一列
+			Date tempDate=sdf2.parse(ResultData.get(ResultData.size()-1).get(0));//æœ€å�Žä¸€è¡Œæœ€å�Žä¸€åˆ—
 			
 			LastUpdateDay.setTime(tempDate);
 			LastUpdateDay.set(Calendar.HOUR, 0);
 			LastUpdateDay.set(Calendar.MINUTE, 0);
 			LastUpdateDay.set(Calendar.SECOND, 0);
 			
-			if((Today.get(Calendar.DAY_OF_WEEK)==Calendar.MONDAY)&&(Today.after(LastUpdateDay)))//当前时间为周一并且大于上一次更新时间
+			if((Today.get(Calendar.DAY_OF_WEEK)==Calendar.MONDAY)&&(Today.after(LastUpdateDay)))//å½“å‰�æ—¶é—´ä¸ºå‘¨ä¸€å¹¶ä¸”å¤§äºŽä¸Šä¸€æ¬¡æ›´æ–°æ—¶é—´
 			{
 				ArrayList<String> InsertItem=new ArrayList<String>();
 				for(ArrayList<String> tempList:sourcedata)
@@ -1015,22 +1014,22 @@ public class Main {
 		jxl.Workbook readwb=null;
 		try
 		{
-			//构建Workbook对象，只读Workbook对象
-			//直接从本地文件创建Workbook
+			//æž„å»ºWorkbookå¯¹è±¡ï¼Œå�ªè¯»Workbookå¯¹è±¡
+			//ç›´æŽ¥ä»Žæœ¬åœ°æ–‡ä»¶åˆ›å»ºWorkbook
 			InputStream instream = new FileInputStream("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls");
 			readwb=Workbook.getWorkbook(instream);
 			
-			//Sheet的下标是从0开始
+			//Sheetçš„ä¸‹æ ‡æ˜¯ä»Ž0å¼€å§‹
 			//Anomaly Metrics_S5KA Sprint
 			Sheet readsheet=readwb.getSheet(1);
 			 
-	        //获取Sheet表中所包含的总列数   	  
+	        //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»åˆ—æ•°   	  
 	           int rsColumns = readsheet.getColumns();   
 	  
-	           //获取Sheet表中所包含的总行数   
+	           //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»è¡Œæ•°   
 	       int rsRows = readsheet.getRows(); 
 	       	       
-	     //获取指定单元格的对象引用   并更新元数据列表（添加历史数据）	           
+	     //èŽ·å�–æŒ‡å®šå�•å…ƒæ ¼çš„å¯¹è±¡å¼•ç”¨   å¹¶æ›´æ–°å…ƒæ•°æ�®åˆ—è¡¨ï¼ˆæ·»åŠ åŽ†å�²æ•°æ�®ï¼‰	           
 	       for (int i = 1; i < rsRows; i++)   	 
 	        {   
 	    	   ArrayList<String> InsertItem=new ArrayList<String>();
@@ -1131,21 +1130,21 @@ public class Main {
 		jxl.Workbook readwb=null;
 		try
 		{
-			//构建Workbook对象，只读Workbook对象
-			//直接从本地文件创建Workbook
+			//æž„å»ºWorkbookå¯¹è±¡ï¼Œå�ªè¯»Workbookå¯¹è±¡
+			//ç›´æŽ¥ä»Žæœ¬åœ°æ–‡ä»¶åˆ›å»ºWorkbook
 			InputStream instream = new FileInputStream("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls");
 			readwb=Workbook.getWorkbook(instream);
 			
 			//Anomaly Metrics_S5KA Monthly  Sheet2
 			Sheet readsheet=readwb.getSheet(2);
 			 
-	        //获取Sheet表中所包含的总列数   	  
+	        //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»åˆ—æ•°   	  
 	           int rsColumns = readsheet.getColumns();   
 	  
-	           //获取Sheet表中所包含的总行数   
+	           //èŽ·å�–Sheetè¡¨ä¸­æ‰€åŒ…å�«çš„æ€»è¡Œæ•°   
 	       int rsRows = readsheet.getRows(); 
 	       
-	     //获取指定单元格的对象引用   并更新元数据列表（添加历史数据）	           
+	     //èŽ·å�–æŒ‡å®šå�•å…ƒæ ¼çš„å¯¹è±¡å¼•ç”¨   å¹¶æ›´æ–°å…ƒæ•°æ�®åˆ—è¡¨ï¼ˆæ·»åŠ åŽ†å�²æ•°æ�®ï¼‰	           
 	       for (int i = 1; i < rsRows; i++)   	 
 	        {   
 	    	   ArrayList<String> InsertItem=new ArrayList<String>();

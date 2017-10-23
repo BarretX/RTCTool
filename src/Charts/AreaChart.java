@@ -8,7 +8,7 @@ public class AreaChart extends Chart {
 	
 	public AreaChart(String chartName)
 	{
-		chartType="BChart";
+		chartType="AreaChart";
 		title=chartName;
 	}
 	
