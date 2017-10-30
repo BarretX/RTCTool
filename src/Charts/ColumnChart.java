@@ -3,7 +3,7 @@ package Charts;
 import com.google.visualization.datasource.render.JsonRenderer;
 
 public class ColumnChart extends Chart {
-	public String isStacked= "true";
+	public String isStacked= "false";
 	
 	public ColumnChart(String chartName)
 	{

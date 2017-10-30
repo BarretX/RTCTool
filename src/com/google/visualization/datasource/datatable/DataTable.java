@@ -110,12 +110,12 @@ public class DataTable {
       throw new TypeMismatchException("Row has too many cells. Should be at most of size: " +
           columns.size());
     }
-    for (int i = 0; i < cells.size(); i++) {
+    /*for (int i = 0; i < cells.size(); i++) {
       if (cells.get(i).getType() != columns.get(i).getType()) {
         throw new TypeMismatchException("Cell type does not match column type, at index: " + i +
             ". Should be of type: " + columns.get(i).getType().toString());
       }
-    }
+    }*/
     for (int i = cells.size(); i < columns.size(); i++) {
       row.addCell(new TableCell(Value.getNullValueFromValueType(columns.get(i).getType())));
     }

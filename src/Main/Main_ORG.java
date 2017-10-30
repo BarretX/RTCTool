@@ -48,8 +48,8 @@ public class Main_ORG {
 	{
 		String repositoryURI ="https://ccmclm.rockwellautomation.com/ccm";
 	    
-	    String userId = "axiong3";
-	    String password = "**";
+	    String userId = "JMa7";
+	    String password = "WelcomeLaneMa00";
 	    LoginHandler handler=new LoginHandler(userId,password,repositoryURI);
 	    
 	    ITeamRepository repository=handler.login();
@@ -109,7 +109,7 @@ public class Main_ORG {
 	    try {
 
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(1), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(0), null, conditionsList);		    
 	    		 
 	    	if(resultOwner!=null)
 	    	{
@@ -133,8 +133,7 @@ public class Main_ORG {
 	    		//Save all data
 	    		try
 	    		{	        		
-	        		//æ‰“å¼€ä¸€ä¸ªæ–‡ä»¶çš„å‰¯æœ¬ï¼Œå¹¶ä¸”æŒ‡å®šæ•°æ�®å†™å›žåˆ°æº�æ–‡ä»¶
-	        		WritableWorkbook book =Workbook.createWorkbook(new File("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Anomaly Metrics_S5KA.xls"));
+	        		WritableWorkbook book =Workbook.createWorkbook(new File("ExcelSource/Anomaly Metrics_S5KA.xls"));
 	        		WritableSheet sheet=book.createSheet("sourcedata_S5KA", 0);
 	        		
 	        		for(int i=0;i<needAttributeList.size();i++)
@@ -181,8 +180,8 @@ public class Main_ORG {
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 	    		}
 	    		
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Weeklyï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Weeklyï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Weekly(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Weekly:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Weekly:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Weekly(X_Data,Y3_Data));
 	    	    
 	    	    ResultData.clear();
 	    	    X_Data.clear();
@@ -197,8 +196,8 @@ public class Main_ORG {
 	    			Y2_Data.add(Integer.parseInt(tmpList3.get(4)));
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(7)));	    			
 	    		}
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Sprintï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Sprintï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Sprint(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Sprint:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Sprint:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Sprint(X_Data,Y3_Data));
 	    	    
 	    	   
 	    	    
@@ -215,8 +214,8 @@ public class Main_ORG {
 	    			Y2_Data.add(Integer.parseInt(tmpList3.get(2)));
 	    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 	    		}
-	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Monthlyï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data));
-	    	    System.out.println("Shippable State_S5KA RC anomaly Monthlyï¼š\n"+ConstString.CHART_URL+ Set_Shippable_RC_Monthly(X_Data,Y3_Data));
+	    	    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Monthly:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data));
+	    	    System.out.println("Shippable State_S5KA RC anomaly Monthly:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Monthly(X_Data,Y3_Data));
 	    	    
 	    	  //calculate the anomaly count created in every week
 	    	   /*(0)Sprint;(1)S5KA Incoming;(2)S5KA Fixed; (3)S5KA Incoming total; (4)S5KA Fixed total
@@ -246,10 +245,10 @@ public class Main_ORG {
 	    			Y2_Data_4.add(Integer.parseInt(tmpList3.get(8)));
 	    		}
 	    		
-	    	    System.out.println("S5KA Runrate(all anomaly)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1));
-	    	    System.out.println("S5KA Stability(all anomaly)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2));
-	    	    System.out.println("S5KA Runrate(RC)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3));
-	    	    System.out.println("S5KA Stability(RC)ï¼š\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4));
+	    	    System.out.println("S5KA Runrate(all anomaly):\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1));
+	    	    System.out.println("S5KA Stability(all anomaly):\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2));
+	    	    System.out.println("S5KA Runrate(RC):\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3));
+	    	    System.out.println("S5KA Stability(RC):\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4));
 	    	}
 	    	
 		} catch (Exception e) {
@@ -883,7 +882,7 @@ public class Main_ORG {
 		{
 			//æž„å»ºWorkbookå¯¹è±¡ï¼Œå�ªè¯»Workbookå¯¹è±¡
 			//ç›´æŽ¥ä»Žæœ¬åœ°æ–‡ä»¶åˆ›å»ºWorkbook
-			InputStream instream = new FileInputStream("C://Users/jma7/Desktop/Susie 1 day/ExcelSource/Source Data.xls");
+			InputStream instream = new FileInputStream("ExcelSource/Source Data.xls");
 			readwb=Workbook.getWorkbook(instream);
 			
 			//Sheetçš„ä¸‹æ ‡æ˜¯ä»Ž0å¼€å§‹

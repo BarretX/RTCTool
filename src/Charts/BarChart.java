@@ -5,6 +5,7 @@ import com.google.visualization.datasource.render.JsonRenderer;
 public class BarChart extends Chart {
 	
 	public String isStacked= "true";
+	public int chartLeft=200;
 	
 	public BarChart(String chartName)
 	{
@@ -30,7 +31,7 @@ public class BarChart extends Chart {
 		String AxisFormat=",\"vAxis\":{\"title\":\""+xTitle+"\"},\"hAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
 		
 		String head="\"description\": \""+description
-				+"\",\"options\":{\"title\":\""+title+"\""+",\"isStacked\": "+isStacked+colors+AxisFormat+"},\"chartType\":\""+chartType+"\",\"datatable\":";
+				+"\",\"options\":{\"title\":\""+title+"\""+",\"chartArea\": {\"left\":"+chartLeft+"}"+",\"isStacked\": "+isStacked+colors+AxisFormat+"},\"chartType\":\""+chartType+"\",\"datatable\":";
 		
 		String body=JsonRenderer.renderDataTable(tableData, true, true, true).toString();
 		return "{"+head+body+"}";
