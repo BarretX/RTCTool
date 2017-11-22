@@ -1,4 +1,4 @@
-package EagleEyeTest;
+package Test;
 
 
 import java.util.Arrays;
@@ -9,7 +9,6 @@ import com.google.visualization.datasource.datatable.DataTable;
 import com.google.visualization.datasource.datatable.TableCell;
 import com.google.visualization.datasource.datatable.TableRow;
 import com.google.visualization.datasource.datatable.value.ValueType;
-
 import Charts.Chart;
 import Charts.AreaChart;
 import Charts.BarChart;
@@ -17,13 +16,12 @@ import Charts.ChartSets;
 import Charts.ColumnChart;
 import Charts.ComboChart;
 import Charts.LineChart;
-import EagleEyeAPI.ConstString;
-import Product.S5KA;
+import ConstVar.ConstString;
 
 
 public class Test {
   
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		
 		// TODO Auto-generated method stub
 		String chartID1=Create_BarChart();
@@ -41,7 +39,7 @@ public class Test {
 		System.out.println("chartSet url:\n"+ ConstString.CHART_SET_URL + chartSetID);
 		//Example:  http://apcndaec3ycs12:8080/#!/chart-sets/59ed906da8e8eb07883a2ed8
 		
-	}
+	}*/
 
 	public static String Create_AreaChart()
 	{						

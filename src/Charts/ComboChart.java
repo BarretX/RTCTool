@@ -3,9 +3,7 @@ package Charts;
 import com.google.visualization.datasource.render.JsonRenderer;
 
 public class ComboChart extends Chart {
-	
-	public int baseLineIndex=2;
-	
+		
 	public ComboChart(String chartName)
 	{
 		chartType="ComboChart";

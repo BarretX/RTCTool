@@ -3,9 +3,7 @@ package Charts;
 import com.google.visualization.datasource.render.JsonRenderer;
 
 public class AreaChart extends Chart {
-	
-	public String isStacked= "true";
-	
+		
 	public AreaChart(String chartName)
 	{
 		chartType="AreaChart";

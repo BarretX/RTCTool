@@ -3,10 +3,7 @@ package Charts;
 import com.google.visualization.datasource.render.JsonRenderer;
 
 public class BarChart extends Chart {
-	
-	public String isStacked= "true";
-	public int chartLeft=200;
-	
+		
 	public BarChart(String chartName)
 	{
 		chartType="BarChart";

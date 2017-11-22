@@ -17,6 +17,9 @@ public class Chart implements  IToJson,IToEagleEye {
 	public String yAxisFormat="";
 	public List<String> colorList=null;
 	public DataTable tableData;
+	public String isStacked= "true";
+	public int chartLeft=200;
+	public int baseLineIndex=2;
 	
 	@Override
 	public String ToJson() {

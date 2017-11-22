@@ -1,5 +1,8 @@
 package EagleEyeAPI;
 
+import ConstVar.ConstString;
+import Helper.HttpRequest;
+
 public class EagleEyeAPI {
 	public static String createChart(String json) {
 		// TODO Auto-generated method stub

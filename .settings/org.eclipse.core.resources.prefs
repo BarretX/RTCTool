@@ -1,4 +1,3 @@
 eclipse.preferences.version=1
 encoding//src/API.Config=UTF-8
-encoding//src/Main/Main.java=UTF-8
-encoding//src/Product/S5KA.java=UTF-8
+encoding//src/DataForChart/S5KADataFactory.java=UTF-8
