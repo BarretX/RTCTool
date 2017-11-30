@@ -1,22 +1,55 @@
 package ConstVar;
 
+import org.dom4j.Document;
+import org.dom4j.Element;
+
+import Helper.XmlParseHelper;
+
 public class ConstString {
 	//Get const string from API.config
 	static
 	{
+		Document document=XmlParseHelper.load("APP.Config");
+
+		Element CHART_URL_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='CHART_URL']");
+		Element CHART_SET_URL_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='CHART_SET_URL']");
+		Element CHART_API_URL_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='CHART_API_URL']");
+		Element CHART_SET_API_URL_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='CHART_SET_API_URL']");
+		Element REPOSITORY_URI_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='REPOSITORY_URI']");
+		Element USER_ID_element=(Element)document.selectSingleNode("/configuration/loginInfo/Info[@name ='USER_ID']");
+		Element PASSWORD_element=(Element)document.selectSingleNode("/configuration/loginInfo/Info[@name ='PASSWORD']");
 		
+		if(CHART_URL_element == null
+				||CHART_SET_URL_element == null
+				||CHART_API_URL_element == null
+				||CHART_SET_API_URL_element == null
+				||REPOSITORY_URI_element == null
+				||USER_ID_element == null
+				||PASSWORD_element == null)
+		{
+			System.out.println("读取配置文件错误");
+			System.exit(0);
+		}
+			
+		CHART_URL=CHART_URL_element.attributeValue("value");
+		CHART_SET_URL=CHART_SET_URL_element.attributeValue("value");
+		CHART_API_URL=CHART_API_URL_element.attributeValue("value");
+		CHART_SET_API_URL=CHART_SET_API_URL_element.attributeValue("value");
+		REPOSITORY_URI=REPOSITORY_URI_element.attributeValue("value");
+		USER_ID=USER_ID_element.attributeValue("value");
+		PASSWORD=PASSWORD_element.attributeValue("value");		
 	}
 	
 	// URL for EagleEye
-	public static String CHART_URL="http://apcndaec3ycs12:8080/#!/charts/";
-	public static String CHART_SET_URL="http://apcndaec3ycs12:8080/#!/chart-sets/";
-	public static String CHART_API_URL="http://apcndaec3ycs12:3000/api/v1/charts";
-	public static String CHART_SET_API_URL="http://apcndaec3ycs12:3000/api/v1/chart-sets";
+	public static String CHART_URL;
+	public static String CHART_SET_URL;
+	public static String CHART_API_URL;
+	public static String CHART_SET_API_URL;
 	
 	//Info for Login
-	public static String REPOSITORY_URI="https://ccmclm.rockwellautomation.com/ccm";
-	public static String USER_ID="JMa7";
-	public static String PASSWORD="WelcomeLaneMa00";
+	public static String REPOSITORY_URI;
+	public static String USER_ID;
+	public static String PASSWORD;
 	
 	//Product and Chart Name
 	public final static String S5KA_NAME="S5KA";

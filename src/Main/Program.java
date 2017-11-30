@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+
 import com.ibm.team.repository.client.ITeamRepository;
 import Login.LoginHandler;
 import ConstVar.*;
 import DataForChart.FTViewSEDataFactory;
 import DataForChart.ProductData;
 import DataForChart.S5KADataFactory;
+import Helper.XmlParseHelper;
 import ChartManage.ChartManager;
 import Charts.*;
 
@@ -38,7 +43,7 @@ public class Program {
 	public static void createCharts()
 	{
 	//	createChartsForS5KA_PM();
-//		createChartsForS5KA_QA();
+		createChartsForS5KA_QA();
 		
 	//	createChartsForCCW_PM();
 	//	createChartsForCCW_QA();
@@ -114,7 +119,10 @@ public class Program {
 	}
 	public static void saveChartsToXML()
 	{
-		
+		Document document=XmlParseHelper.load("RTCURLS.xml");
+		saveS5KA_UrlToXml(document);
+		saveFTViewSE_UrlToXml(document);
+		XmlParseHelper.persist(document,"RTCURLS.xml");
 	}
 	
 	
@@ -345,5 +353,84 @@ public class Program {
 	{
 		for (String name : map.keySet())
 			System.out.println("<Chart>"+name +":    "+ ConstString.CHART_URL +map.get(name));
+	}
+	
+	public static void saveS5KA_UrlToXml(Document document)
+	{
+		if(document==null)
+			return;
+		
+		if(ChartSetForS5KA_PM!=null)
+		{
+			
+			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_PM']");
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForS5KA_PM);
+		}
+		if(ChartsForS5KA_PM!=null)
+		{
+			for(String key:ChartsForS5KA_PM.keySet())
+			{
+				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_PM']/Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForS5KA_PM.get(key));
+			}
+		}
+		if(ChartSetForS5KA_QA!=null)
+		{
+			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_QA']");
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForS5KA_QA);
+		}
+
+		if(ChartsForS5KA_QA!=null)
+		{
+			for(String key:ChartsForS5KA_QA.keySet())
+			{
+				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_QA']/Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForS5KA_QA.get(key));
+			}
+		}
+
+	}
+	public static void saveFTViewSE_UrlToXml(Document document)
+	{
+		if(document==null)
+			return;
+		
+		if(ChartSetForFTViewSE_PM!=null)
+		{
+			
+			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='FTViewSE']/Charts[@name ='ChartSetForFTViewSE_PM']");
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTViewSE_PM);
+		}
+		if(ChartsForFTViewSE_PM!=null)
+		{
+			for(String key:ChartsForFTViewSE_PM.keySet())
+			{
+				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='FTViewSE']/Charts[@name ='FTViewSE_For_PM']/Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_PM.get(key));
+			}
+		}
+		if(ChartSetForFTViewSE_QA!=null)
+		{
+			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='FTViewSE']/Charts[@name ='ChartSetForFTViewSE_QA']");
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTViewSE_QA);
+		}
+
+		if(ChartsForFTViewSE_QA!=null)
+		{
+			for(String key:ChartsForFTViewSE_QA.keySet())
+			{
+				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='FTViewSE']/Charts[@name ='FTViewSE_For_QA']/Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_QA.get(key));
+			}
+		}
+
 	}
 }

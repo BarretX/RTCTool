@@ -105,5 +105,7 @@
 	<classpathentry kind="lib" path="libForEagleEye/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="libForEagleEye/opencsv-1.8.jar"/>
 	<classpathentry kind="lib" path="libForRTC/jxl.jar"/>
+	<classpathentry kind="lib" path="LibForXmlHelper/dom4j-2.1.0.jar"/>
+	<classpathentry kind="lib" path="LibForXmlHelper/jaxen-1.1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
