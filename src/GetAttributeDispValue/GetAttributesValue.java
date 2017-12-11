@@ -9,10 +9,14 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.ibm.team.process.common.IProcessArea;
+import com.ibm.team.process.common.IProcessAreaHandle;
 import com.ibm.team.process.common.IProjectArea;
+import com.ibm.team.repository.client.IItemManager;
 import com.ibm.team.repository.client.ITeamRepository;
 import com.ibm.team.repository.common.TeamRepositoryException;
 import com.ibm.team.workitem.client.IWorkItemClient;
+import com.ibm.team.workitem.common.IWorkItemCommon;
 import com.ibm.team.workitem.common.model.IAttribute;
 import com.ibm.team.workitem.common.model.IWorkItem;
 import com.ibm.team.workitem.common.query.IQueryResult;
@@ -69,10 +73,17 @@ public class GetAttributesValue {
 			for(String displyName : needAttributesName)
 			{
 				if(displyName==null)
+					throw new IllegalArgumentException("displyName is null");
+				if(allAttributeMap.get(displyName)!=null)
+				{
+					needIAttributes.add(allAttributeMap.get(displyName));
+				}
+				else
+				{
 					throw new IllegalArgumentException("displyName does not have");
-				needIAttributes.add(allAttributeMap.get(displyName));
-			}
-			
+				}
+					
+			}			
 			IResolvedResult<IWorkItem> resolved =null;
 			IWorkItem workItem = null;
 			while(resultAll.hasNext(monitor))
@@ -91,6 +102,7 @@ public class GetAttributesValue {
 		}
 		return valueListReturn;
 	}
+
 	public List<List<String>> GetPointNeedAttribute
 	(
 			ITeamRepository repository,
@@ -119,5 +131,49 @@ public class GetAttributesValue {
 				 valueListReturn.add(tmplist);
 			}	
 		return valueListReturn;
+	}
+	
+	public List<String> GetTeamAreaList
+	(
+			ITeamRepository repository,
+			IProgressMonitor monitor,
+			IProjectArea projectArea ,
+			IQueryResult<IResolvedResult<IWorkItem>> resultAll
+	)
+	{
+		if(resultAll==null)
+			return null;	
+		List<String> valueListReturn = new ArrayList<String>();
+		IWorkItemCommon workItemCommon = (IWorkItemCommon) repository.getClientLibrary(IWorkItemCommon.class);
+		try {
+			IResolvedResult<IWorkItem> resolved =null;
+			IWorkItem workItem = null;
+			while(resultAll.hasNext(monitor))
+			{
+				 resolved = resultAll.next(monitor);
+				 workItem = (IWorkItem)resolved.getItem();
+				 valueListReturn.add(getTeamArea(repository, workItem, monitor,workItemCommon));
+			}	
+		}catch (TeamRepositoryException e) {
+			e.printStackTrace();
+		}
+		return valueListReturn;
+	}
+	
+	public String getTeamArea(ITeamRepository repository, IWorkItem workItem,IProgressMonitor monitor,IWorkItemCommon workItemCommon)
+	{
+		String TeamAreaName = "";
+		if(workItemCommon == null)
+		{
+			workItemCommon = (IWorkItemCommon) repository.getClientLibrary(IWorkItemCommon.class);
+		}
+		try {
+			IProcessAreaHandle processAreaHandle = workItemCommon.findProcessArea(workItem, null);
+	        IProcessArea processArea = (IProcessArea) repository.itemManager().fetchCompleteItem(processAreaHandle, IItemManager.REFRESH, monitor);
+	        TeamAreaName = processArea.getName();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+         return TeamAreaName;
 	}
 }
