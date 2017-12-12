@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 import com.ibm.team.repository.client.ITeamRepository;
 import Login.LoginHandler;
@@ -17,6 +20,9 @@ import DataForChart.S5KADataFactory;
 import Helper.XmlParseHelper;
 import ChartManage.ChartManager;
 import Charts.*;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Program {
 
@@ -43,7 +49,7 @@ public class Program {
 	public static void createCharts()
 	{
 	//	createChartsForS5KA_PM();
-	//	createChartsForS5KA_QA();
+		createChartsForS5KA_QA();
 		
 	//	createChartsForCCW_PM();
 	//	createChartsForCCW_QA();
@@ -51,7 +57,7 @@ public class Program {
 	//	createChartsForFTAC_PM();
 	//	createChartsForFTAC_QA();
 		
-		createChartsForFTViewSE_PM();
+	//	createChartsForFTViewSE_PM();
 	//	createChartsForFTViewSE_QA();
 	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();
@@ -119,10 +125,11 @@ public class Program {
 	}
 	public static void saveChartsToXML()
 	{
-		Document document=XmlParseHelper.load("RTCURLS.xml");
+		Document document=XmlParseHelper.load("config.xml");
 		saveS5KA_UrlToXml(document);
 		saveFTViewSE_UrlToXml(document);
-		XmlParseHelper.persist(document,"RTCURLS.xml");
+		//updateXmlTime(document);
+		XmlParseHelper.persist(document,"config.xml");
 	}
 	
 	
@@ -350,78 +357,68 @@ public class Program {
 	{
 		if(document==null)
 			return;
-		
-		if(ChartSetForS5KA_PM!=null)
-		{
-			
-			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_PM']");
-			if(e != null)
-				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForS5KA_PM);
-		}
+		Node s5kaNode=document.selectSingleNode("/Products/Bucket[@name='Logix']/Product[@name ='S5KA']");
+		if(s5kaNode==null)
+			return;
+
 		if(ChartsForS5KA_PM!=null)
 		{
 			for(String key:ChartsForS5KA_PM.keySet())
 			{
-				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_PM']/Chart[@name=\'%s\']", key));
+				Element e=(Element)s5kaNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
 				if(e != null)
 					e.addAttribute("url", ConstString.CHART_URL + ChartsForS5KA_PM.get(key));
 			}
 		}
-		if(ChartSetForS5KA_QA!=null)
-		{
-			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_QA']");
-			if(e != null)
-				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForS5KA_QA);
-		}
-
 		if(ChartsForS5KA_QA!=null)
 		{
 			for(String key:ChartsForS5KA_QA.keySet())
 			{
-				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='S5KA']/Charts[@name ='S5KA_For_QA']/Chart[@name=\'%s\']", key));
+				Element e=(Element)s5kaNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
 				if(e != null)
 					e.addAttribute("url", ConstString.CHART_URL + ChartsForS5KA_QA.get(key));
 			}
 		}
-
+		updateXmlTime(s5kaNode);
 	}
 	public static void saveFTViewSE_UrlToXml(Document document)
 	{
 		if(document==null)
 			return;
-		
-		if(ChartSetForFTViewSE_PM!=null)
-		{
-			
-			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='FTViewSE']/Charts[@name ='ChartSetForFTViewSE_PM']");
-			if(e != null)
-				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTViewSE_PM);
-		}
+		Node FTViewSENode=document.selectSingleNode("/Products/Bucket[@name='FTView']/Product[@name ='FTView SE']");
+		if(FTViewSENode==null)
+			return;
 		if(ChartsForFTViewSE_PM!=null)
 		{
 			for(String key:ChartsForFTViewSE_PM.keySet())
 			{
-				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='FTViewSE']/Charts[@name ='FTViewSE_For_PM']/Chart[@name=\'%s\']", key));
+				Element e=(Element)FTViewSENode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
 				if(e != null)
 					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_PM.get(key));
 			}
-		}
-		if(ChartSetForFTViewSE_QA!=null)
-		{
-			Element e=(Element)document.selectSingleNode("/Products/Product[@name ='FTViewSE']/Charts[@name ='ChartSetForFTViewSE_QA']");
-			if(e != null)
-				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTViewSE_QA);
 		}
 
 		if(ChartsForFTViewSE_QA!=null)
 		{
 			for(String key:ChartsForFTViewSE_QA.keySet())
 			{
-				Element e=(Element)document.selectSingleNode(String.format("/Products/Product[@name ='FTViewSE']/Charts[@name ='FTViewSE_For_QA']/Chart[@name=\'%s\']", key));
+				Element e=(Element)FTViewSENode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
 				if(e != null)
 					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_QA.get(key));
 			}
 		}
-
+		updateXmlTime(FTViewSENode);
+	}
+	
+	private static void updateXmlTime(Node document)
+	{
+		List<Node> timeNodes =document.selectNodes(".//@time");
+		//SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		for(Node n : timeNodes)
+		{
+			Attribute timeAttri=(Attribute)n;
+			timeAttri.setValue(df.format(new Date()));
+		}	
 	}
 }

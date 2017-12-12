@@ -229,7 +229,7 @@ public class FTViewSEDataFactory {
 		    		
 		    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 		    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Original Commitment"));
-		    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Story Points Finish"));
+		    		//FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Story Points Finish"));
 		    		
 		    		//Chart data
 		    				//////////////////////////////////////////////

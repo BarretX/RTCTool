@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Products name="Program">
+	<Bucket name="FTView" title="FTView" id="ftview">
+		<Product name="FTView ART" title="FTView ART" id="ftview_art">
+		</Product>
+		<Product name="FTView SE" title="FTView SE" id="ftview_se">
+			<!-- Charts for PM -->
+			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
+				<ChartGroup name="Trend" title="Trend" time="ttt">
+					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f2e" time="ttt"/>
+					<Chart name="Trend by Epic" title="Trend by Epic" url="#" time="ttt"/>
+					<Chart name="Trend by Team" title="Trend by Team" url="#" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="ttt">
+					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f30" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="ttt">
+					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f31" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Feature Progress" title="Feature Progress" time="ttt">
+					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/59f6ead7a8e8eb07883a2f7a" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Resource" title="Resource" time="ttt">
+					<Chart name="Resource by Sprint" title="Resource by Sprint" url="#" time="ttt"/>
+				</ChartGroup>	
+			</Charts>
+			<!-- Charts for QA -->
+			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">	
+			</Charts>
+		</Product>
+		<Product name="FTView ME" title="FTView ME" id="ftview_me">
+		</Product>
+		<Product name="FTVP" title="FTVP" id="ftvp">
+		</Product>
+		<Product name="FTAE" title="FTAE" id="ftae">
+		</Product>
+	</Bucket>
+	<Bucket name="Services" title="Services" id="services">
+		<Product name="FTSP" title="FTSP" id="ftsp">
+		</Product>
+		<Product name="RSNetWorx" title="RSNetWorx" id="rsnetworx">
+		</Product>
+		<Product name="COMM Software(ART)" title="COMM Software(ART)" id="comm_software_art">
+		</Product>
+		<Product name="FTAC" title="FTAC" id="ftac">
+		</Product>
+		<Product name="RSLC" title="RSLC" id="rslc">
+		</Product>
+		<Product name="FTLE" title="FTLE" id="ftle">
+		</Product>
+		<Product name="FTLD" title="FTLD" id="ftld">
+		</Product>
+		<Product name="FTGW" title="FTGW" id="ftgw">
+		</Product>
+		<Product name="OPC UA" title="OPC UA" id="opc_ua">
+		</Product>
+	</Bucket>
+	<Bucket name="Logix" title="Logix" id="logix">
+		<Product name="S5KA" title="S5KA" id="s5ka">
+			<!-- Charts for PM -->
+			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">	
+			</Charts>
+			<!-- Charts for QA -->
+			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">
+				<ChartGroup name="S5KA FY17 Anomlay Backlog_3.0" title="S5KA FY17 Anomlay Backlog_3.0" time="ttt">
+					<Chart name="S5KA FY17 Anomlay Backlog_3.0 Weekly" title="S5KA FY17 Anomlay Backlog_3.0 Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f7b" time="ttt"/>
+					<Chart name="S5KA FY17 Anomlay Backlog_3.0 Monthly" title="S5KA FY17 Anomlay Backlog_3.0 Monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f7f" time="ttt"/>
+					<Chart name="S5KA FY17 Anomlay Backlog_3.0 Sprint" title="S5KA FY17 Anomlay Backlog_3.0 Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f7d" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Shippable State_S5KA RC anomaly" title="Shippable State_S5KA RC anomaly" time="ttt">
+					<Chart name="Shippable State_S5KA RC anomaly Weekly" title="Shippable State_S5KA RC anomaly Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f7c" time="ttt"/>
+					<Chart name="Shippable State_S5KA RC anomaly monthly" title="Shippable State_S5KA RC anomaly monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f80" time="ttt"/>
+					<Chart name="Shippable State_S5KA RC anomaly Sprint" title="Shippable State_S5KA RC anomaly Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f7e" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="S5KA Runrate" title="S5KA Runrate" time="ttt">
+					<Chart name="S5KA Runrate (all anomaly)" title="S5KA Runrate (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f81" time="ttt"/>
+					<Chart name="S5KA Runrate (RC)" title="S5KA Runrate (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f83" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="S5KA Stability" title="S5KA Stability" time="ttt">
+					<Chart name="S5KA Stability (all anomaly)" title="S5KA Stability (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f82" time="ttt"/>
+					<Chart name="S5KA Stability (RC)" title="S5KA Stability (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a0ea541a8e8eb07883a2f84" time="ttt"/>
+				</ChartGroup>	
+			</Charts>
+		</Product>
+		<Product name="Compare Tool" title="Compare Tool" id="compare_tool">
+		</Product>
+		<Product name="Control Flash Plus" title="Control Flash Plus" id="control_flash_plus">
+		</Product>
+		<Product name="CCW" title="CCW" id="ccw">
+			<!-- Charts for PM -->
+			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
+				<ChartGroup name="Trend" title="Trend" time="ttt">
+					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f2e" time="ttt"/>
+					<Chart name="Trend by Epic" title="Trend by Epic" url="#" time="ttt"/>
+					<Chart name="Trend by Team" title="Trend by Team" url="#" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="ttt">
+					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f30" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="ttt">
+					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f31" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Feature Progress" title="Feature Progress" time="ttt">
+					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/59f6ead7a8e8eb07883a2f7a" time="ttt"/>
+				</ChartGroup>
+				<ChartGroup name="Resource" title="Resource" time="ttt">
+					<Chart name="Resource by Sprint" title="Resource by Sprint" url="#" time="ttt"/>
+				</ChartGroup>	
+			</Charts>
+			<!-- Charts for QA -->
+			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">	
+			</Charts>
+		</Product>
+		<Product name="PV800" title="PV800" id="pv800">
+		</Product>
+		<Product name="SSCB Optoelectronics" title="SSCB Optoelectronics" id="sscb_optoelectronics">
+		</Product>
+		<Product name="SSCB Safety Relay" title="SSCB Safety Relay" id="sscb_safety_relay">
+		</Product>
+	</Bucket>
+</Products>

@@ -2,16 +2,20 @@ package Helper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 public class XmlParseHelper {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		/*
 		Document document=load("output.xml");
 		System.out.println(document.asXML());
 		
@@ -27,6 +31,13 @@ public class XmlParseHelper {
 		System.out.println(element.asXML());
 		
 		persist(document,"output.xml");
+		*/
+		Document document=load("config.xml");
+		List<Node> timeNodes = document.selectNodes("//@time");
+        System.out.println(timeNodes.size());	
+
+        timeNodes=document.selectSingleNode("/Products/Bucket[@name='FTView']/Product[@name ='FTView SE']").selectNodes(".//@time");
+        System.out.println(timeNodes.size());
 	}	
 	
 	public static Document load(String filePath){
