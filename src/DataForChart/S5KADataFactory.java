@@ -37,6 +37,7 @@ import Charts.LineChart;
 import ConstVar.ConstString;
 import GetAttributeDispValue.GetAttributesValue;
 import Helper.Calendar_Compare;
+import Helper.ColorFormater;
 import Login.LoginHandler;
 import Main.Program;
 import QueryReference.QueryChild;
@@ -265,8 +266,7 @@ import jxl.write.WritableWorkbook;
 		    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 		    		}
 		    		
-		    	//    System.out.println("S5KA FY17 Anomlay Backlog_3.0 Weekly:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data));
-		    	  //  System.out.println("Shippable State_S5KA RC anomaly Weekly:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Weekly(X_Data,Y3_Data));
+		    		// ("S5KA FY17 Anomlay Backlog_3.0 Weekly)
 		    	    Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data);
 		    	    Set_Shippable_RC_Weekly(X_Data,Y3_Data);
 
@@ -284,8 +284,7 @@ import jxl.write.WritableWorkbook;
 		    			Y2_Data.add(Integer.parseInt(tmpList3.get(4)));
 		    			Y3_Data.add(Integer.parseInt(tmpList3.get(7)));	    			
 		    		}
-		    	  //  System.out.println("S5KA FY17 Anomlay Backlog_3.0 Sprint:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data));
-		    	    //System.out.println("Shippable State_S5KA RC anomaly Sprint:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Sprint(X_Data,Y3_Data));	    	    
+		    	    //("S5KA FY17 Anomlay Backlog_3.0 Sprint")
 		    	    Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data);
 		    	    Set_Shippable_RC_Sprint(X_Data,Y3_Data);	    	    
 
@@ -303,8 +302,7 @@ import jxl.write.WritableWorkbook;
 		    			Y2_Data.add(Integer.parseInt(tmpList3.get(2)));
 		    			Y3_Data.add(Integer.parseInt(tmpList3.get(5)));	    			
 		    		}
-		    	   // System.out.println("S5KA FY17 Anomlay Backlog_3.0 Monthly:\n"+ConstString.CHART_URL+ Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data));
-		    	   // System.out.println("Shippable State_S5KA RC anomaly Monthly:\n"+ConstString.CHART_URL+ Set_Shippable_RC_Monthly(X_Data,Y3_Data));
+		    	   //("S5KA FY17 Anomlay Backlog_3.0 Monthly");
 		    	    Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data);
 		    	    Set_Shippable_RC_Monthly(X_Data,Y3_Data);
 		    	    		    	    
@@ -362,7 +360,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.yTitle="";
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.yAxisFormat="#";
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.tableData=new DataTable();
-			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.colorList=Arrays.asList("red");
+			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77));
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -400,7 +398,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.yTitle="";
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.yAxisFormat="#";
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.tableData=new DataTable();
-			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.colorList=Arrays.asList("red");
+			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77));
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -438,7 +436,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.yTitle="Number";
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.yAxisFormat="#";
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.tableData=new DataTable();
-			S5KA_QA_Data_Shippable_RC_anomaly_monthly.colorList=Arrays.asList("red");
+			S5KA_QA_Data_Shippable_RC_anomaly_monthly.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77),ColorFormater.RGB2String(85, 142, 213));
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Month"));
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -517,7 +515,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.yTitle="Number";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.yAxisFormat="#";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.tableData=new DataTable();
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.colorList=Arrays.asList("red","blue");
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77),ColorFormater.RGB2String(85, 142, 213));
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Week"));
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -558,7 +556,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.yTitle="Number";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.yAxisFormat="#";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.tableData=new DataTable();
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.colorList=Arrays.asList("red","blue");
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77),ColorFormater.RGB2String(85, 142, 213));
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -600,7 +598,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.yTitle="Number";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.yAxisFormat="#";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.tableData=new DataTable();
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.colorList=Arrays.asList("red","blue");
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.colorList=Arrays.asList(ColorFormater.RGB2String(192, 80, 77),ColorFormater.RGB2String(85, 142, 213));
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Month"));
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -642,7 +640,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Runrate_all_anomaly.yTitle="Number";
 			S5KA_QA_Data_Runrate_all_anomaly.yAxisFormat="#";
 			S5KA_QA_Data_Runrate_all_anomaly.tableData=new DataTable();
-			S5KA_QA_Data_Runrate_all_anomaly.colorList=Arrays.asList("red","blue");
+			S5KA_QA_Data_Runrate_all_anomaly.colorList=Arrays.asList(ColorFormater.RGB2String(250,192,143),ColorFormater.RGB2String(2,109,190));
 			
 			S5KA_QA_Data_Runrate_all_anomaly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
 			S5KA_QA_Data_Runrate_all_anomaly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "S5KA(incoming)"));
@@ -684,7 +682,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Stability_all_anomaly.yTitle="Number";
 			S5KA_QA_Data_Stability_all_anomaly.yAxisFormat="#";
 			S5KA_QA_Data_Stability_all_anomaly.tableData=new DataTable();
-			S5KA_QA_Data_Stability_all_anomaly.colorList=Arrays.asList("red","green");
+			S5KA_QA_Data_Stability_all_anomaly.colorList=Arrays.asList(ColorFormater.RGB2String(250,192,143),ColorFormater.RGB2String(2,109,190));
 			
 			S5KA_QA_Data_Stability_all_anomaly.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
 			S5KA_QA_Data_Stability_all_anomaly.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "S5KA(incoming)"));
@@ -726,7 +724,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Runrate_RC.yTitle="Number";
 			S5KA_QA_Data_Runrate_RC.yAxisFormat="#";
 			S5KA_QA_Data_Runrate_RC.tableData=new DataTable();
-			S5KA_QA_Data_Runrate_RC.colorList=Arrays.asList("red","green");
+			S5KA_QA_Data_Runrate_RC.colorList=Arrays.asList(ColorFormater.RGB2String(250,192,143),ColorFormater.RGB2String(2,109,190));
 			
 			S5KA_QA_Data_Runrate_RC.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
 			S5KA_QA_Data_Runrate_RC.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "S5KA(incoming)"));
@@ -768,7 +766,7 @@ import jxl.write.WritableWorkbook;
 			S5KA_QA_Data_Stability_RC.yTitle="Number";
 			S5KA_QA_Data_Stability_RC.yAxisFormat="#";
 			S5KA_QA_Data_Stability_RC.tableData=new DataTable();
-			S5KA_QA_Data_Stability_RC.colorList=Arrays.asList("red","green");
+			S5KA_QA_Data_Stability_RC.colorList=Arrays.asList(ColorFormater.RGB2String(250,192,143),ColorFormater.RGB2String(2,109,190));
 			
 			S5KA_QA_Data_Stability_RC.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
 			S5KA_QA_Data_Stability_RC.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "S5KA(incoming)"));

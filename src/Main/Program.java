@@ -57,7 +57,7 @@ public class Program {
 	//	createChartsForFTAC_PM();
 	//	createChartsForFTAC_QA();
 		
-	//	createChartsForFTViewSE_PM();
+		createChartsForFTViewSE_PM();
 	//	createChartsForFTViewSE_QA();
 	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();
@@ -291,20 +291,20 @@ public class Program {
 		ProductData d2=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
 		if(null != d2)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d2, new LineChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d2, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
 			String id2=Mgr_FTVIEWSE_PM_CHART_Trend_Epic.createChartInEagleEye();
 			chartSetIDList.add(id2);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Epic, id2);
 		}
 		
-/*		ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
+		ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
 		if(null != d3)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d3, new ComboChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d3, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
 			String id3=Mgr_FTVIEWSE_PM_CHART_Trend_Team.createChartInEagleEye();
 			chartSetIDList.add(id3);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Team, id3);
-		}*/
+		}
 		
 		ProductData d4=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint();
 		if(null != d4)

@@ -138,25 +138,19 @@ public class GetAttributesValue {
 			ITeamRepository repository,
 			IProgressMonitor monitor,
 			IProjectArea projectArea ,
-			IQueryResult<IResolvedResult<IWorkItem>> resultAll
+			List<IWorkItem> ChildList
 	)
 	{
-		if(resultAll==null)
+		if(ChildList==null)
 			return null;	
 		List<String> valueListReturn = new ArrayList<String>();
 		IWorkItemCommon workItemCommon = (IWorkItemCommon) repository.getClientLibrary(IWorkItemCommon.class);
-		try {
-			IResolvedResult<IWorkItem> resolved =null;
-			IWorkItem workItem = null;
-			while(resultAll.hasNext(monitor))
-			{
-				 resolved = resultAll.next(monitor);
-				 workItem = (IWorkItem)resolved.getItem();
-				 valueListReturn.add(getTeamArea(repository, workItem, monitor,workItemCommon));
-			}	
-		}catch (TeamRepositoryException e) {
-			e.printStackTrace();
-		}
+		
+		for(IWorkItem workItem:ChildList)
+		{
+			 valueListReturn.add(getTeamArea(repository, workItem, monitor,workItemCommon));
+		}	
+
 		return valueListReturn;
 	}
 	

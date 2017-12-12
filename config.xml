@@ -7,18 +7,18 @@
 			<!-- Charts for PM -->
 			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
 				<ChartGroup name="Trend" title="Trend" time="2017-12-12">
-					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f2e" time="2017-12-12"/>
-					<Chart name="Trend by Epic" title="Trend by Epic" url="#" time="2017-12-12"/>
-					<Chart name="Trend by Team" title="Trend by Team" url="#" time="2017-12-12"/>
+					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8c2da8e8eb07883a3334" time="2017-12-12"/>
+					<Chart name="Trend by Epic" title="Trend by Epic" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8c3ca8e8eb07883a3335" time="2017-12-12"/>
+					<Chart name="Trend by Team" title="Trend by Team" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8f3da8e8eb07883a3336" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="2017-12-12">
-					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f30" time="2017-12-12"/>
+					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8f3da8e8eb07883a3337" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="2017-12-12">
-					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f31" time="2017-12-12"/>
+					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8f3da8e8eb07883a3338" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Feature Progress" title="Feature Progress" time="2017-12-12">
-					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/59f6ead7a8e8eb07883a2f7a" time="2017-12-12"/>
+					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8f3da8e8eb07883a3339" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Resource" title="Resource" time="2017-12-12">
 					<Chart name="Resource by Sprint" title="Resource by Sprint" url="#" time="2017-12-12"/>
@@ -63,22 +63,22 @@
 			<!-- Charts for QA -->
 			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">
 				<ChartGroup name="FY17 Anomlay Backlog_3.0" title="S5KA FY17 Anomlay Backlog_3.0" time="2017-12-12">
-					<Chart name="FY17 Anomlay Backlog_3.0 Weekly" title="S5KA FY17 Anomlay Backlog_3.0 Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a330b" time="2017-12-12"/>
-					<Chart name="FY17 Anomlay Backlog_3.0 Monthly" title="S5KA FY17 Anomlay Backlog_3.0 Monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a330c" time="2017-12-12"/>
-					<Chart name="FY17 Anomlay Backlog_3.0 Sprint" title="S5KA FY17 Anomlay Backlog_3.0 Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a330d" time="2017-12-12"/>
+					<Chart name="FY17 Anomlay Backlog_3.0 Weekly" title="S5KA FY17 Anomlay Backlog_3.0 Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a3328" time="2017-12-12"/>
+					<Chart name="FY17 Anomlay Backlog_3.0 Monthly" title="S5KA FY17 Anomlay Backlog_3.0 Monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a3329" time="2017-12-12"/>
+					<Chart name="FY17 Anomlay Backlog_3.0 Sprint" title="S5KA FY17 Anomlay Backlog_3.0 Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332a" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Shippable State RC anomaly" title="Shippable State_S5KA RC anomaly" time="2017-12-12">
-					<Chart name="Shippable State RC anomaly Weekly" title="Shippable State_S5KA RC anomaly Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a330e" time="2017-12-12"/>
-					<Chart name="Shippable State RC anomaly monthly" title="Shippable State_S5KA RC anomaly monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a330f" time="2017-12-12"/>
-					<Chart name="Shippable State RC anomaly Sprint" title="Shippable State_S5KA RC anomaly Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a3310" time="2017-12-12"/>
+					<Chart name="Shippable State RC anomaly Weekly" title="Shippable State_S5KA RC anomaly Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332b" time="2017-12-12"/>
+					<Chart name="Shippable State RC anomaly monthly" title="Shippable State_S5KA RC anomaly monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332c" time="2017-12-12"/>
+					<Chart name="Shippable State RC anomaly Sprint" title="Shippable State_S5KA RC anomaly Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332d" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Runrate" title="S5KA Runrate" time="2017-12-12">
-					<Chart name="Runrate (all anomaly)" title="S5KA Runrate (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a3311" time="2017-12-12"/>
-					<Chart name="Runrate (RC)" title="S5KA Runrate (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a3312" time="2017-12-12"/>
+					<Chart name="Runrate (all anomaly)" title="S5KA Runrate (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332e" time="2017-12-12"/>
+					<Chart name="Runrate (RC)" title="S5KA Runrate (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a332f" time="2017-12-12"/>
 				</ChartGroup>
 				<ChartGroup name="Stability" title="S5KA Stability" time="2017-12-12">
-					<Chart name="Stability (all anomaly)" title="S5KA Stability (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a3313" time="2017-12-12"/>
-					<Chart name="Stability (RC)" title="S5KA Stability (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f371ba8e8eb07883a3314" time="2017-12-12"/>
+					<Chart name="Stability (all anomaly)" title="S5KA Stability (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a3330" time="2017-12-12"/>
+					<Chart name="Stability (RC)" title="S5KA Stability (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a2f8a81a8e8eb07883a3331" time="2017-12-12"/>
 				</ChartGroup>	
 			</Charts>
 		</Product>
