@@ -3,6 +3,7 @@ package DataForChart;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,78 +56,77 @@ import jxl.write.WritableWorkbook;
 	{
 		private static LoginHandler handler=Program.handler;
 		private static ITeamRepository repository=Program.repository;		
-						
+		
+		//QA:1 
 		public static ProductData Get_S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly()
 		{
 			if(S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly;
 		}
+		//QA:2
 		public static ProductData Get_S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly()
 		{
 			if(S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly;
 		}
+		//QA:3
 		public static ProductData Get_S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint()
 		{
 			if(S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint;
 		}
+		//QA:4
 		public static ProductData Get_S5KA_QA_Data_Shippable_RC_anomaly_Weekly()
 		{
 			if(S5KA_QA_Data_Shippable_RC_anomaly_Weekly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Shippable_RC_anomaly_Weekly;
 		}
+		//QA:5
 		public static ProductData Get_S5KA_QA_Data_Shippable_RC_anomaly_monthly()
 		{
 			if(S5KA_QA_Data_Shippable_RC_anomaly_monthly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Shippable_RC_anomaly_monthly;
 		}
+		//QA:6
 		public static ProductData Get_S5KA_QA_Data_Shippable_RC_anomaly_Sprint()
 		{
 			if(S5KA_QA_Data_Shippable_RC_anomaly_Sprint==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Shippable_RC_anomaly_Sprint;
 		}
+		//QA:7
 		public static ProductData Get_S5KA_QA_Data_Runrate_all_anomaly()
 		{
 			if(S5KA_QA_Data_Runrate_all_anomaly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Runrate_all_anomaly;
 		}
+		//QA:8
 		public static ProductData Get_S5KA_QA_Data_Runrate_RC()
 		{
 			if(S5KA_QA_Data_Runrate_RC==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Runrate_RC;
 		}
+		//QA:9
 		public static ProductData Get_S5KA_QA_Data_Stability_all_anomaly()
 		{
 			if(S5KA_QA_Data_Stability_all_anomaly==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Stability_all_anomaly;
 		}
+		//QA:10
 		public static ProductData Get_S5KA_QA_Data_Stability_RC()
 		{
 			if(S5KA_QA_Data_Stability_RC==null)
 				ChartOfQA();			
 			return S5KA_QA_Data_Stability_RC;
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		}		
 		
 		private static ProductData S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly= null ;
 		private static ProductData S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly= null ;
@@ -145,16 +145,21 @@ import jxl.write.WritableWorkbook;
 			//[start]
 		    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
 		    List<String> projectAreaNames = new ArrayList<>();
+		    int nProjectNumber=0;
 		    for(int i = 0;i<iProcessAreas.size();i++)
 			{
 		    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 		    	projectAreaNames.add(iProcessArea.getName());
 				System.out.println(iProcessArea.getName());
+				if(iProcessArea.getName().equals("CVB Studio 5000 Architect - RTC SAFe"))
+				{
+					nProjectNumber=i;
+				}
 			}
 		    //[end]
 		    
 		    // there suppose you take the first value
-		    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(3));
+		    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
 			List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
 			for(String str: allDispNames)
 			{
@@ -195,7 +200,7 @@ import jxl.write.WritableWorkbook;
 		    try {
 
 			    MulConditionQuery query=new MulConditionQuery();
-		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(3), null, conditionsList);		    
+		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);		    
 		    		 
 		    	if(resultOwner!=null)
 		    	{
@@ -249,7 +254,15 @@ import jxl.write.WritableWorkbook;
 		    		
 	                //calculate the data need in next 
 		    		List<ArrayList<String>> SourceDataFilled=CalculateSourceData(needAttributeList,resultList); 	    		
-		    		
+		    		for (List<String> item:SourceDataFilled)
+		    		{
+		    			int i = 0;
+		    			for(String str : item)
+		    			{
+		    				System.out.print(i++ + "\t"+str+"\t");
+		    			}
+		    			System.out.println();
+		    		}
 		    		//calculate the anomaly count created in every week
 		    		List<ArrayList<String>> ResultData=S5KA_FY17_Anomlay_Backlog3_SourceData_Week(SourceDataFilled);
 
@@ -337,8 +350,8 @@ import jxl.write.WritableWorkbook;
 		    		}
 		    		
 		    	    Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1);
-		    	    Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3);
-		    	    Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2);	    	    
+		    	    Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2);	
+		    	    Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3);    	    
 		    	    Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4); 
 		    	}
 		    	
@@ -346,10 +359,7 @@ import jxl.write.WritableWorkbook;
 				e.printStackTrace();
 			}
 		}
-
-
-		
-		
+	
 		public static void Set_Shippable_RC_Weekly(List<String> x1,List<Integer> y1)
 		{
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly=new ProductData();
@@ -1235,8 +1245,8 @@ import jxl.write.WritableWorkbook;
 					for(ArrayList<String> tempList:sourcedata)
 					{			
 						if(tempList.get(1).equals("1")&&   //Found in 3.0=1
-						   tempList.get(2).equals("0")&&   //Document=0
-						   tempList.get(3).equals("0")&&   //Not committed=0
+						//   tempList.get(2).equals("0")&&   //Document=0
+						//   tempList.get(3).equals("0")&&   //Not committed=0
 						   tempList.get(4).equals("1")&&   //RC=1
 						   tempList.get(11).equals("1"))   //ACtive=1
 						{
@@ -1244,19 +1254,19 @@ import jxl.write.WritableWorkbook;
 						}
 						
 						if(tempList.get(1).equals("1")&&   //Found in 3.0=1
-								   tempList.get(2).equals("0")&&   //Document=0
-								   tempList.get(3).equals("0")&&   //Not committed=0
-								   tempList.get(5).equals("1")&&   //FMEA=[16,24)
-								   tempList.get(11).equals("1"))   //ACtive=1
+							//	   tempList.get(2).equals("0")&&   //Document=0
+							//	   tempList.get(3).equals("0")&&   //Not committed=0
+								   tempList.get(5).equals("1"))//&&   //FMEA=[16,24)
+							//	   tempList.get(11).equals("1"))   //ACtive=1
 						{
 							IMPACT_24++;
 						}
 						
 						if(tempList.get(1).equals("1")&&   //Found in 3.0=1
-								   tempList.get(2).equals("0")&&   //Document=0
-								   tempList.get(3).equals("0")&&   //Not committed=0
-								   tempList.get(9).equals("1")&&   //FMEA<16
-								   tempList.get(11).equals("1"))   //ACtive=1
+							//	   tempList.get(2).equals("0")&&   //Document=0
+							//	   tempList.get(3).equals("0")&&   //Not committed=0
+								   tempList.get(9).equals("1"))//&&   //FMEA<16
+							//	   tempList.get(11).equals("1"))   //ACtive=1
 						{
 							IMPACT_16++;
 						}
@@ -1520,5 +1530,1177 @@ import jxl.write.WritableWorkbook;
 			return ResultData;		
 		}
 
+	//Lane:
 		
+		public static ProductData Get_S5KA_PM_Data_Weekly_Trend()
+		{
+			if(S5KA_PM_Data_Weekly_Trend==null)
+			{
+				ChartOfPM();
+			}
+			
+			return S5KA_PM_Data_Weekly_Trend;
+		}
+		
+		public static ProductData Get_S5KA_PM_Data_Trend_Epic()
+		{
+			//[start]
+		    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
+		    List<String> projectAreaNames = new ArrayList<>();
+		    int nProjectNumber=0;
+		    for(int i = 0;i<iProcessAreas.size();i++)
+			{
+		    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
+		    	projectAreaNames.add(iProcessArea.getName());
+		    	
+				if(iProcessArea.getName().equals("CVB Studio 5000 Architect - RTC SAFe"))
+				{
+					nProjectNumber=i;
+				}
+				
+				System.out.println(iProcessArea.getName());
+			}
+		    //[end]
+		    
+		    // there suppose you take the first value
+		    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
+			List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
+			for(String str: allDispNames)
+			{
+				System.out.println(str);
+			}
+			
+		    List<SearchCondition> conditionsList = new ArrayList<>(); 
+		    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
+		    
+		    List<String> needAttributeList = new ArrayList<>();
+		    needAttributeList.add("Id");//pass                       0
+		    needAttributeList.add("Planned For");//pass              1 
+		    needAttributeList.add("Story Points (numeric)");//pass   2
+		    needAttributeList.add("Status");//pass                   3
+		    needAttributeList.add("Resolution Date");//pass          4
+		    
+		    try {
+			    MulConditionQuery query=new MulConditionQuery();
+		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);		    
+		    	if(resultOwner!=null)
+		    	{
+		    		resultOwner.setLimit(1000);
+		    			
+		    		IWorkItem workItem = null;
+		    		IResolvedResult<IWorkItem> resolved =null;
+		    		
+		//			while(resultOwner.hasNext(handler.getMonitor()))
+					{
+				
+						resolved = resultOwner.next(handler.getMonitor());
+						 workItem = (IWorkItem)resolved.getItem();
+						
+						 //Print the Father's ID
+						 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());
+						 
+						 //Find the father's comment
+						 List<IWorkItem> FatherList = new ArrayList<>();
+						 FatherList.add(workItem);
+						 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
+						 
+						 //Print all the father's comment
+						 int k=0;
+			    		for(List<String> tmpList2 : resultList_father)
+			    		{
+			    			int i = 0;
+			    			k++;
+			    			System.out.print(k+"\t");
+			    			for(String str : tmpList2)
+			    			{
+			    				System.out.print(i++ + "\t"+str+"\t");
+			    			}
+			    			System.out.println();
+			    		}
+						 
+						 QueryChild queryChild = new QueryChild();
+						 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
+						 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
+						 List<IWorkItem> ChildList = new ArrayList<>();
+						 ChildList = queryChild.analyzeReferences(repository,references);
+						 
+						 for(IWorkItem tempWorkitem:ChildList)
+						 {
+							 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
+						 }
+						 
+						 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
+						 
+						 for(List<String> tempList4:resultList)   //the story status of the sprint
+						 {
+							 int i=0;
+							 for(String str : tempList4)
+				    			{
+				    				System.out.print(i++ + "\t"+str+"\t");
+				    			}
+							 System.out.println("");
+						 }
+						 
+						 ////Calculate the week section
+						 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						 List<Date> Epic_Resolution_Date=new ArrayList<Date>();
+						 
+						 for(List<String> tempList4:resultList)   //the story status of the sprint
+						 {
+							if(tempList4.get(4).equals(""))
+								continue;
+							
+							 Date temp=sdf.parse(tempList4.get(4));
+							Epic_Resolution_Date.add(temp);
+						 }
+						 
+						 Date Date_Min=new Date();
+						 Date Date_Max=new Date();
+						 Date_Max=Epic_Resolution_Date.get(0);
+						 
+						 for(Date temp:Epic_Resolution_Date)
+						 {
+							 if(temp.before(Date_Min))
+							 {
+								 Date_Min=temp;
+							 }
+							 if(temp.after(Date_Max))
+							 {
+								 Date_Max=temp;
+							 }
+						 }
+						 
+						 List<Date> Week_Trend=new ArrayList<Date>();
+						 Week_Trend.add(Date_Min);
+						 for(Date temp=Date_Min;temp.before(Date_Max);)
+						 {
+							 Calendar calendar=Calendar.getInstance();
+							 calendar.setTime(temp);
+							 calendar.add(Calendar.WEEK_OF_MONTH,1);
+							 temp=calendar.getTime();
+							 Week_Trend.add(temp);
+						 }
+						 
+						 List<List<String>> Trend_result=new ArrayList<>();
+						 for(int i=0;i<Week_Trend.size()-2;i++)
+						 {
+							 List<String> Haha=new ArrayList<>();
+							 int StoryPoint=0;
+							 for(List<String> tempList4:resultList)
+							 {
+								 if(tempList4.get(4).equals(""))
+								 continue;
+								 
+								 Date DateOfStory=new Date();
+								 DateOfStory=sdf.parse(tempList4.get(4));
+								 
+								 if(DateOfStory.after(Week_Trend.get(i))&&DateOfStory.before(Week_Trend.get(i+1)))
+								 {
+									 StoryPoint+=Integer.parseInt(tempList4.get(2));
+								 }
+							 }
+							 Haha.add(sdf.format(Week_Trend.get(i)));
+							 Haha.add(Integer.toString(StoryPoint));
+							 Trend_result.add(Haha);
+						 }				 
+						 
+			    		List<String> x1=new ArrayList<>();
+			    		List<Integer> y1=new ArrayList<>();
+			    		
+			    		for(List<String> temp:Trend_result)
+			    		{
+			    			x1.add(temp.get(0));
+			    			y1.add(Integer.parseInt(temp.get(1)));		    			
+			    		}
+			    		
+			    		
+			    		S5KA_PM_Data_Trend_Epic=new ProductData();
+			    		S5KA_PM_Data_Trend_Epic.title="Trend by Epic";
+			    		
+			    		S5KA_PM_Data_Trend_Epic.description=workItem.getHTMLSummary().toString();//description		
+			    		S5KA_PM_Data_Trend_Epic.xTitle="Date";
+			    		S5KA_PM_Data_Trend_Epic.yTitle="Number";
+			    		S5KA_PM_Data_Trend_Epic.yAxisFormat="#";
+			    		S5KA_PM_Data_Trend_Epic.tableData=new DataTable();
+			    		S5KA_PM_Data_Trend_Epic.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
+			    		
+			    		S5KA_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+			    		S5KA_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Original Commitment"));
+			    		
+			    		//Chart data
+	    				//////////////////////////////////////////////
+	    				List<String> x_data=x1;
+	    				List<Integer> y1_data=y1;
+			    		
+			    		int dataCount=x_data.size();
+			    		List<TableRow> rows = Lists.newArrayList();
+			    		for(int i=0;i<dataCount;i++)
+			    		{
+			    			TableRow row = new TableRow();
+			    		    row.addCell(new TableCell(x_data.get(i)));
+			    		    row.addCell(new TableCell(y1_data.get(i)));
+			    		    rows.add(row);
+			    		}
+			    		
+			    		try 
+			    		{
+			    			S5KA_PM_Data_Trend_Epic.tableData.addRows(rows);
+			    		}catch(Exception e)
+			    		{
+			    			System.out.println("Import Exception!");
+			    		}
+					}	
+		    	}
+		    }
+		    catch(Exception e)
+		    {
+		    	System.out.println(e);
+		    }
+			return S5KA_PM_Data_Trend_Epic;
+		}
+		public static ProductData Get_S5KA_PM_Data_Trend_Team()
+		{		
+			//[start]
+		    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
+		    List<String> projectAreaNames = new ArrayList<>();
+		    int nProjectNumber=0;
+		    for(int i = 0;i<iProcessAreas.size();i++)
+			{
+		    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
+		    	projectAreaNames.add(iProcessArea.getName());
+		    	
+				if(iProcessArea.getName().equals("CVB Studio 5000 Architect - RTC SAFe"))
+				{
+					nProjectNumber=i;
+				}
+				
+				System.out.println(iProcessArea.getName());
+			}
+		    //[end]
+		    
+		    // there suppose you take the first value
+		    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
+			List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
+			for(String str: allDispNames)
+			{
+				System.out.println(str);
+			}
+			
+			String SpeicTeam="CCW Localization";
+			
+		    List<SearchCondition> conditionsList = new ArrayList<>(); 
+		    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
+		    
+		    List<String> needAttributeList = new ArrayList<>();
+		    needAttributeList.add("Id");//pass                       0
+		    needAttributeList.add("Planned For");//pass              1 
+		    needAttributeList.add("Story Points (numeric)");//pass   2
+		    needAttributeList.add("Status");//pass                   3
+		    needAttributeList.add("Resolution Date");//pass          4
+		    
+		    ////Calculate the week section
+			 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			 
+			 List<Date> Week_Trend=new ArrayList<Date>();
+			 List<List<String>> Week_Result=new ArrayList<>();
+			 Date Date_Max=new Date();
+			 Date Date_Min;
+			try {
+					Date_Min = sdf.parse("2017-01-01");	 
+		
+					Week_Trend.add(Date_Min);
+					
+					 for(Date temp=Date_Min;temp.before(Date_Max);)
+					 {
+						 Calendar calendar=Calendar.getInstance();
+						 calendar.setTime(temp);
+						 calendar.add(Calendar.WEEK_OF_MONTH,1);
+						 temp=calendar.getTime();
+						 Week_Trend.add(temp);
+					 }
+				} 
+			catch (ParseException e1) 
+				{
+					e1.printStackTrace();
+				}
+			
+			//Create the new record list
+			for(Date item:Week_Trend)
+			{
+				List<String> temp=new ArrayList<>();
+				temp.add(sdf.format(item));
+				temp.add("0");
+				Week_Result.add(temp);			
+			}
+			
+		    try {
+				    MulConditionQuery query=new MulConditionQuery();
+			    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);		    
+			    	if(resultOwner!=null)
+			    	{
+			    		resultOwner.setLimit(1000);
+			    			
+			    		IWorkItem workItem = null;
+			    		IResolvedResult<IWorkItem> resolved =null;
+			    		
+			    		
+						while(resultOwner.hasNext(handler.getMonitor()))//iterate the father item
+						{
+					
+							resolved = resultOwner.next(handler.getMonitor());
+							 workItem = (IWorkItem)resolved.getItem();
+							 
+							 //Print the Father's ID
+							 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());					 
+							 
+							 QueryChild queryChild = new QueryChild();
+							 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
+							 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
+							 List<IWorkItem> ChildList = new ArrayList<>();
+							 ChildList = queryChild.analyzeReferences(repository,references);
+							 
+							 for(IWorkItem tempWorkitem:ChildList)
+							 {
+								 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
+							 }
+							 
+							 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
+							 List<String> TeamResultList=getAttributesValue.GetTeamAreaList(repository, handler.getMonitor(),query.getProjectArea(), ChildList);
+							 for(List<String> tempList4:resultList)   //the story status of the sprint
+							 {
+								 int i=0;
+								 for(String str : tempList4)
+					    			{
+					    				System.out.print(i++ + "\t"+str+"\t");
+					    			}
+								 System.out.println("");
+							 }
+							 
+							 for(int i=0;i<Week_Trend.size()-1;i++)
+							 {
+								 int StoryPoint=0;
+								 for(int j=0;j<resultList.size();j++)
+								 {
+									 if(resultList.get(j).get(4).equals(""))
+									 continue;
+									 
+									 Date DateOfStory=new Date();
+									 DateOfStory=sdf.parse(resultList.get(j).get(4));
+									 
+									 if(DateOfStory.after(Week_Trend.get(i))&&DateOfStory.before(Week_Trend.get(i+1))&&TeamResultList.get(j).equals(SpeicTeam))
+									// if(DateOfStory.after(Week_Trend.get(i))&&DateOfStory.before(Week_Trend.get(i+1)))
+									 {
+										 if(resultList.get(j).get(2).equals(""))
+											 continue;
+										 StoryPoint+=Integer.parseInt(resultList.get(j).get(2));
+									 }
+								 }
+								 String NumberString=Integer.toString(StoryPoint+Integer.parseInt(Week_Result.get(i).get(1)));
+								 Week_Result.get(i).set(1, NumberString);
+							 }				 
+						}
+			    	}
+			    	
+		    		List<String> x1=new ArrayList<>();
+		    		List<Integer> y1=new ArrayList<>();
+		    		
+		    		for(List<String> temp:Week_Result)
+		    		{
+		    			x1.add(temp.get(0));
+		    			y1.add(Integer.parseInt(temp.get(1)));		    			
+		    		}
+			    		
+			    		
+			    		S5KA_PM_Data_Trend_Team=new ProductData();
+			    		S5KA_PM_Data_Trend_Team.title="Trend by Team";
+			    		
+			    		S5KA_PM_Data_Trend_Team.description=SpeicTeam;//description		
+			    		S5KA_PM_Data_Trend_Team.xTitle="Date";
+			    		S5KA_PM_Data_Trend_Team.yTitle="Number";
+			    		S5KA_PM_Data_Trend_Team.yAxisFormat="#";
+			    		S5KA_PM_Data_Trend_Team.tableData=new DataTable();
+			    		S5KA_PM_Data_Trend_Team.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
+			    		
+			    		S5KA_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+			    		S5KA_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Original Commitment"));
+			    		
+			    		//Chart data
+	    				//////////////////////////////////////////////
+	    				List<String> x_data=x1;
+	    				List<Integer> y1_data=y1;
+			    		
+			    		int dataCount=x_data.size();
+			    		List<TableRow> rows = Lists.newArrayList();
+			    		for(int i=0;i<dataCount;i++)
+			    		{
+			    			TableRow row = new TableRow();
+			    		    row.addCell(new TableCell(x_data.get(i)));
+			    		    row.addCell(new TableCell(y1_data.get(i)));
+			    		    rows.add(row);
+			    		}
+			    		
+			    		try 
+			    		{
+			    			S5KA_PM_Data_Trend_Team.tableData.addRows(rows);
+			    		}
+			    		catch(Exception e)
+			    		{
+			    			System.out.println("Import Exception!");
+			    		}
+		    }
+		    catch(Exception e)
+		    {
+		    	System.out.println(e);
+		    }
+			return S5KA_PM_Data_Trend_Team;
+		}
+		public static ProductData Get_S5KA_PM_Data_ThroughputVelocity_sprint()
+		{
+			if(S5KA_PM_Data_ThroughputVelocity_sprint==null)
+			{
+				ChartOfPM();
+			}
+			
+			return S5KA_PM_Data_ThroughputVelocity_sprint;
+		}
+		public static ProductData Get_S5KA_PM_Data_Plan_Actual_Sprint()
+		{
+			if(S5KA_PM_Data_Plan_Actual_Sprint==null)
+			{
+				ChartOfPM();
+			}
+			
+			return S5KA_PM_Data_Plan_Actual_Sprint;
+		}
+		public static ProductData Get_S5KA_PM_Data_Feature_Progress()
+		{
+			if(S5KA_PM_Data_Feature_Progress==null)
+			{
+				ChartOfPM();
+			}
+			
+			return S5KA_PM_Data_Feature_Progress;
+		}
+		
+		public static ProductData S5KA_PM_Data_Weekly_Trend=null;
+		public static ProductData S5KA_PM_Data_Trend_Epic=null;
+		public static ProductData S5KA_PM_Data_Trend_Team=null;
+		public static ProductData S5KA_PM_Data_ThroughputVelocity_sprint=null;
+		public static ProductData S5KA_PM_Data_Plan_Actual_Sprint=null;
+		public static ProductData S5KA_PM_Data_Feature_Progress=null;
+		
+		public static void ChartOfPM()
+		{	
+			
+			//[start]
+		    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
+		    List<String> projectAreaNames = new ArrayList<>();
+		    int nProjectNumber=0;
+		    for(int i = 0;i<iProcessAreas.size();i++)
+			{
+		    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
+		    	projectAreaNames.add(iProcessArea.getName());
+				System.out.println(iProcessArea.getName());
+				if(iProcessArea.getName().equals("CVB Studio 5000 Architect - RTC SAFe"))
+				{
+					nProjectNumber=i;
+				}
+			}
+		    //[end]
+		    
+		    // there suppose you take the first value
+		    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
+			List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
+			for(String str: allDispNames)
+			{
+				System.out.println(str);
+			}
+			
+		    List<SearchCondition> conditionsList = new ArrayList<>(); 
+		    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
+		    
+		    Calculate_BurnDown	( repository, handler,projectAreaNames,getAttributesValue,conditionsList,nProjectNumber);//1,2,6,7,8
+		}
+		
+		//Calculate Agile Burndown of S5KA 1,2,6,7,8
+		public static void Calculate_BurnDown(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjecrtArea) 
+		{
+		    List<String> needAttributeList = new ArrayList<>();
+		    needAttributeList.add("Id");//pass                       0
+		    needAttributeList.add("Planned For");//pass              1 
+		    needAttributeList.add("Story Points (numeric)");//pass   2
+		    needAttributeList.add("Status");//pass                   3
+		    
+		    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
+			List<List<String>> Point_of_Sprint=Arrays.asList(Arrays.asList("PI1_Sprint1","1/6/2017","0","0"),
+														   Arrays.asList("PI1_Sprint2","1/26/2017","0","0"),
+														   Arrays.asList("PI1_Sprint3","2/17/2017","0","0"),
+														   Arrays.asList("PI1_IP","3/10/2017","0","0"),
+														   Arrays.asList("PI2_Sprint1","3/24/2017","0","0"),
+														   Arrays.asList("PI2_Sprint2","4/14/2017","0","0"),
+														   Arrays.asList("PI2_Sprint3","5/5/2017","0","0"),
+														   Arrays.asList("PI2_IP","5/26/2017","0","0"),
+														   Arrays.asList("PI3_Spring1","6/9/2017","0","0"),
+														   Arrays.asList("PI3_Spring2","6/30/2017","0","0"),
+														   Arrays.asList("PI3_Spring3","7/21/2017","0","0"),
+														   Arrays.asList("PI3_IP","8/11/2017","0","0"),
+														   Arrays.asList("PI4_Spring1","8/25/2017","0","0"),
+														   Arrays.asList("PI4_Spring2","9/15/2017","0","0"),
+														   Arrays.asList("PI4_Spring3","10/6/2017","0","0"));
+			
+			//the definition of the array:0-Epic Summary; 1-Finish Point; 2-Remain Point;
+			List<List<String>> All_Epic=new ArrayList<>();
+		    
+		    try {
+			    MulConditionQuery query=new MulConditionQuery();
+		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjecrtArea), null, conditionsList);		    
+		    	if(resultOwner!=null)
+		    	{
+		    		resultOwner.setLimit(1000);
+		    			
+		    		IWorkItem workItem = null;
+		    		IResolvedResult<IWorkItem> resolved =null;
+		    		
+					while(resultOwner.hasNext(handler.getMonitor()))
+					{
+				
+						resolved = resultOwner.next(handler.getMonitor());
+						 workItem = (IWorkItem)resolved.getItem();
+						
+						 //Print the Father's ID
+						 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());
+						 
+						 //Find the father's comment
+						 List<IWorkItem> FatherList = new ArrayList<>();
+						 FatherList.add(workItem);
+						 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
+						 
+						 //Print all the father's comment
+						 int k=0;
+			    		for(List<String> tmpList2 : resultList_father)
+			    		{
+			    			int i = 0;
+			    			k++;
+			    			System.out.print(k+"\t");
+			    			for(String str : tmpList2)
+			    			{
+			    				System.out.print(i++ + "\t"+str+"\t");
+			    			}
+			    			System.out.println();
+			    		}
+						 
+						 QueryChild queryChild = new QueryChild();
+						 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
+						 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
+						 List<IWorkItem> ChildList = new ArrayList<>();
+						 ChildList = queryChild.analyzeReferences(repository,references);
+						 
+						 for(IWorkItem tempWorkitem:ChildList)
+						 {
+							 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
+						 }
+						 
+						 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
+						 
+						 for (List<String> tempList3:Point_of_Sprint )//the record of the sprint point
+						 {
+							 for(List<String> tempList4:resultList)   //the story status of the sprint
+							 {
+								 if(tempList4.get(1).contains(tempList3.get(0)))
+								 {
+									//if can't get the attribute points,loop this for()
+									 if(tempList4.get(2).equals("")) 
+										 tempList4.set(2, "0");
+									 
+									 //get the plan point and add to the record
+									 int temp_plan_point= Integer.parseInt(tempList3.get(2))+Integer.parseInt(tempList4.get(2));
+									 tempList3.set(2,Integer.toString(temp_plan_point));
+									 
+									 //get the status ,if the status is "closed",add to finish
+									 if(tempList4.get(3).equals("Closed"))
+									 {									 
+										 int temp_finish_point=Integer.parseInt(tempList3.get(3))+Integer.parseInt(tempList4.get(2));
+										 tempList3.set(3, Integer.toString(temp_finish_point));
+									 }
+								 }
+							 }
+						 }
+						 
+						 ////Calculate all Point of every epic[begin]
+						 int Epic_Plan_Point=0;
+						 int Epic_Finish_Point=0;
+						 int Epic_Remain_Point=0;
+						 for(List<String> tempList4:resultList)   //the story status of the sprint
+						 {
+
+								//if can't get the attribute points,loop this for()
+								 if(tempList4.get(2).equals("")) 
+									 tempList4.set(2, "0");
+								 
+								 //get the plan point and add to the record
+								 Epic_Plan_Point+= Integer.parseInt(tempList4.get(2));
+								 
+								 //get the status ,if the status is "closed",add to finish
+								 if(tempList4.get(3).equals("Closed"))
+								 {									 
+									 Epic_Finish_Point+=Integer.parseInt(tempList4.get(2));								 
+								 }
+						 }
+						 Epic_Remain_Point=Epic_Plan_Point-Epic_Finish_Point;
+						
+						 //the fotmat of record is :1.epic name 2.epic finish point 3.epic remain point
+						 //the record will be used to draw Chart : All Epic
+						List<String> One_Epic=new ArrayList<>(); 
+						One_Epic.add(workItem.getHTMLSummary().toString());
+						One_Epic.add(Integer.toString(Epic_Finish_Point));
+						One_Epic.add(Integer.toString(Epic_Remain_Point));
+						All_Epic.add(One_Epic);		
+						////Calculate all Epic Point [end]
+					}
+					
+					//Print the sprint plan and finish
+		    		int kk=0;
+		    		for(List<String> tmpList2 : Point_of_Sprint)
+		    		{
+		    			int i = 0;
+		    			kk++;
+		    			System.out.print(kk+"\t");
+		    			for(String str : tmpList2)
+		    			{
+		    				System.out.print(i++ + "\t"+str+"\t");
+		    			}
+		    			System.out.println();
+		    		}
+		    		
+		    		int total_plan=0;
+		    		//Calculate the total_plan and burndown
+		    		for (List<String> tempList3:Point_of_Sprint )//the record of the sprint point
+		    		{
+		    			total_plan+=Integer.parseInt(tempList3.get(2));
+		    		}
+		    		int Point_Plan_Remain=total_plan;
+		    		int Point_finish_Remain=total_plan;
+		    		
+		    		
+		    		List<List<String>> Remain_of_Sprint=Arrays.asList(Arrays.asList("PI1_Sprint1","1/6/2017","0","0"),
+																   Arrays.asList("PI1_Sprint2","1/26/2017","0","0"),
+																   Arrays.asList("PI1_Sprint3","2/17/2017","0","0"),
+																   Arrays.asList("PI1_IP","3/10/2017","0","0"),
+																   Arrays.asList("PI2_Sprint1","3/24/2017","0","0"),
+																   Arrays.asList("PI2_Sprint2","4/14/2017","0","0"),
+																   Arrays.asList("PI2_Sprint3","5/5/2017","0","0"),
+																   Arrays.asList("PI2_IP","5/26/2017","0","0"),
+																   Arrays.asList("PI3_Spring1","6/9/2017","0","0"),
+																   Arrays.asList("PI3_Spring2","6/30/2017","0","0"),
+																   Arrays.asList("PI3_Spring3","7/21/2017","0","0"),
+																   Arrays.asList("PI3_IP","8/11/2017","0","0"),
+																   Arrays.asList("PI4_Spring1","8/25/2017","0","0"),
+																   Arrays.asList("PI4_Spring2","9/15/2017","0","0"),
+																   Arrays.asList("PI4_Spring3","10/6/2017","0","0"));
+		    		
+		    		List<List<String>> BurnUp_of_Sprint=Arrays.asList(Arrays.asList("PI1_Sprint1","1/6/2017","0","0"),
+																   Arrays.asList("PI1_Sprint2","1/26/2017","0","0"),
+																   Arrays.asList("PI1_Sprint3","2/17/2017","0","0"),
+																   Arrays.asList("PI1_IP","3/10/2017","0","0"),
+																   Arrays.asList("PI2_Sprint1","3/24/2017","0","0"),
+																   Arrays.asList("PI2_Sprint2","4/14/2017","0","0"),
+																   Arrays.asList("PI2_Sprint3","5/5/2017","0","0"),
+																   Arrays.asList("PI2_IP","5/26/2017","0","0"),
+																   Arrays.asList("PI3_Spring1","6/9/2017","0","0"),
+																   Arrays.asList("PI3_Spring2","6/30/2017","0","0"),
+																   Arrays.asList("PI3_Spring3","7/21/2017","0","0"),
+																   Arrays.asList("PI3_IP","8/11/2017","0","0"),
+																   Arrays.asList("PI4_Spring1","8/25/2017","0","0"),
+																   Arrays.asList("PI4_Spring2","9/15/2017","0","0"),
+																   Arrays.asList("PI4_Spring3","10/6/2017","0","0"));
+		    		for(int i=0;i<Point_of_Sprint.size();i++)
+		    		{
+		    			List<String> tempList5=Point_of_Sprint.get(i);
+		    			Point_Plan_Remain=Point_Plan_Remain-Integer.parseInt(tempList5.get(2));
+		    			Point_finish_Remain=Point_finish_Remain-Integer.parseInt(tempList5.get(3));
+		    			
+		    			Remain_of_Sprint.get(i).set(2, Integer.toString(Point_Plan_Remain));
+		    			Remain_of_Sprint.get(i).set(3, Integer.toString(Point_finish_Remain));
+		    		}  	
+		    		
+		    		int sum_plan=0;
+		    		int sum_close=0;
+		    		for(int i=0;i<Point_of_Sprint.size();i++)
+		    		{
+		    			List<String> tempList6=Point_of_Sprint.get(i);
+		    			sum_plan+=Integer.parseInt(tempList6.get(2));
+		    			sum_close+=Integer.parseInt(tempList6.get(3));
+		    			
+		    			BurnUp_of_Sprint.get(i).set(2, Integer.toString(sum_plan));
+		    			BurnUp_of_Sprint.get(i).set(3, Integer.toString(sum_close));
+		    		}
+		    		   		
+		    		
+		    		List<String> x1=new ArrayList<>();
+		    		List<Integer> y1=new ArrayList<>();
+		    		List<Integer> y2=new ArrayList<>();
+		    		
+		    		//P1:Draw the burndown
+		    		for(List<String> item:BurnUp_of_Sprint)
+		    		{
+		    			x1.add(item.get(0));
+		    			y1.add(Integer.parseInt(item.get(2)));
+		    			y2.add(Integer.parseInt(item.get(3)));
+		    		}
+		    		
+		    		Create_P1(x1,y1,y2);
+		
+		    		
+		    		//P2:Draw the story point by sprint
+		    		x1.clear();
+		    		y1.clear();
+		    		
+		    		for(List<String> item:Point_of_Sprint)
+		    		{
+		    			x1.add(item.get(0));
+		    			y1.add(Integer.parseInt(item.get(2)));//plan    			
+		    		}
+		    		
+		    		String chartID2=Create_P2(x1,y1);
+		    		System.out.println("CCW Team Velocity by Sprint:\n"+ ConstString.CHART_URL + chartID2);
+		    		
+		    		//P6:Draw the story point by sprint
+		    		x1.clear();
+		    		y1.clear();
+		    		y2.clear();
+		    		int Sprint_Average=0;
+		    		
+		    		for(List<String> item:Point_of_Sprint)
+		    		{  
+		    			Sprint_Average+=Integer.parseInt(item.get(3));
+		    		}
+		    		Sprint_Average=Sprint_Average/Point_of_Sprint.size();
+		    		
+		    		for(List<String> item:Point_of_Sprint)
+		    		{
+		    			x1.add(item.get(0));
+		    			y1.add(Integer.parseInt(item.get(3)));//finish    
+		    			y2.add(Sprint_Average);
+		    		}
+
+		    		Create_P6(x1,y2,y1);
+		    		
+		    		//P7:Draw the Plan vs Actual
+		    		x1.clear();
+		    		y1.clear();
+		    		y2.clear();
+		    		
+		    		for(List<String> item:Point_of_Sprint)
+		    		{
+		    			x1.add(item.get(0));
+		    			y1.add(Integer.parseInt(item.get(2)));//plan
+		    			y2.add(Integer.parseInt(item.get(3)));//finish	    				
+		    		}
+		    		
+		    		Create_P7(x1,y1,y2);
+		    		
+		    		
+		    		//P8:Draw the all epic
+		    		x1.clear();
+		    		y1.clear();
+		    		y2.clear();
+		    		
+		    		for(List<String> item:All_Epic)
+		    		{
+		    			x1.add(item.get(0));
+		    			y1.add(Integer.parseInt(item.get(1)));
+		    			y2.add(Integer.parseInt(item.get(2)));
+		    		}
+		    		
+		    		Create_P8(x1,y1,y2);  		  			
+		    		
+		    	}
+		    	
+		    }
+		    catch(Exception e)
+		    {
+		    	System.out.println(e);
+		    }
+		}
+		
+		//Lane Ma, Modify the demo to draw specific chart
+		public static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{	
+			S5KA_PM_Data_Weekly_Trend=new ProductData();
+			S5KA_PM_Data_Weekly_Trend.title="S5KA Release BurnUp(IC-Nov 7)";
+			
+			S5KA_PM_Data_Weekly_Trend.description="";//description		
+			S5KA_PM_Data_Weekly_Trend.xTitle="Date";
+			S5KA_PM_Data_Weekly_Trend.yTitle="Number";
+			S5KA_PM_Data_Weekly_Trend.yAxisFormat="#";
+			S5KA_PM_Data_Weekly_Trend.tableData=new DataTable();
+			S5KA_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(130,175,94),ColorFormater.RGB2String(135,199,255));
+			
+			S5KA_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+			S5KA_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Original Commitment"));
+			S5KA_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Story Points Finish"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_PM_Data_Weekly_Trend.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+			}
+		}
+		
+		public static String Create_P2(List<String> x1,List<Integer> y1)
+		{						
+			Chart S5KA_One_Chart=new ColumnChart("S5KA Team Velocity by Sprint");//Title
+			
+			S5KA_One_Chart.description="";//description		
+			S5KA_One_Chart.xTitle="Sprint";
+			S5KA_One_Chart.yTitle="Number";
+			S5KA_One_Chart.yAxisFormat="#";
+			S5KA_One_Chart.tableData=new DataTable();
+			S5KA_One_Chart.colorList=Arrays.asList("blue");
+			
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Story Points"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+			
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_One_Chart.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+				return null;
+			}
+			
+			return S5KA_One_Chart.ToEagleEye();
+		}
+		
+		public static void Create_P6(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{	
+			S5KA_PM_Data_ThroughputVelocity_sprint=new ProductData();
+			S5KA_PM_Data_ThroughputVelocity_sprint.title="Throughput - Velocity by Sprint";
+			
+			S5KA_PM_Data_ThroughputVelocity_sprint.description="";//description		
+			S5KA_PM_Data_ThroughputVelocity_sprint.xTitle="Sprint";
+			S5KA_PM_Data_ThroughputVelocity_sprint.yTitle="Number";
+			S5KA_PM_Data_ThroughputVelocity_sprint.yAxisFormat="#";
+			S5KA_PM_Data_ThroughputVelocity_sprint.tableData=new DataTable();
+			S5KA_PM_Data_ThroughputVelocity_sprint.colorList=Arrays.asList(ColorFormater.RGB2String(238,118,37),ColorFormater.RGB2String(91,155,213));
+			
+			S5KA_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
+			S5KA_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "AVERAGE"));
+			S5KA_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Customer impact(24,16]"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+					
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_PM_Data_ThroughputVelocity_sprint.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+			}
+		}
+		
+		public static void Create_P7(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{	
+			S5KA_PM_Data_Plan_Actual_Sprint=new ProductData();
+			S5KA_PM_Data_Plan_Actual_Sprint.title="Plan vs Actual";
+			
+			S5KA_PM_Data_Plan_Actual_Sprint.description="";//description		
+			S5KA_PM_Data_Plan_Actual_Sprint.xTitle="Sprint";
+			S5KA_PM_Data_Plan_Actual_Sprint.yTitle="Number";
+			S5KA_PM_Data_Plan_Actual_Sprint.yAxisFormat="#";
+			S5KA_PM_Data_Plan_Actual_Sprint.tableData=new DataTable();
+			S5KA_PM_Data_Plan_Actual_Sprint.colorList=Arrays.asList(ColorFormater.RGB2String(91,155,213),ColorFormater.RGB2String(237,125,49));
+
+			
+			S5KA_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+			S5KA_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Planned"));
+			S5KA_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Actual"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_PM_Data_Plan_Actual_Sprint.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+			}
+		}
+		
+		public static void Create_P8(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{	
+			S5KA_PM_Data_Feature_Progress=new ProductData();
+			S5KA_PM_Data_Feature_Progress.title="all epic";
+			S5KA_PM_Data_Feature_Progress.description="";//description		
+			S5KA_PM_Data_Feature_Progress.xTitle="Epic";
+			S5KA_PM_Data_Feature_Progress.yTitle="Number";
+			S5KA_PM_Data_Feature_Progress.yAxisFormat="#";
+			S5KA_PM_Data_Feature_Progress.tableData=new DataTable();
+			S5KA_PM_Data_Feature_Progress.colorList=Arrays.asList(ColorFormater.RGB2String(112,173,71),ColorFormater.RGB2String(68,114,196));
+			
+			S5KA_PM_Data_Feature_Progress.isStacked="true";
+			S5KA_PM_Data_Feature_Progress.chartLeft=400;
+			
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remain"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_PM_Data_Feature_Progress.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+			}
+		}
+		
+		public static void Create_P9(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{	
+			S5KA_PM_Data_Feature_Progress=new ProductData();
+			S5KA_PM_Data_Feature_Progress.title="Trend by Team";
+			S5KA_PM_Data_Feature_Progress.description="";//description		
+			S5KA_PM_Data_Feature_Progress.xTitle="Date";
+			S5KA_PM_Data_Feature_Progress.yTitle="Number";
+			S5KA_PM_Data_Feature_Progress.yAxisFormat="#";
+			S5KA_PM_Data_Feature_Progress.tableData=new DataTable();
+			S5KA_PM_Data_Feature_Progress.colorList=Arrays.asList("gray","blue");
+			
+			S5KA_PM_Data_Feature_Progress.isStacked="true";
+			S5KA_PM_Data_Feature_Progress.chartLeft=400;
+			
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+			S5KA_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remain"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				//TODO:(Jma7)
+				//	S5KA_PM_Data_Trend_Team.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+			}
+		}
+		
+		public static String Create_P3(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{						
+			Chart S5KA_One_Chart=new BarChart("Logix-Ladder");//Title
+			
+			S5KA_One_Chart.description="";//description		
+			S5KA_One_Chart.xTitle="Epic";
+			S5KA_One_Chart.yTitle="Story Points";
+			S5KA_One_Chart.yAxisFormat="#";
+			S5KA_One_Chart.tableData=new DataTable();
+			S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
+			//((ColumnChart)S5KA_One_Chart).isStacked="false";
+			//((AreaChart)S5KA_One_Chart).isStacked="true";
+			((BarChart)S5KA_One_Chart).isStacked="true";
+			
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_One_Chart.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+				return null;
+			}
+			
+			return S5KA_One_Chart.ToEagleEye();
+		}
+		
+		public static String Create_P4(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{						
+			Chart S5KA_One_Chart=new BarChart("FW Related");//Title
+			
+			S5KA_One_Chart.description="";//description		
+			S5KA_One_Chart.xTitle="Epic";
+			S5KA_One_Chart.yTitle="Story Points";
+			S5KA_One_Chart.yAxisFormat="#";
+			S5KA_One_Chart.tableData=new DataTable();
+			S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
+			((BarChart)S5KA_One_Chart).isStacked="true";
+			
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_One_Chart.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+				return null;
+			}
+			
+			return S5KA_One_Chart.ToEagleEye();
+		}
+		
+		public static String Create_P5(List<String> x1,List<Integer> y1, List<Integer> y2)
+		{						
+			Chart S5KA_One_Chart=new BarChart("Other");//Title
+			
+			S5KA_One_Chart.description="";//description		
+			S5KA_One_Chart.xTitle="Epic";
+			S5KA_One_Chart.yTitle="Story Points";
+			S5KA_One_Chart.yAxisFormat="#";
+			S5KA_One_Chart.tableData=new DataTable();
+			S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
+			((BarChart)S5KA_One_Chart).isStacked="true";
+			
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+			S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
+			
+			//Chart data
+					//////////////////////////////////////////////
+					List<String> x_data=x1;
+					List<Integer> y1_data=y1;
+					List<Integer> y2_data=y2;
+			int dataCount=x_data.size();
+			List<TableRow> rows = Lists.newArrayList();
+			for(int i=0;i<dataCount;i++)
+			{
+				TableRow row = new TableRow();
+			    row.addCell(new TableCell(x_data.get(i)));
+			    row.addCell(new TableCell(y1_data.get(i)));
+			    row.addCell(new TableCell(y2_data.get(i)));
+			    rows.add(row);
+			}
+			try 
+			{
+				S5KA_One_Chart.tableData.addRows(rows);
+			}catch(Exception e)
+			{
+				System.out.println("Import Exception!");
+				return null;
+			}
+			
+			return S5KA_One_Chart.ToEagleEye();
+		}
 	}

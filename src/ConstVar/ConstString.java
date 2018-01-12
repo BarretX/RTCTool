@@ -55,17 +55,24 @@ public class ConstString {
 	public final static String S5KA_NAME="S5KA";
 	public final static String S5KA_PM_CHARTSET_NAME="S5KA_For_PM";
 	
-	public final static String S5KA_QA_CHARTSET_NAME="S5KA_For_QA";
-	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Weekly= "FY17 Anomlay Backlog_3.0 Weekly" ;
-	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Monthly= "FY17 Anomlay Backlog_3.0 Monthly" ;
-	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Sprint= "FY17 Anomlay Backlog_3.0 Sprint" ;
-	public final static String S5KA_QA_CHART_Shippable_RC_anomaly_Weekly= "Shippable State RC anomaly Weekly" ;
+	public final static String S5KA_QA_CHARTSET_NAME="S5KA Quality Metrics";
+	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Weekly= "FY17 Anomaly Backlog_3.0 Weekly" ;
+	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Monthly= "FY17 Anomaly Backlog_3.0 Monthly" ;
+	public final static String S5KA_QA_CHART_FY17_Anomlay_Backlog_Sprint= "FY17 Anomaly Backlog_3.0 Sprint" ;
+	public final static String S5KA_QA_CHART_Shippable_RC_anomaly_Weekly= "Shippable State RC Anomaly Weekly" ;
 	public final static String S5KA_QA_CHART_Shippable_RC_anomaly_monthly= "Shippable State RC anomaly monthly";
 	public final static String S5KA_QA_CHART_Shippable_RC_anomaly_Sprint= "Shippable State RC anomaly Sprint" ;
 	public final static String S5KA_QA_CHART_Runrate_all_anomaly = "Runrate (all anomaly)";
 	public final static String S5KA_QA_CHART_Runrate_RC = "Runrate (RC)" ;
 	public final static String S5KA_QA_CHART_Stability_all_anomaly = "Stability (all anomaly)" ;
 	public final static String S5KA_QA_CHART_Stability_RC = "Stability (RC)";
+	public final static String S5KA_PM_CHART_Weekly_Trend="Weekly Trend";
+	public final static String S5KA_PM_CHART_Trend_Epic="Trend by Epic";
+	public final static String S5KA_PM_CHART_Trend_Team="Trend by Team";
+	public final static String S5KA_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
+	public final static String S5KA_PM_CHART_Plan_Actual_Sprint="Plan vs Actual by Sprint";
+	public final static String S5KA_PM_CHART_Feature_Progress="Feature Progress";
+	public final static String S5KA_PM_CHART_Resource_Sprint="Resource by Sprint";
 
 
 	public final static String CCW_NAME="CCW";
@@ -79,7 +86,7 @@ public class ConstString {
 	
 	
 	public final static String FTVIEWSE_NAME="FTViewSE";
-	public final static String FTVIEWSE_PM_CHARTSET_NAME="FTViewSE_For_PM";
+	public final static String FTVIEWSE_PM_CHARTSET_NAME="CCW Project Metrics";
 	public final static String FTVIEWSE_PM_CHART_Weekly_Trend="Weekly Trend";
 	public final static String FTVIEWSE_PM_CHART_Trend_Epic="Trend by Epic";
 	public final static String FTVIEWSE_PM_CHART_Trend_Team="Trend by Team";

@@ -28,6 +28,7 @@ public class Program {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		 Date DateBegin=new Date();
 		loginRTC();
 		createCharts();
 		createChartSet();
@@ -35,7 +36,12 @@ public class Program {
 		
 		//Output
 		printCharts();
-		saveChartsToXML();
+		saveChartsToXML();	
+		Date DateEnd=new Date();
+		
+		System.out.println(DateBegin.toString());
+		System.out.println(DateEnd.toString());
+		
 	}
 	
 	//Login/off RTC
@@ -48,7 +54,8 @@ public class Program {
 	}
 	public static void createCharts()
 	{
-	//	createChartsForS5KA_PM();
+	
+		//	createChartsForS5KA_PM();
 		createChartsForS5KA_QA();
 		
 	//	createChartsForCCW_PM();
@@ -138,7 +145,68 @@ public class Program {
 	public static String ChartSetForS5KA_PM=null;
 	public static void createChartsForS5KA_PM()
 	{
+		List<String> chartSetIDList=new ArrayList<String>();
+		ChartsForS5KA_PM = new HashMap<String,String>();
 		
+		ProductData d1=S5KADataFactory.Get_S5KA_PM_Data_Weekly_Trend();
+		if(null != d1)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_Weekly_Trend=new ChartManager(d1, new LineChart(ConstString.S5KA_PM_CHART_Weekly_Trend));
+			String id1=Mgr_S5KA_PM_CHART_Weekly_Trend.createChartInEagleEye();
+			chartSetIDList.add(id1);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_Weekly_Trend, id1);
+		}
+		
+		ProductData d2=S5KADataFactory.Get_S5KA_PM_Data_Trend_Epic();
+		if(null != d2)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_Trend_Epic=new ChartManager(d2, new ColumnChart(ConstString.S5KA_PM_CHART_Trend_Epic));
+			String id2=Mgr_S5KA_PM_CHART_Trend_Epic.createChartInEagleEye();
+			chartSetIDList.add(id2);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_Trend_Epic, id2);
+		}
+		
+		ProductData d3=S5KADataFactory.Get_S5KA_PM_Data_Trend_Team();
+		if(null != d3)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_Trend_Team=new ChartManager(d3, new ColumnChart(ConstString.S5KA_PM_CHART_Trend_Team));
+			String id3=Mgr_S5KA_PM_CHART_Trend_Team.createChartInEagleEye();
+			chartSetIDList.add(id3);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_Trend_Team, id3);
+		}
+		
+		ProductData d4=S5KADataFactory.Get_S5KA_PM_Data_ThroughputVelocity_sprint();
+		if(null != d4)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_ThroughputVelocity_sprint=new ChartManager(d4, new ComboChart(ConstString.S5KA_PM_CHART_ThroughputVelocity_sprint));
+			String id4=Mgr_S5KA_PM_CHART_ThroughputVelocity_sprint.createChartInEagleEye();
+			chartSetIDList.add(id4);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_ThroughputVelocity_sprint, id4);
+		}
+		
+		ProductData d5=S5KADataFactory.Get_S5KA_PM_Data_Plan_Actual_Sprint();
+		if(null != d5)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_Plan_Actual_Sprint=new ChartManager(d5, new ColumnChart(ConstString.S5KA_PM_CHART_Plan_Actual_Sprint));
+			String id5=Mgr_S5KA_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
+			chartSetIDList.add(id5);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_Plan_Actual_Sprint, id5);
+		}
+		
+		ProductData d6=S5KADataFactory.Get_S5KA_PM_Data_Feature_Progress();
+		if(null != d6)
+		{
+			ChartManager Mgr_S5KA_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.S5KA_PM_CHART_Feature_Progress));
+			String id6=Mgr_S5KA_PM_CHART_Feature_Progress.createChartInEagleEye();
+			chartSetIDList.add(id6);
+			ChartsForS5KA_PM.put(ConstString.S5KA_PM_CHART_Feature_Progress, id6);
+		}
+
+		if(null != chartSetIDList && chartSetIDList.size()>0)
+		{
+			ChartSetForS5KA_PM=ChartManager.CreateChartSet(ConstString.S5KA_PM_CHARTSET_NAME,null,chartSetIDList);
+			ChartSets.put(ConstString.S5KA_PM_CHARTSET_NAME, ChartSetForS5KA_PM);
+		}
 	}
 	
 	public static Map<String,String> ChartsForS5KA_QA= null;

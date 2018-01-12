@@ -57,18 +57,25 @@ public class FTViewSEDataFactory {
 	public static ProductData Get_FTVIEWSE_PM_Data_Trend_Epic()
 	{
 		//[start]
+		int nProjectNumber=0;
 	    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
 	    List<String> projectAreaNames = new ArrayList<>();
 	    for(int i = 0;i<iProcessAreas.size();i++)
 		{
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
+	    	
+			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			{
+				nProjectNumber=i;
+			}
+			
 			System.out.println(iProcessArea.getName());
 		}
 	    //[end]
 	    
 	    // there suppose you take the first value
-	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(2));
+	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
 		List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
 		for(String str: allDispNames)
 		{
@@ -87,7 +94,7 @@ public class FTViewSEDataFactory {
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -266,18 +273,23 @@ public class FTViewSEDataFactory {
 	public static ProductData Get_FTVIEWSE_PM_Data_Trend_Team()
 	{		
 		//[start]
+		int nProjectNumber=0;
 	    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
 	    List<String> projectAreaNames = new ArrayList<>();
 	    for(int i = 0;i<iProcessAreas.size();i++)
 		{
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
+			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			{
+				nProjectNumber=i;
+			}
 			System.out.println(iProcessArea.getName());
 		}
 	    //[end]
 	    
 	    // there suppose you take the first value
-	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(2));
+	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
 		List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
 		for(String str: allDispNames)
 		{
@@ -333,7 +345,7 @@ public class FTViewSEDataFactory {
 		
 	    try {
 			    MulConditionQuery query=new MulConditionQuery();
-		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+		    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);		    
 		    	if(resultOwner!=null)
 		    	{
 		    		resultOwner.setLimit(1000);
@@ -492,18 +504,25 @@ public class FTViewSEDataFactory {
 	{	
 		
 		//[start]
+		int nProjectNumber=0;
 	    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
 	    List<String> projectAreaNames = new ArrayList<>();
 	    for(int i = 0;i<iProcessAreas.size();i++)
 		{
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
+	    	
+			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			{
+				nProjectNumber=i;
+			}
+	    	
 			System.out.println(iProcessArea.getName());
 		}
 	    //[end]
 	    
 	    // there suppose you take the first value
-	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(2));
+	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
 		List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
 		for(String str: allDispNames)
 		{
@@ -513,14 +532,14 @@ public class FTViewSEDataFactory {
 	    List<SearchCondition> conditionsList = new ArrayList<>(); 
 	    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
 	    
-	    Calculate_BurnDown	( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//1,2,6,7,8
+	    Calculate_BurnDown	( repository, handler,projectAreaNames,getAttributesValue,conditionsList,nProjectNumber);//1,2,6,7,8
 //	    Calculate_LogixLike( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//3
 //	    Calculate_FW_Related( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//4
 //	    Calculate_Others( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//5
 	}
 	
 	//Calculate Agile Burndown of CCW 1,2,6,7,8
-	public static void Calculate_BurnDown(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList) 
+	public static void Calculate_BurnDown(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -529,28 +548,31 @@ public class FTViewSEDataFactory {
 	    needAttributeList.add("Status");//pass                   3
 	    
 	    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
-		List<List<String>> Point_of_Sprint=Arrays.asList(Arrays.asList("Sprint 3","1/26/2017","0","0"),
-													   Arrays.asList("Sprint 4","2/16/2017","0","0"),
-													   Arrays.asList("Sprint 5","3/9/2017","0","0"),
-													   Arrays.asList("Sprint 6","3/23/2017","0","0"),
-													   Arrays.asList("Sprint 7","4/13/2017","0","0"),
-													   Arrays.asList("Sprint 8","5/4/2017","0","0"),
-													   Arrays.asList("Sprint 9","5/25/2017","0","0"),
-													   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-													   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-													   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-													   Arrays.asList("Sprint 13","8/10/2017","0","0"),
+		List<List<String>> Point_of_Sprint=Arrays.asList(
+													   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
+													   //Arrays.asList("Sprint 4","2/16/2017","0","0"),
+													   //Arrays.asList("Sprint 5","3/9/2017","0","0"),
+													   //Arrays.asList("Sprint 6","3/23/2017","0","0"),
+													  // Arrays.asList("Sprint 7","4/13/2017","0","0"),
+													  // Arrays.asList("Sprint 8","5/4/2017","0","0"),
+													 //  Arrays.asList("Sprint 9","5/25/2017","0","0"),
+													//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
+													//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
+													//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
+													//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
 													   Arrays.asList("Sprint 14","8/24/2017","0","0"),
 													   Arrays.asList("Sprint 15","9/14/2017","0","0"),
 													   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-													   Arrays.asList("Sprint 17","10/19/2017","0","0"));
+													   Arrays.asList("Sprint 17","10/19/2017","0","0"),
+													   Arrays.asList("Sprint 18","10/19/2017","0","0"),
+													   Arrays.asList("Sprint 19","10/19/2017","0","0"));
 		
 		//the definition of the array:0-Epic Summary; 1-Finish Point; 2-Remain Point;
 		List<List<String>> All_Epic=new ArrayList<>();
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -679,37 +701,43 @@ public class FTViewSEDataFactory {
 	    		int Point_finish_Remain=total_plan;
 	    		
 	    		
-	    		List<List<String>> Remain_of_Sprint=Arrays.asList(Arrays.asList("Sprint 3","1/26/2017","0","0"),
-																   Arrays.asList("Sprint 4","2/16/2017","0","0"),
-																   Arrays.asList("Sprint 5","3/9/2017","0","0"),
-																   Arrays.asList("Sprint 6","3/23/2017","0","0"),
-																   Arrays.asList("Sprint 7","4/13/2017","0","0"),
-																   Arrays.asList("Sprint 8","5/4/2017","0","0"),
-																   Arrays.asList("Sprint 9","5/25/2017","0","0"),
-																   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-																   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-																   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-																   Arrays.asList("Sprint 13","8/10/2017","0","0"),
+	    		List<List<String>> Remain_of_Sprint=Arrays.asList(
+	    														   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
+																   //Arrays.asList("Sprint 4","2/16/2017","0","0"),
+																//   Arrays.asList("Sprint 5","3/9/2017","0","0"),
+																//   Arrays.asList("Sprint 6","3/23/2017","0","0"),
+																//   Arrays.asList("Sprint 7","4/13/2017","0","0"),
+																//   Arrays.asList("Sprint 8","5/4/2017","0","0"),
+																//   Arrays.asList("Sprint 9","5/25/2017","0","0"),
+																//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
+																//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
+																//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
+																//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
 																   Arrays.asList("Sprint 14","8/24/2017","0","0"),
 																   Arrays.asList("Sprint 15","9/14/2017","0","0"),
 																   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-																   Arrays.asList("Sprint 17","10/19/2017","0","0"));
+																   Arrays.asList("Sprint 17","10/19/2017","0","0"),
+																   Arrays.asList("Sprint 18","10/19/2017","0","0"),
+																   Arrays.asList("Sprint 19","10/19/2017","0","0"));
 	    		
-	    		List<List<String>> BurnUp_of_Sprint=Arrays.asList(Arrays.asList("Sprint 3","1/26/2017","0","0"),
-																   Arrays.asList("Sprint 4","2/16/2017","0","0"),
-																   Arrays.asList("Sprint 5","3/9/2017","0","0"),
-																   Arrays.asList("Sprint 6","3/23/2017","0","0"),
-																   Arrays.asList("Sprint 7","4/13/2017","0","0"),
-																   Arrays.asList("Sprint 8","5/4/2017","0","0"),
-																   Arrays.asList("Sprint 9","5/25/2017","0","0"),
-																   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-																   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-																   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-																   Arrays.asList("Sprint 13","8/10/2017","0","0"),
+	    		List<List<String>> BurnUp_of_Sprint=Arrays.asList(
+	    														   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
+																  // Arrays.asList("Sprint 4","2/16/2017","0","0"),
+																//   Arrays.asList("Sprint 5","3/9/2017","0","0"),
+																//   Arrays.asList("Sprint 6","3/23/2017","0","0"),
+																//   Arrays.asList("Sprint 7","4/13/2017","0","0"),
+																//   Arrays.asList("Sprint 8","5/4/2017","0","0"),
+																//   Arrays.asList("Sprint 9","5/25/2017","0","0"),
+																//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
+																//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
+																//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
+																//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
 																   Arrays.asList("Sprint 14","8/24/2017","0","0"),
 																   Arrays.asList("Sprint 15","9/14/2017","0","0"),
 																   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-																   Arrays.asList("Sprint 17","10/19/2017","0","0"));
+																   Arrays.asList("Sprint 17","10/19/2017","0","0"),
+																   Arrays.asList("Sprint 18","10/19/2017","0","0"),
+																   Arrays.asList("Sprint 19","10/19/2017","0","0"));
 	    		for(int i=0;i<Point_of_Sprint.size();i++)
 	    		{
 	    			List<String> tempList5=Point_of_Sprint.get(i);
@@ -822,7 +850,7 @@ public class FTViewSEDataFactory {
 	
 	//Lane Ma
 	//Calculate CCW R11 Feature Progress- Logix-ladder 3
-	public static void Calculate_LogixLike(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList) 
+	public static void Calculate_LogixLike(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -833,7 +861,7 @@ public class FTViewSEDataFactory {
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -950,7 +978,7 @@ public class FTViewSEDataFactory {
 	
 	//Lane Ma
 	//Calculate CCW R11 Feature Progress- FW related
-	public static void Calculate_FW_Related(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList) 
+	public static void Calculate_FW_Related(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -961,7 +989,7 @@ public class FTViewSEDataFactory {
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -1075,7 +1103,7 @@ public class FTViewSEDataFactory {
 
 	//Lane Ma
 	//Calculate CCW R11 Feature Progress- Others
-	public static void Calculate_Others(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList) 
+	public static void Calculate_Others(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -1086,7 +1114,7 @@ public class FTViewSEDataFactory {
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -1203,7 +1231,7 @@ public class FTViewSEDataFactory {
 	
 	//Lane Ma
 	//Calculate CCW R11 Feature Progress- All
-	public static void Calculate_All(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList) 
+	public static void Calculate_All(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -1214,7 +1242,7 @@ public class FTViewSEDataFactory {
 	    
 	    try {
 		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(2), null, conditionsList);		    
+	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
 	    	if(resultOwner!=null)
 	    	{
 	    		resultOwner.setLimit(1000);
@@ -1309,7 +1337,7 @@ public class FTViewSEDataFactory {
 	public static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_Weekly_Trend=new ProductData();
-		FTVIEWSE_PM_Data_Weekly_Trend.title="CCW R11 Release BurnUp(IC-Nov 7)";
+		FTVIEWSE_PM_Data_Weekly_Trend.title="CCW R11.01 Release Burnup";
 		
 		FTVIEWSE_PM_Data_Weekly_Trend.description="";//description		
 		FTVIEWSE_PM_Data_Weekly_Trend.xTitle="Date";
@@ -1349,7 +1377,7 @@ public class FTViewSEDataFactory {
 	
 	public static String Create_P2(List<String> x1,List<Integer> y1)
 	{						
-		Chart S5KA_One_Chart=new ColumnChart("CCW Team Velocity by Sprint");//Title
+		Chart S5KA_One_Chart=new ColumnChart("CCW R11 Release Burnup");//Title
 		
 		S5KA_One_Chart.description="";//description		
 		S5KA_One_Chart.xTitle="Sprint";
