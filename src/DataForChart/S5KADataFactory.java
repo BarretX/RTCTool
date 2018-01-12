@@ -363,7 +363,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Shippable_RC_Weekly(List<String> x1,List<Integer> y1)
 		{
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly=new ProductData();
-			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.title="Shippable State_S5KA RC anomlay Weekly";
+			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.title=ConstString.S5KA_QA_CHART_Shippable_RC_anomaly_Weekly;
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_Shippable_RC_anomaly_Weekly.xTitle="Week";
@@ -401,7 +401,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Shippable_RC_Sprint(List<String> x1,List<Integer> y1)
 		{	
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint=new ProductData();
-			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.title="Shippable State_S5KA RC anomlay Sprint";
+			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.title=ConstString.S5KA_QA_CHART_Shippable_RC_anomaly_Sprint;
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_Shippable_RC_anomaly_Sprint.xTitle="Sprint";
@@ -439,7 +439,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Shippable_RC_Monthly(List<String> x1,List<Integer> y1)
 		{	
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly=new ProductData();
-			S5KA_QA_Data_Shippable_RC_anomaly_monthly.title="Shippable State_S5KA RC anomlay Monthly";
+			S5KA_QA_Data_Shippable_RC_anomaly_monthly.title=ConstString.S5KA_QA_CHART_Shippable_RC_anomaly_monthly;
 			
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_Shippable_RC_anomaly_monthly.xTitle="Month";
@@ -518,7 +518,7 @@ import jxl.write.WritableWorkbook;
 		{
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly=new ProductData();
 			
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.title="S5KA FY17 Anomlay Backlog_3.0 Weekly";
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.title=ConstString.S5KA_QA_CHART_FY17_Anomlay_Backlog_Weekly;
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Weekly.xTitle="Week";
@@ -559,7 +559,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_Sprint(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{	
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint=new ProductData();
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.title="S5KA FY17 Anomlay Backlog_3.0 Sprint";
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.title=ConstString.S5KA_QA_CHART_FY17_Anomlay_Backlog_Sprint;
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Sprint.xTitle="date";
@@ -601,10 +601,10 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_Monthly(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly=new ProductData();
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.title="S5KA FY17 Anomlay Backlog_3.0 Monthly";
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.title=ConstString.S5KA_QA_CHART_FY17_Anomlay_Backlog_Monthly;
 			
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.description="Goal (Customer impact16):15";//description		
-			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.xTitle="date";
+			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.xTitle="Month";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.yTitle="Number";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.yAxisFormat="#";
 			S5KA_QA_Data_FY17_Anomlay_Backlog_Monthly.tableData=new DataTable();
@@ -643,10 +643,10 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_3(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{
 			S5KA_QA_Data_Runrate_all_anomaly=new ProductData();
-			S5KA_QA_Data_Runrate_all_anomaly.title="S5KA Runrate (all anomally)";
+			S5KA_QA_Data_Runrate_all_anomaly.title=ConstString.S5KA_QA_CHART_Runrate_all_anomaly;
 			
 			S5KA_QA_Data_Runrate_all_anomaly.description="Goal (Customer impact16):15";//description		
-			S5KA_QA_Data_Runrate_all_anomaly.xTitle="Date";
+			S5KA_QA_Data_Runrate_all_anomaly.xTitle="Sprint";
 			S5KA_QA_Data_Runrate_all_anomaly.yTitle="Number";
 			S5KA_QA_Data_Runrate_all_anomaly.yAxisFormat="#";
 			S5KA_QA_Data_Runrate_all_anomaly.tableData=new DataTable();
@@ -685,10 +685,10 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_4(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{	
 			S5KA_QA_Data_Stability_all_anomaly=new ProductData();
-			S5KA_QA_Data_Stability_all_anomaly.title="S5KA Stability (all anomally)";
+			S5KA_QA_Data_Stability_all_anomaly.title=ConstString.S5KA_QA_CHART_Stability_all_anomaly;
 			
 			S5KA_QA_Data_Stability_all_anomaly.description="Goal (Customer impact16):15";//description		
-			S5KA_QA_Data_Stability_all_anomaly.xTitle="Date";
+			S5KA_QA_Data_Stability_all_anomaly.xTitle="Sprint";
 			S5KA_QA_Data_Stability_all_anomaly.yTitle="Number";
 			S5KA_QA_Data_Stability_all_anomaly.yAxisFormat="#";
 			S5KA_QA_Data_Stability_all_anomaly.tableData=new DataTable();
@@ -727,7 +727,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_5(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{	
 			S5KA_QA_Data_Runrate_RC=new ProductData();
-			S5KA_QA_Data_Runrate_RC.title="S5KA Runrate (RC)";
+			S5KA_QA_Data_Runrate_RC.title=ConstString.S5KA_QA_CHART_Runrate_RC;
 			
 			S5KA_QA_Data_Runrate_RC.description="Goal (Customer impact16):15";//description		
 			S5KA_QA_Data_Runrate_RC.xTitle="Date";
@@ -769,7 +769,7 @@ import jxl.write.WritableWorkbook;
 		public static void Set_Create_For_QA_S5KA_6(List<String> x1,List<Integer> y1,List<Integer> y2)
 		{
 			S5KA_QA_Data_Stability_RC=new ProductData();
-			S5KA_QA_Data_Stability_RC.title="S5KA Stability (RC)";
+			S5KA_QA_Data_Stability_RC.title=ConstString.S5KA_QA_CHART_Stability_RC;
 			
 			S5KA_QA_Data_Stability_RC.description="";//description		
 			S5KA_QA_Data_Stability_RC.xTitle="Date";

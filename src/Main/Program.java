@@ -64,7 +64,7 @@ public class Program {
 	//	createChartsForFTAC_PM();
 	//	createChartsForFTAC_QA();
 		
-		createChartsForFTViewSE_PM();
+	//	createChartsForFTViewSE_PM();
 	//	createChartsForFTViewSE_QA();
 	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();
