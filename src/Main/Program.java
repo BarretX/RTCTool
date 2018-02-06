@@ -56,7 +56,7 @@ public class Program {
 	{
 	
 		//	createChartsForS5KA_PM();
-		createChartsForS5KA_QA();
+	//	createChartsForS5KA_QA();
 		
 	//	createChartsForCCW_PM();
 	//	createChartsForCCW_QA();
@@ -64,7 +64,7 @@ public class Program {
 	//	createChartsForFTAC_PM();
 	//	createChartsForFTAC_QA();
 		
-	//	createChartsForFTViewSE_PM();
+		createChartsForFTViewSE_PM();
 	//	createChartsForFTViewSE_QA();
 	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();

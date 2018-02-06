@@ -207,8 +207,8 @@ import jxl.write.WritableWorkbook;
 		    		resultOwner.setLimit(100);	
 		    		List<List<String>> resultList = getAttributesValue.GetAllNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),resultOwner,needAttributeList);
 		    		
-		    		//show all data
-		    		int j=0;
+		    		//show all anomaly data
+		    	/*	int j=0;
 		    		for(List<String> tmpList2 : resultList)
 		    		{
 		    			int i = 0;
@@ -219,7 +219,7 @@ import jxl.write.WritableWorkbook;
 		    				System.out.print(i++ + "  "+str+"  ;; ");
 		    			}
 		    			System.out.println();
-		    		}
+		    		}*/
 		    		
 		    		//Save all data
 		    		try
@@ -252,9 +252,12 @@ import jxl.write.WritableWorkbook;
 		    		}
 		    		
 		    		
-	                //calculate the data need in next 
-		    		List<ArrayList<String>> SourceDataFilled=CalculateSourceData(needAttributeList,resultList); 	    		
-		    		for (List<String> item:SourceDataFilled)
+	                //calculate the data need in next step
+		    		List<ArrayList<String>> SourceDataFilled=CalculateSourceData(needAttributeList,resultList); 	
+		    		
+		    		//print the SourceData Filled
+		    		
+		    		/*for (List<String> item:SourceDataFilled)
 		    		{
 		    			int i = 0;
 		    			for(String str : item)
@@ -262,7 +265,8 @@ import jxl.write.WritableWorkbook;
 		    				System.out.print(i++ + "\t"+str+"\t");
 		    			}
 		    			System.out.println();
-		    		}
+		    		}*/
+		    		
 		    		//calculate the anomaly count created in every week
 		    		List<ArrayList<String>> ResultData=S5KA_FY17_Anomlay_Backlog3_SourceData_Week(SourceDataFilled);
 
@@ -281,6 +285,7 @@ import jxl.write.WritableWorkbook;
 		    		
 		    		// ("S5KA FY17 Anomlay Backlog_3.0 Weekly)
 		    	    Set_Create_For_QA_S5KA_1(X_Data,Y1_Data,Y2_Data);
+		    	    //("S5KA Shippable State RC Anomaly Weekly")
 		    	    Set_Shippable_RC_Weekly(X_Data,Y3_Data);
 
 		    	    
@@ -299,6 +304,7 @@ import jxl.write.WritableWorkbook;
 		    		}
 		    	    //("S5KA FY17 Anomlay Backlog_3.0 Sprint")
 		    	    Set_Create_For_QA_S5KA_Sprint(X_Data,Y1_Data,Y2_Data);
+		    	    //("S5KA Shippable State RC Anomaly Sprint")
 		    	    Set_Shippable_RC_Sprint(X_Data,Y3_Data);	    	    
 
 		    	    
@@ -317,6 +323,7 @@ import jxl.write.WritableWorkbook;
 		    		}
 		    	   //("S5KA FY17 Anomlay Backlog_3.0 Monthly");
 		    	    Set_Create_For_QA_S5KA_Monthly(X_Data,Y1_Data,Y2_Data);
+		    	    //("S5KA Shippable State RC Anomaly Monthly")
 		    	    Set_Shippable_RC_Monthly(X_Data,Y3_Data);
 		    	    		    	    
 		    	    
@@ -349,10 +356,10 @@ import jxl.write.WritableWorkbook;
 		    			Y2_Data_4.add(Integer.parseInt(tmpList3.get(8)));
 		    		}
 		    		
-		    	    Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1);
-		    	    Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2);	
-		    	    Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3);    	    
-		    	    Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4); 
+		    	    Set_Create_For_QA_S5KA_3(X_Data_1,Y1_Data_1,Y2_Data_1); //Runrate (All Anomaly)
+		    	    Set_Create_For_QA_S5KA_4(X_Data_1,Y1_Data_2,Y2_Data_2);	//Runrate (RC)
+		    	    Set_Create_For_QA_S5KA_5(X_Data_1,Y1_Data_3,Y2_Data_3); //Stability (All Anomaly)   	    
+		    	    Set_Create_For_QA_S5KA_6(X_Data_1,Y1_Data_4,Y2_Data_4); //Stability (RC)
 		    	}
 		    	
 			} catch (Exception e) {
@@ -1076,7 +1083,7 @@ import jxl.write.WritableWorkbook;
 			
 			int i_rc_sum=0;
 			int j_rc_sum=0;
-			for(List<String> tempList:Sprint_Definition)
+			for(List<String> tempList:Sprint_Definition) // 1-2 layer for() loop, iterate the sprint
 			{
 				int i=0;int i_rc=0;
 				int j=0;int j_rc=0;
@@ -1088,7 +1095,7 @@ import jxl.write.WritableWorkbook;
 					c_SprintBegin.setTime(d_SprintBegin);
 					c_SprintEnd.setTime(d_SprintEnd);
 					
-					for(ArrayList<String> tempList1:sourcedata)
+					for(ArrayList<String> tempList1:sourcedata)  //2-1 layer for() loop, iterate the sprint
 					{
 						String temp="";
 						temp=tempList1.get(12); //get the create date
@@ -1126,44 +1133,43 @@ import jxl.write.WritableWorkbook;
 						c_SprintEnd.set(Calendar.MINUTE, 0);
 						c_SprintEnd.set(Calendar.SECOND, 0);
 						
-						//if((CreateDate.after(c_SprintBegin)&&CreateDate.before(c_SprintEnd)))  //Create in this week
+						//if create in this sprint
 						if((CreateDate.after(c_SprintBegin)&&CreateDate.before(c_SprintEnd))||(CreateDate.equals(c_SprintBegin))||CreateDate.equals(c_SprintEnd))  //Create in this week
 						{
-							i++;
-							if(tempList1.get(4).equals("1"))
+							i++;  //All Anomaly
+							if(tempList1.get(4).equals("1"))  //RC=1,RC_Anomaly
 							{
 								i_rc++;
 							}
 						}	
-						//if(VerifyDate.after(c_SprintBegin)&&VerifyDate.before(c_SprintEnd))
+						//if verify in this sprint
 						if((VerifyDate.after(c_SprintBegin)&&VerifyDate.before(c_SprintEnd))||(VerifyDate.equals(c_SprintBegin))||(VerifyDate.equals(c_SprintEnd)))
 						{
-							j++;
-							if(tempList1.get(4).equals("1"))
+							j++;  //All Anomaly
+							if(tempList1.get(4).equals("1"))  //RC=1,RC_Anomaly
 							{
 								j_rc++;
 							}
 						}
 					}
 					
-					FilledItes.add(tempList.get(2));
-					FilledItes.add(String.valueOf(i));
+					FilledItes.add(tempList.get(2));        //index 0:Sprint
+					FilledItes.add(String.valueOf(i));      //index 1:All Anomaly incoming of this sprint
 					i_sum+=i;
-					FilledItes.add(String.valueOf(j));
+					FilledItes.add(String.valueOf(j));      //index 2:All Anomaly fixed of this sprint
 					j_sum+=j;
 					
-					FilledItes.add(String.valueOf(i_sum));
-					FilledItes.add(String.valueOf(j_sum));
+					FilledItes.add(String.valueOf(i_sum));   //index 3:all Anomaly incoming by today
+					FilledItes.add(String.valueOf(j_sum));   //index 4:all anomaly fixed by today
 					
-					FilledItes.add(String.valueOf(i_rc));
+					FilledItes.add(String.valueOf(i_rc));    //index 5:RC Anomaly incoming of this sprint
 					i_rc_sum+=i_rc;
-					FilledItes.add(String.valueOf(j_rc));
+					FilledItes.add(String.valueOf(j_rc));    //index 6:RC Anomaly fixed of this sprint
 					j_rc_sum+=j_rc;
 					SourceDataFilled.add(FilledItes);
 					
-					FilledItes.add(String.valueOf(i_rc_sum));
-					FilledItes.add(String.valueOf(j_rc_sum));
-					
+					FilledItes.add(String.valueOf(i_rc_sum)); //index 7:RC Anomaly incoming by today
+					FilledItes.add(String.valueOf(j_rc_sum)); //index 8:RC Anomaly fixed by today
 					TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));				
 					Calendar Today=Calendar.getInstance();
 					if(Today.before(c_SprintBegin))
@@ -1232,14 +1238,14 @@ import jxl.write.WritableWorkbook;
 			
 			try
 			{
-				Date tempDate=sdf2.parse(ResultData.get(ResultData.size()-1).get(0));//æœ€å�Žä¸€è¡Œæœ€å�Žä¸€åˆ—
+				Date tempDate=sdf2.parse(ResultData.get(ResultData.size()-1).get(0));
 				
 				LastUpdateDay.setTime(tempDate);
 				LastUpdateDay.set(Calendar.HOUR, 0);
 				LastUpdateDay.set(Calendar.MINUTE, 0);
 				LastUpdateDay.set(Calendar.SECOND, 0);
 				
-				if((Today.get(Calendar.DAY_OF_WEEK)==Calendar.MONDAY)&&(Today.after(LastUpdateDay)))//å½“å‰�æ—¶é—´ä¸ºå‘¨ä¸€å¹¶ä¸�?å¤§äºŽä¸Šä¸€æ¬¡æ›´æ–°æ—¶é—´
+				if((Today.get(Calendar.DAY_OF_WEEK)==Calendar.MONDAY)&&(Calendar_Compare.After(Today, LastUpdateDay)))
 				{
 					ArrayList<String> InsertItem=new ArrayList<String>();
 					for(ArrayList<String> tempList:sourcedata)

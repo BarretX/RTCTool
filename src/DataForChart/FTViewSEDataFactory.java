@@ -39,7 +39,6 @@ import SearchWorkItem.MulConditionQuery;
 import SearchWorkItem.SearchCondition;
 
 public class FTViewSEDataFactory {
-//	private static final List Date = null;
 	private static LoginHandler handler=Program.handler;
 	private static ITeamRepository repository=Program.repository;	
 
@@ -398,7 +397,6 @@ public class FTViewSEDataFactory {
 								 DateOfStory=sdf.parse(resultList.get(j).get(4));
 								 
 								 if(DateOfStory.after(Week_Trend.get(i))&&DateOfStory.before(Week_Trend.get(i+1))&&TeamResultList.get(j).equals(SpeicTeam))
-								// if(DateOfStory.after(Week_Trend.get(i))&&DateOfStory.before(Week_Trend.get(i+1)))
 								 {
 									 if(resultList.get(j).get(2).equals(""))
 										 continue;
@@ -523,19 +521,11 @@ public class FTViewSEDataFactory {
 	    
 	    // there suppose you take the first value
 	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
-		List<String> allDispNames = getAttributesValue.GetAllAttributeDispName();
-		for(String str: allDispNames)
-		{
-			System.out.println(str);
-		}
 		
 	    List<SearchCondition> conditionsList = new ArrayList<>(); 
 	    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
 	    
 	    Calculate_BurnDown	( repository, handler,projectAreaNames,getAttributesValue,conditionsList,nProjectNumber);//1,2,6,7,8
-//	    Calculate_LogixLike( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//3
-//	    Calculate_FW_Related( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//4
-//	    Calculate_Others( repository, handler,projectAreaNames,getAttributesValue,conditionsList);//5
 	}
 	
 	//Calculate Agile Burndown of CCW 1,2,6,7,8
@@ -587,26 +577,7 @@ public class FTViewSEDataFactory {
 					 workItem = (IWorkItem)resolved.getItem();
 					
 					 //Print the Father's ID
-					 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());
-					 
-					 //Find the father's comment
-					 List<IWorkItem> FatherList = new ArrayList<>();
-					 FatherList.add(workItem);
-					 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
-					 
-					 //Print all the father's comment
-					 int k=0;
-		    		for(List<String> tmpList2 : resultList_father)
-		    		{
-		    			int i = 0;
-		    			k++;
-		    			System.out.print(k+"\t");
-		    			for(String str : tmpList2)
-		    			{
-		    				System.out.print(i++ + "\t"+str+"\t");
-		    			}
-		    			System.out.println();
-		    		}
+					 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());			 
 					 
 					 QueryChild queryChild = new QueryChild();
 					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
@@ -765,7 +736,7 @@ public class FTViewSEDataFactory {
 	    		List<Integer> y1=new ArrayList<>();
 	    		List<Integer> y2=new ArrayList<>();
 	    		
-	    		//P1:Draw the burndown
+	    		//P1:Release Burn up
 	    		for(List<String> item:BurnUp_of_Sprint)
 	    		{
 	    			x1.add(item.get(0));
@@ -777,7 +748,7 @@ public class FTViewSEDataFactory {
 	
 	    		
 	    		//P2:Draw the story point by sprint
-	    		x1.clear();
+/*	    		x1.clear();
 	    		y1.clear();
 	    		
 	    		for(List<String> item:Point_of_Sprint)
@@ -787,9 +758,9 @@ public class FTViewSEDataFactory {
 	    		}
 	    		
 	    		String chartID2=Create_P2(x1,y1);
-	    		System.out.println("CCW Team Velocity by Sprint:\n"+ ConstString.CHART_URL + chartID2);
+	    		System.out.println("CCW Team Velocity by Sprint:\n"+ ConstString.CHART_URL + chartID2);*/
 	    		
-	    		//P6:Draw the story point by sprint
+	    		//P6:Draw the Throughput - Velocity by Sprint
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
@@ -849,388 +820,7 @@ public class FTViewSEDataFactory {
 	}
 	
 	//Lane Ma
-	//Calculate CCW R11 Feature Progress- Logix-ladder 3
-	public static void Calculate_LogixLike(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
-	{
-	    List<String> needAttributeList = new ArrayList<>();
-	    needAttributeList.add("Id");//pass                       0
-	    needAttributeList.add("Planned For");//pass              1 
-	    needAttributeList.add("Story Points (numeric)");//pass   2
-	    needAttributeList.add("Status");//pass                   3
-	    needAttributeList.add("Summary");//pass                  4
-	    
-	    try {
-		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
-	    	if(resultOwner!=null)
-	    	{
-	    		resultOwner.setLimit(1000);
-	    			
-	    		IWorkItem workItem = null;
-	    		IResolvedResult<IWorkItem> resolved =null;
-	    		
-	    		List<List<String>> LogixLike=new ArrayList<>();
-				while(resultOwner.hasNext(handler.getMonitor()))
-				{
-					 resolved = resultOwner.next(handler.getMonitor());
-					 workItem = (IWorkItem)resolved.getItem();
-					
-					 if(!workItem.getHTMLSummary().toString().contains("LogixLike"))
-					 {
-						 continue;
-					 }
-					 					 
-					 //Print the Father's ID
-					// System.out.println("Epic:\t" + workItem.getId()+"\t"+workItem.getWorkItemType()+"\t"+workItem.getHTMLSummary());
-					 
-					//Find the father's comment
-					 List<IWorkItem> FatherList = new ArrayList<>();
-					 FatherList.add(workItem);
-					 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
-					 
-					 if(!resultList_father.get(0).get(1).equals("R11"))
-					 {
-						 continue;//if not "R11"
-					 }
-					
-					 //Print the Father's ID
-				     System.out.println("Epic:\t" + workItem.getId()+"\t"+workItem.getWorkItemType()+"\t"+workItem.getHTMLSummary());
-					 
-					 					 
-					 QueryChild queryChild = new QueryChild();
-					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
-					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
-					 List<IWorkItem> ChildList = new ArrayList<>();
-				
-					  ChildList = queryChild.analyzeReferences(repository,references);
-					 
-					 for(IWorkItem tempWorkitem:ChildList)
-					 {
-						 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
-					 }
-					 
-					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);	 
-					 int Epic_Close_Point=0;
-					 int Epic_Open_Point=0;
-					 for(List<String> tmpList2 : resultList)
-					 {
-						 if(tmpList2.get(3).equals("Closed"))
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Close_Point+=Integer.parseInt(tmpList2.get(2));
-						 }
-						 else
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Open_Point+=Integer.parseInt(tmpList2.get(2));
-						 }						 
-					 }
-					 
-					 List<String> Item_of_LogixLike=new ArrayList<String>();
-					 Item_of_LogixLike.add( workItem.getHTMLSummary().toString());
-					 Item_of_LogixLike.add(Integer.toString(Epic_Close_Point));
-					 Item_of_LogixLike.add(Integer.toString(Epic_Open_Point));
-					 
-					 LogixLike.add(Item_of_LogixLike);
-				}
-				int j=0;
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			int i = 0;
-	    			j++;
-	    			System.out.print(j+"\t");
-	    			for(String str : tmpList2)
-	    			{
-	    				System.out.print(i++ + "\t"+str+"\t");
-	    			}
-	    			System.out.println();
-	    		}
-	    		
-	    		//P3:Draw Logix-Like
-	    		List<String> x1=new ArrayList<>();
-	    		List<Integer> y1=new ArrayList<>();
-	    		List<Integer> y2=new ArrayList<>();
-	    		
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			x1.add(tmpList2.get(0)); //Summary
-	    			y1.add(Integer.parseInt(tmpList2.get(1)));//finish
-	    			y2.add(Integer.parseInt(tmpList2.get(2)));//remain
-	    		}
-	    		
-	    		String chartID3=Create_P3(x1,y1,y2);
-	    		System.out.println("Logix Like:\n"+ ConstString.CHART_URL + chartID3);
-	    		
-	    	}
-	    	
-	    }
-	    catch(Exception e)
-	    {
-	    	System.out.println(e);
-	    }
-	}
-	
-	//Lane Ma
-	//Calculate CCW R11 Feature Progress- FW related
-	public static void Calculate_FW_Related(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
-	{
-	    List<String> needAttributeList = new ArrayList<>();
-	    needAttributeList.add("Id");//pass                       0
-	    needAttributeList.add("Planned For");//pass              1 
-	    needAttributeList.add("Story Points (numeric)");//pass   2
-	    needAttributeList.add("Status");//pass                   3
-	    needAttributeList.add("Summary");//pass                  4
-	    
-	    try {
-		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
-	    	if(resultOwner!=null)
-	    	{
-	    		resultOwner.setLimit(1000);
-	    			
-	    		IWorkItem workItem = null;
-	    		IResolvedResult<IWorkItem> resolved =null;
-	    		
-	    		List<List<String>> LogixLike=new ArrayList<>();
-				while(resultOwner.hasNext(handler.getMonitor()))
-				{
-					 resolved = resultOwner.next(handler.getMonitor());
-					 workItem = (IWorkItem)resolved.getItem();
-					
-					 if(!workItem.getHTMLSummary().toString().contains("FW related"))
-					 {
-						 continue;
-					 }
-					 					 
-					 
-					//Find the father's comment
-					 List<IWorkItem> FatherList = new ArrayList<>();
-					 FatherList.add(workItem);
-					 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
-					 
-					 if(!resultList_father.get(0).get(1).equals("R11"))
-					 {
-						 continue;//if not "R11"
-					 }
-					
-					 //Print the Father's ID
-				     System.out.println("Epic:\t" + workItem.getId()+"\t"+workItem.getWorkItemType()+"\t"+workItem.getHTMLSummary());
-					 					 
-					 QueryChild queryChild = new QueryChild();
-					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
-					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
-					 List<IWorkItem> ChildList = new ArrayList<>();
-				
-					  ChildList = queryChild.analyzeReferences(repository,references);
-					 
-					 for(IWorkItem tempWorkitem:ChildList)
-					 {
-						 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
-					 }
-					 
-					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);	 
-					 int Epic_Close_Point=0;
-					 int Epic_Open_Point=0;
-					 for(List<String> tmpList2 : resultList)
-					 {
-						 if(tmpList2.get(3).equals("Closed"))
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Close_Point+=Integer.parseInt(tmpList2.get(2));
-						 }
-						 else
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Open_Point+=Integer.parseInt(tmpList2.get(2));
-						 }						 
-					 }
-					 
-					 List<String> Item_of_LogixLike=new ArrayList<String>();
-					 Item_of_LogixLike.add( workItem.getHTMLSummary().toString());
-					 Item_of_LogixLike.add(Integer.toString(Epic_Close_Point));
-					 Item_of_LogixLike.add(Integer.toString(Epic_Open_Point));
-					 
-					 LogixLike.add(Item_of_LogixLike);					 
-				}
-				
-				int j=0;
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			int i = 0;
-	    			j++;
-	    			System.out.print(j+"\t");
-	    			for(String str : tmpList2)
-	    			{
-	    				System.out.print(i++ + "\t"+str+"\t");
-	    			}
-	    			System.out.println();
-	    		}
-	    		
-	    		//P4:FW - related
-	    		List<String> x1=new ArrayList<>();
-	    		List<Integer> y1=new ArrayList<>();
-	    		List<Integer> y2=new ArrayList<>();
-	    		
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			x1.add(tmpList2.get(0)); //Summary
-	    			y1.add(Integer.parseInt(tmpList2.get(1)));//finish
-	    			y2.add(Integer.parseInt(tmpList2.get(2)));//remain
-	    		}
-	    		
-	    		String chartID4=Create_P4(x1,y1,y2);
-	    		System.out.println("FW Related:\n"+ ConstString.CHART_URL + chartID4);
-	    	}
-	    	
-	    }
-	    catch(Exception e)
-	    {
-	    	System.out.println(e);
-	    }
-	}
-
-	//Lane Ma
-	//Calculate CCW R11 Feature Progress- Others
-	public static void Calculate_Others(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
-	{
-	    List<String> needAttributeList = new ArrayList<>();
-	    needAttributeList.add("Id");//pass                       0
-	    needAttributeList.add("Planned For");//pass              1 
-	    needAttributeList.add("Story Points (numeric)");//pass   2
-	    needAttributeList.add("Status");//pass                   3
-	    needAttributeList.add("Summary");//pass                  4
-	    
-	    try {
-		    MulConditionQuery query=new MulConditionQuery();
-	    	IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(ProjectArea), null, conditionsList);		    
-	    	if(resultOwner!=null)
-	    	{
-	    		resultOwner.setLimit(1000);
-	    			
-	    		IWorkItem workItem = null;
-	    		IResolvedResult<IWorkItem> resolved =null;
-	    		
-	    		List<List<String>> LogixLike=new ArrayList<>();
-				while(resultOwner.hasNext(handler.getMonitor()))
-				{
-					 resolved = resultOwner.next(handler.getMonitor());
-					 workItem = (IWorkItem)resolved.getItem();
-					
-					 if((!workItem.getHTMLSummary().toString().contains("MLX convertor"))&
-					     (!workItem.getHTMLSummary().toString().contains("Installation"))&
-					     (!workItem.getHTMLSummary().toString().contains("RSLinx Enterprise adoption"))&
-					     (!workItem.getHTMLSummary().toString().contains("UDC trending support"))&
-					     (!workItem.getHTMLSummary().toString().contains("DFS and common policy")))
-					 {
-						 continue;
-					 }
-					 					 
-					 
-					//Find the father's comment
-					 List<IWorkItem> FatherList = new ArrayList<>();
-					 FatherList.add(workItem);
-					 List<List<String>> resultList_father=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),FatherList,needAttributeList);
-					 
-					 if(!resultList_father.get(0).get(1).equals("R11"))
-					 {
-						 continue;//if not "R11"
-					 }
-					
-					 //Print the Father's ID
-				     System.out.println("Epic:\t" + workItem.getId()+"\t"+workItem.getWorkItemType()+"\t"+workItem.getHTMLSummary());
-					 					 
-					 QueryChild queryChild = new QueryChild();
-					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
-					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
-					 List<IWorkItem> ChildList = new ArrayList<>();
-				
-					  ChildList = queryChild.analyzeReferences(repository,references);
-					 
-					 for(IWorkItem tempWorkitem:ChildList)
-					 {
-						 System.out.println("child: "+tempWorkitem.getId()+"   Type: "+tempWorkitem.getWorkItemType());
-					 }
-					 
-					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);	 
-					 int Epic_Close_Point=0;
-					 int Epic_Open_Point=0;
-					 for(List<String> tmpList2 : resultList)
-					 {
-						 if(tmpList2.get(3).equals("Closed"))
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Close_Point+=Integer.parseInt(tmpList2.get(2));
-						 }
-						 else
-						 {
-							 if(tmpList2.get(2).equals(""))
-							 {
-								 tmpList2.set(2, "0");
-							 }
-							 Epic_Open_Point+=Integer.parseInt(tmpList2.get(2));
-						 }						 
-					 }
-					 
-					 List<String> Item_of_LogixLike=new ArrayList<String>();
-					 Item_of_LogixLike.add( workItem.getHTMLSummary().toString());
-					 Item_of_LogixLike.add(Integer.toString(Epic_Close_Point));
-					 Item_of_LogixLike.add(Integer.toString(Epic_Open_Point));
-					 
-					 LogixLike.add(Item_of_LogixLike);					 
-				}
-				int j=0;
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			int i = 0;
-	    			j++;
-	    			System.out.print(j+"\t");
-	    			for(String str : tmpList2)
-	    			{
-	    				System.out.print(i++ + "\t"+str+"\t");
-	    			}
-		    			System.out.println();
-		    						
-		    	}	
-	    		
-	    		//P4:FW - related
-	    		List<String> x1=new ArrayList<>();
-	    		List<Integer> y1=new ArrayList<>();
-	    		List<Integer> y2=new ArrayList<>();
-	    		
-	    		for(List<String> tmpList2 : LogixLike)
-	    		{
-	    			x1.add(tmpList2.get(0)); //Summary
-	    			y1.add(Integer.parseInt(tmpList2.get(1)));//finish
-	    			y2.add(Integer.parseInt(tmpList2.get(2)));//remain
-	    		}
-	    		
-	    		String chartID5=Create_P4(x1,y1,y2);
-	    		System.out.println("Others:\n"+ ConstString.CHART_URL + chartID5);
-		    }
-	    }
-		    catch(Exception e)
-		    {
-		    	System.out.println(e);
-		    }
-		}
-	
-	//Lane Ma
-	//Calculate CCW R11 Feature Progress- All
+	//Calculate FTView R11 Feature Progress- All
 	public static void Calculate_All(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
@@ -1539,183 +1129,4 @@ public class FTViewSEDataFactory {
 			System.out.println("Import Exception!");
 		}
 	}
-	
-	public static void Create_P9(List<String> x1,List<Integer> y1, List<Integer> y2)
-	{	
-		FTVIEWSE_PM_Data_Feature_Progress=new ProductData();
-		FTVIEWSE_PM_Data_Feature_Progress.title="Trend by Team";
-		FTVIEWSE_PM_Data_Feature_Progress.description="";//description		
-		FTVIEWSE_PM_Data_Feature_Progress.xTitle="Date";
-		FTVIEWSE_PM_Data_Feature_Progress.yTitle="Number";
-		FTVIEWSE_PM_Data_Feature_Progress.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Feature_Progress.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Feature_Progress.colorList=Arrays.asList("gray","blue");
-		
-		FTVIEWSE_PM_Data_Feature_Progress.isStacked="true";
-		FTVIEWSE_PM_Data_Feature_Progress.chartLeft=400;
-		
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remain"));
-		
-		//Chart data
-				//////////////////////////////////////////////
-				List<String> x_data=x1;
-				List<Integer> y1_data=y1;
-				List<Integer> y2_data=y2;
-		int dataCount=x_data.size();
-		List<TableRow> rows = Lists.newArrayList();
-		for(int i=0;i<dataCount;i++)
-		{
-			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
-		    row.addCell(new TableCell(y1_data.get(i)));
-		    row.addCell(new TableCell(y2_data.get(i)));
-		    rows.add(row);
-		}
-		try 
-		{
-			//TODO:(Jma7)
-			//	FTVIEWSE_PM_Data_Trend_Team.tableData.addRows(rows);
-		}catch(Exception e)
-		{
-			System.out.println("Import Exception!");
-		}
-	}
-	
-	public static String Create_P3(List<String> x1,List<Integer> y1, List<Integer> y2)
-	{						
-		Chart S5KA_One_Chart=new BarChart("Logix-Ladder");//Title
-		
-		S5KA_One_Chart.description="";//description		
-		S5KA_One_Chart.xTitle="Epic";
-		S5KA_One_Chart.yTitle="Story Points";
-		S5KA_One_Chart.yAxisFormat="#";
-		S5KA_One_Chart.tableData=new DataTable();
-		S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
-		//((ColumnChart)S5KA_One_Chart).isStacked="false";
-		//((AreaChart)S5KA_One_Chart).isStacked="true";
-		((BarChart)S5KA_One_Chart).isStacked="true";
-		
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
-		
-		//Chart data
-				//////////////////////////////////////////////
-				List<String> x_data=x1;
-				List<Integer> y1_data=y1;
-				List<Integer> y2_data=y2;
-		int dataCount=x_data.size();
-		List<TableRow> rows = Lists.newArrayList();
-		for(int i=0;i<dataCount;i++)
-		{
-			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
-		    row.addCell(new TableCell(y1_data.get(i)));
-		    row.addCell(new TableCell(y2_data.get(i)));
-		    rows.add(row);
-		}
-		try 
-		{
-			S5KA_One_Chart.tableData.addRows(rows);
-		}catch(Exception e)
-		{
-			System.out.println("Import Exception!");
-			return null;
-		}
-		
-		return S5KA_One_Chart.ToEagleEye();
-	}
-	
-	public static String Create_P4(List<String> x1,List<Integer> y1, List<Integer> y2)
-	{						
-		Chart S5KA_One_Chart=new BarChart("FW Related");//Title
-		
-		S5KA_One_Chart.description="";//description		
-		S5KA_One_Chart.xTitle="Epic";
-		S5KA_One_Chart.yTitle="Story Points";
-		S5KA_One_Chart.yAxisFormat="#";
-		S5KA_One_Chart.tableData=new DataTable();
-		S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
-		//((ColumnChart)S5KA_One_Chart).isStacked="false";
-		//((AreaChart)S5KA_One_Chart).isStacked="true";
-		((BarChart)S5KA_One_Chart).isStacked="true";
-		
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
-		
-		//Chart data
-				//////////////////////////////////////////////
-				List<String> x_data=x1;
-				List<Integer> y1_data=y1;
-				List<Integer> y2_data=y2;
-		int dataCount=x_data.size();
-		List<TableRow> rows = Lists.newArrayList();
-		for(int i=0;i<dataCount;i++)
-		{
-			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
-		    row.addCell(new TableCell(y1_data.get(i)));
-		    row.addCell(new TableCell(y2_data.get(i)));
-		    rows.add(row);
-		}
-		try 
-		{
-			S5KA_One_Chart.tableData.addRows(rows);
-		}catch(Exception e)
-		{
-			System.out.println("Import Exception!");
-			return null;
-		}
-		
-		return S5KA_One_Chart.ToEagleEye();
-	}
-	
-	public static String Create_P5(List<String> x1,List<Integer> y1, List<Integer> y2)
-	{						
-		Chart S5KA_One_Chart=new BarChart("Other");//Title
-		
-		S5KA_One_Chart.description="";//description		
-		S5KA_One_Chart.xTitle="Epic";
-		S5KA_One_Chart.yTitle="Story Points";
-		S5KA_One_Chart.yAxisFormat="#";
-		S5KA_One_Chart.tableData=new DataTable();
-		S5KA_One_Chart.colorList=Arrays.asList("blue","yellow");
-		//((ColumnChart)S5KA_One_Chart).isStacked="false";
-		//((AreaChart)S5KA_One_Chart).isStacked="true";
-		((BarChart)S5KA_One_Chart).isStacked="true";
-		
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remaining"));
-		
-		//Chart data
-				//////////////////////////////////////////////
-				List<String> x_data=x1;
-				List<Integer> y1_data=y1;
-				List<Integer> y2_data=y2;
-		int dataCount=x_data.size();
-		List<TableRow> rows = Lists.newArrayList();
-		for(int i=0;i<dataCount;i++)
-		{
-			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
-		    row.addCell(new TableCell(y1_data.get(i)));
-		    row.addCell(new TableCell(y2_data.get(i)));
-		    rows.add(row);
-		}
-		try 
-		{
-			S5KA_One_Chart.tableData.addRows(rows);
-		}catch(Exception e)
-		{
-			System.out.println("Import Exception!");
-			return null;
-		}
-		
-		return S5KA_One_Chart.ToEagleEye();
-	}
-
 }
