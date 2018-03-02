@@ -24,11 +24,8 @@ import com.ibm.team.workitem.common.model.IWorkItemReferences;
 import com.ibm.team.workitem.common.query.IQueryResult;
 import com.ibm.team.workitem.common.query.IResolvedResult;
 
-import Charts.BarChart;
 import Charts.Chart;
 import Charts.ColumnChart;
-import Charts.ComboChart;
-import Charts.LineChart;
 import ConstVar.ConstString;
 import GetAttributeDispValue.GetAttributesValue;
 import Helper.ColorFormater;
@@ -64,7 +61,7 @@ public class FTViewSEDataFactory {
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
 	    	
-			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
 			{
 				nProjectNumber=i;
 			}
@@ -100,16 +97,25 @@ public class FTViewSEDataFactory {
 	    			
 	    		IWorkItem workItem = null;
 	    		IResolvedResult<IWorkItem> resolved =null;
+	    		boolean isOK=false;
 	    		
-	//			while(resultOwner.hasNext(handler.getMonitor()))
+				while(resultOwner.hasNext(handler.getMonitor()))
 				{
-			
+					
+					if(isOK) break;
 					resolved = resultOwner.next(handler.getMonitor());
 					 workItem = (IWorkItem)resolved.getItem();
 					
 					 //Print the Father's ID
 					 System.out.println("Epic: " + workItem.getId()+"   "+workItem.getWorkItemType());
-					 
+					 if(workItem.getId()==58061)  //[SE] TrendPro enhancements
+					 {
+						 isOK=true;
+					 }
+					 else
+					 {
+						 continue;
+					 }
 					 //Find the father's comment
 					 List<IWorkItem> FatherList = new ArrayList<>();
 					 FatherList.add(workItem);
@@ -193,7 +199,7 @@ public class FTViewSEDataFactory {
 					 }
 					 
 					 List<List<String>> Trend_result=new ArrayList<>();
-					 for(int i=0;i<Week_Trend.size()-2;i++)
+					 for(int i=0;i<Week_Trend.size()-1;i++)
 					 {
 						 List<String> Haha=new ArrayList<>();
 						 int StoryPoint=0;
@@ -279,7 +285,7 @@ public class FTViewSEDataFactory {
 		{
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
-			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
 			{
 				nProjectNumber=i;
 			}
@@ -295,7 +301,7 @@ public class FTViewSEDataFactory {
 			System.out.println(str);
 		}
 		
-		String SpeicTeam="CCW Localization";
+		String SpeicTeam="TrendPro";
 		
 	    List<SearchCondition> conditionsList = new ArrayList<>(); 
 	    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
@@ -510,7 +516,7 @@ public class FTViewSEDataFactory {
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
 	    	
-			if(iProcessArea.getName().equals("DCB CCW - RTC SAFe"))
+			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
 			{
 				nProjectNumber=i;
 			}
@@ -539,23 +545,14 @@ public class FTViewSEDataFactory {
 	    
 	    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
 		List<List<String>> Point_of_Sprint=Arrays.asList(
-													   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
-													   //Arrays.asList("Sprint 4","2/16/2017","0","0"),
-													   //Arrays.asList("Sprint 5","3/9/2017","0","0"),
-													   //Arrays.asList("Sprint 6","3/23/2017","0","0"),
-													  // Arrays.asList("Sprint 7","4/13/2017","0","0"),
-													  // Arrays.asList("Sprint 8","5/4/2017","0","0"),
-													 //  Arrays.asList("Sprint 9","5/25/2017","0","0"),
-													//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-													//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-													//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-													//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
-													   Arrays.asList("Sprint 14","8/24/2017","0","0"),
-													   Arrays.asList("Sprint 15","9/14/2017","0","0"),
-													   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-													   Arrays.asList("Sprint 17","10/19/2017","0","0"),
-													   Arrays.asList("Sprint 18","10/19/2017","0","0"),
-													   Arrays.asList("Sprint 19","10/19/2017","0","0"));
+													   Arrays.asList("Sprint 11.1",null,"0","0"),
+													   Arrays.asList("Sprint 11.2",null,"0","0"),
+													   Arrays.asList("Sprint 11.3",null,"0","0"),
+													   Arrays.asList("Sprint 11.4",null,"0","0"),
+													   Arrays.asList("Sprint 12.1",null,"0","0"),
+													   Arrays.asList("Sprint 12.2",null,"0","0"),
+													   Arrays.asList("Sprint 12.3",null,"0","0"),
+													   Arrays.asList("Sprint 12.4",null,"0","0"));
 		
 		//the definition of the array:0-Epic Summary; 1-Finish Point; 2-Remain Point;
 		List<List<String>> All_Epic=new ArrayList<>();
@@ -662,62 +659,15 @@ public class FTViewSEDataFactory {
 	    			System.out.println();
 	    		}
 	    		
-	    		int total_plan=0;
-	    		//Calculate the total_plan and burndown
-	    		for (List<String> tempList3:Point_of_Sprint )//the record of the sprint point
-	    		{
-	    			total_plan+=Integer.parseInt(tempList3.get(2));
-	    		}
-	    		int Point_Plan_Remain=total_plan;
-	    		int Point_finish_Remain=total_plan;
-	    		
-	    		
-	    		List<List<String>> Remain_of_Sprint=Arrays.asList(
-	    														   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
-																   //Arrays.asList("Sprint 4","2/16/2017","0","0"),
-																//   Arrays.asList("Sprint 5","3/9/2017","0","0"),
-																//   Arrays.asList("Sprint 6","3/23/2017","0","0"),
-																//   Arrays.asList("Sprint 7","4/13/2017","0","0"),
-																//   Arrays.asList("Sprint 8","5/4/2017","0","0"),
-																//   Arrays.asList("Sprint 9","5/25/2017","0","0"),
-																//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-																//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-																//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-																//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
-																   Arrays.asList("Sprint 14","8/24/2017","0","0"),
-																   Arrays.asList("Sprint 15","9/14/2017","0","0"),
-																   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-																   Arrays.asList("Sprint 17","10/19/2017","0","0"),
-																   Arrays.asList("Sprint 18","10/19/2017","0","0"),
-																   Arrays.asList("Sprint 19","10/19/2017","0","0"));
-	    		
 	    		List<List<String>> BurnUp_of_Sprint=Arrays.asList(
-	    														   //Arrays.asList("Sprint 3","1/26/2017","0","0"),
-																  // Arrays.asList("Sprint 4","2/16/2017","0","0"),
-																//   Arrays.asList("Sprint 5","3/9/2017","0","0"),
-																//   Arrays.asList("Sprint 6","3/23/2017","0","0"),
-																//   Arrays.asList("Sprint 7","4/13/2017","0","0"),
-																//   Arrays.asList("Sprint 8","5/4/2017","0","0"),
-																//   Arrays.asList("Sprint 9","5/25/2017","0","0"),
-																//   Arrays.asList("Sprint 10","6/8/2017","0","0"),
-																//   Arrays.asList("Sprint 11","6/29/2017","0","0"),
-																//   Arrays.asList("Sprint 12","7/20/2017","0","0"),
-																//   Arrays.asList("Sprint 13","8/10/2017","0","0"),
-																   Arrays.asList("Sprint 14","8/24/2017","0","0"),
-																   Arrays.asList("Sprint 15","9/14/2017","0","0"),
-																   Arrays.asList("Sprint 16","10/5/2017","0","0"),
-																   Arrays.asList("Sprint 17","10/19/2017","0","0"),
-																   Arrays.asList("Sprint 18","10/19/2017","0","0"),
-																   Arrays.asList("Sprint 19","10/19/2017","0","0"));
-	    		for(int i=0;i<Point_of_Sprint.size();i++)
-	    		{
-	    			List<String> tempList5=Point_of_Sprint.get(i);
-	    			Point_Plan_Remain=Point_Plan_Remain-Integer.parseInt(tempList5.get(2));
-	    			Point_finish_Remain=Point_finish_Remain-Integer.parseInt(tempList5.get(3));
-	    			
-	    			Remain_of_Sprint.get(i).set(2, Integer.toString(Point_Plan_Remain));
-	    			Remain_of_Sprint.get(i).set(3, Integer.toString(Point_finish_Remain));
-	    		}  	
+											    				   Arrays.asList("Sprint 11.1",null,"0","0"),
+																   Arrays.asList("Sprint 11.2",null,"0","0"),
+																   Arrays.asList("Sprint 11.3",null,"0","0"),
+																   Arrays.asList("Sprint 11.4",null,"0","0"),
+																   Arrays.asList("Sprint 12.1",null,"0","0"),
+																   Arrays.asList("Sprint 12.2",null,"0","0"),
+																   Arrays.asList("Sprint 12.3",null,"0","0"),
+																   Arrays.asList("Sprint 12.4",null,"0","0"));
 	    		
 	    		int sum_plan=0;
 	    		int sum_close=0;
@@ -745,20 +695,6 @@ public class FTViewSEDataFactory {
 	    		}
 	    		
 	    		Create_P1(x1,y1,y2);
-	
-	    		
-	    		//P2:Draw the story point by sprint
-/*	    		x1.clear();
-	    		y1.clear();
-	    		
-	    		for(List<String> item:Point_of_Sprint)
-	    		{
-	    			x1.add(item.get(0));
-	    			y1.add(Integer.parseInt(item.get(2)));//plan    			
-	    		}
-	    		
-	    		String chartID2=Create_P2(x1,y1);
-	    		System.out.println("CCW Team Velocity by Sprint:\n"+ ConstString.CHART_URL + chartID2);*/
 	    		
 	    		//P6:Draw the Throughput - Velocity by Sprint
 	    		x1.clear();
@@ -821,7 +757,7 @@ public class FTViewSEDataFactory {
 	
 	//Lane Ma
 	//Calculate FTView R11 Feature Progress- All
-	public static void Calculate_All(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
+/*	public static void Calculate_All(ITeamRepository repository,LoginHandler handler,List<String> projectAreaNames,GetAttributesValue getAttributesValue,List<SearchCondition> conditionsList,int ProjectArea) 
 	{
 	    List<String> needAttributeList = new ArrayList<>();
 	    needAttributeList.add("Id");//pass                       0
@@ -922,12 +858,12 @@ public class FTViewSEDataFactory {
 		    	System.out.println(e);
 		    }
 		}
-	
+	*/
 	//Lane Ma, Modify the demo to draw specific chart
 	public static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_Weekly_Trend=new ProductData();
-		FTVIEWSE_PM_Data_Weekly_Trend.title="CCW R11.01 Release Burnup";
+		FTVIEWSE_PM_Data_Weekly_Trend.title=ConstString.CCW_PM_CHART_Weekly_Trend;
 		
 		FTVIEWSE_PM_Data_Weekly_Trend.description="";//description		
 		FTVIEWSE_PM_Data_Weekly_Trend.xTitle="Date";
@@ -965,50 +901,10 @@ public class FTViewSEDataFactory {
 		}
 	}
 	
-	public static String Create_P2(List<String> x1,List<Integer> y1)
-	{						
-		Chart S5KA_One_Chart=new ColumnChart("CCW R11 Release Burnup");//Title
-		
-		S5KA_One_Chart.description="";//description		
-		S5KA_One_Chart.xTitle="Sprint";
-		S5KA_One_Chart.yTitle="Number";
-		S5KA_One_Chart.yAxisFormat="#";
-		S5KA_One_Chart.tableData=new DataTable();
-		S5KA_One_Chart.colorList=Arrays.asList("blue");
-		
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
-		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Story Points"));
-		
-		//Chart data
-				//////////////////////////////////////////////
-				List<String> x_data=x1;
-				List<Integer> y1_data=y1;
-		
-		int dataCount=x_data.size();
-		List<TableRow> rows = Lists.newArrayList();
-		for(int i=0;i<dataCount;i++)
-		{
-			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
-		    row.addCell(new TableCell(y1_data.get(i)));
-		    rows.add(row);
-		}
-		try 
-		{
-			S5KA_One_Chart.tableData.addRows(rows);
-		}catch(Exception e)
-		{
-			System.out.println("Import Exception!");
-			return null;
-		}
-		
-		return S5KA_One_Chart.ToEagleEye();
-	}
-	
 	public static void Create_P6(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint=new ProductData();
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.title="Throughput - Velocity by Sprint";
+		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.title=ConstString.CCW_PM_CHART_ThroughputVelocity_sprint;
 		
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.description="";//description		
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.xTitle="Sprint";
@@ -1049,7 +945,7 @@ public class FTViewSEDataFactory {
 	public static void Create_P7(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint=new ProductData();
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.title="Plan vs Actual";
+		FTVIEWSE_PM_Data_Plan_Actual_Sprint.title=ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint;
 		
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.description="";//description		
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.xTitle="Sprint";
@@ -1091,7 +987,7 @@ public class FTViewSEDataFactory {
 	public static void Create_P8(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_Feature_Progress=new ProductData();
-		FTVIEWSE_PM_Data_Feature_Progress.title="all epic";
+		FTVIEWSE_PM_Data_Feature_Progress.title=ConstString.FTVIEWSE_PM_CHART_Feature_Progress;
 		FTVIEWSE_PM_Data_Feature_Progress.description="";//description		
 		FTVIEWSE_PM_Data_Feature_Progress.xTitle="Epic";
 		FTVIEWSE_PM_Data_Feature_Progress.yTitle="Number";

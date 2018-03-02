@@ -14,6 +14,7 @@ import org.dom4j.Node;
 import com.ibm.team.repository.client.ITeamRepository;
 import Login.LoginHandler;
 import ConstVar.*;
+import DataForChart.CCWDataFactory;
 import DataForChart.FTViewSEDataFactory;
 import DataForChart.ProductData;
 import DataForChart.S5KADataFactory;
@@ -64,7 +65,7 @@ public class Program {
 	//	createChartsForFTAC_PM();
 	//	createChartsForFTAC_QA();
 		
-		createChartsForFTViewSE_PM();
+	createChartsForFTViewSE_PM();
 	//	createChartsForFTViewSE_QA();
 	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();
@@ -318,7 +319,68 @@ public class Program {
 	public static String ChartSetForCCW_PM=null;
 	public static void createChartsForCCW_PM()
 	{
+		List<String> chartSetIDList=new ArrayList<String>();
+		ChartsForCCW_PM = new HashMap<String,String>();
 		
+		ProductData d1=CCWDataFactory.Get_CCW_PM_Data_Weekly_Trend();
+		if(null != d1)
+		{
+			ChartManager Mgr_CCW_PM_CHART_Weekly_Trend=new ChartManager(d1, new LineChart(ConstString.CCW_PM_CHART_Weekly_Trend));
+			String id1=Mgr_CCW_PM_CHART_Weekly_Trend.createChartInEagleEye();
+			chartSetIDList.add(id1);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_Weekly_Trend, id1);
+		}
+		
+		ProductData d2=CCWDataFactory.Get_CCW_PM_Data_Trend_Epic();
+		if(null != d2)
+		{
+			ChartManager Mgr_CCW_PM_CHART_Trend_Epic=new ChartManager(d2, new ColumnChart(ConstString.CCW_PM_CHART_Trend_Epic));
+			String id2=Mgr_CCW_PM_CHART_Trend_Epic.createChartInEagleEye();
+			chartSetIDList.add(id2);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_Trend_Epic, id2);
+		}
+		
+		ProductData d3=CCWDataFactory.Get_CCW_PM_Data_Trend_Team();
+		if(null != d3)
+		{
+			ChartManager Mgr_CCW_PM_CHART_Trend_Team=new ChartManager(d3, new ColumnChart(ConstString.CCW_PM_CHART_Trend_Team));
+			String id3=Mgr_CCW_PM_CHART_Trend_Team.createChartInEagleEye();
+			chartSetIDList.add(id3);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_Trend_Team, id3);
+		}
+		
+		ProductData d4=CCWDataFactory.Get_CCW_PM_Data_ThroughputVelocity_sprint();
+		if(null != d4)
+		{
+			ChartManager Mgr_CCW_PM_CHART_ThroughputVelocity_sprint=new ChartManager(d4, new ComboChart(ConstString.CCW_PM_CHART_ThroughputVelocity_sprint));
+			String id4=Mgr_CCW_PM_CHART_ThroughputVelocity_sprint.createChartInEagleEye();
+			chartSetIDList.add(id4);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_ThroughputVelocity_sprint, id4);
+		}
+		
+		ProductData d5=CCWDataFactory.Get_CCW_PM_Data_Plan_Actual_Sprint();
+		if(null != d5)
+		{
+			ChartManager Mgr_CCW_PM_CHART_Plan_Actual_Sprint=new ChartManager(d5, new ColumnChart(ConstString.CCW_PM_CHART_Plan_Actual_Sprint));
+			String id5=Mgr_CCW_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
+			chartSetIDList.add(id5);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_Plan_Actual_Sprint, id5);
+		}
+		
+		ProductData d6=CCWDataFactory.Get_CCW_PM_Data_Feature_Progress();
+		if(null != d6)
+		{
+			ChartManager Mgr_CCW_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.CCW_PM_CHART_Feature_Progress));
+			String id6=Mgr_CCW_PM_CHART_Feature_Progress.createChartInEagleEye();
+			chartSetIDList.add(id6);
+			ChartsForCCW_PM.put(ConstString.CCW_PM_CHART_Feature_Progress, id6);
+		}
+
+		if(null != chartSetIDList && chartSetIDList.size()>0)
+		{
+			ChartSetForCCW_PM=ChartManager.CreateChartSet(ConstString.CCW_PM_CHARTSET_NAME,null,chartSetIDList);
+			ChartSets.put(ConstString.CCW_PM_CHARTSET_NAME, ChartSetForCCW_PM);
+		}
 	}
 	public static Map<String,String> ChartsForCCW_QA= null;
 	public static String ChartSetForCCW_QA=null;
