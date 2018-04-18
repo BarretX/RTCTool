@@ -96,6 +96,7 @@ public class ConstString {
 	public final static String FTVIEWSE_PM_CHARTSET_NAME="FTView Project Metrics";
 	public final static String FTVIEWSE_QA_CHARTSET_NAME="FTViewSE_For_QA";
 	public final static String FTVIEWSE_PM_CHART_Weekly_Trend="FTView Release Burnup";
+	public final static String FTVIEWSE_PM_CHART_Weekly_BurnDown="FTView Release Burndown";
 	public final static String FTVIEWSE_PM_CHART_Trend_Epic="Trend by Epic";
 	public final static String FTVIEWSE_PM_CHART_Trend_Team="Trend by Team";
 	public final static String FTVIEWSE_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";

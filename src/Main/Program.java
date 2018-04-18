@@ -56,7 +56,7 @@ public class Program {
 	public static void createCharts()
 	{
 	
-		//	createChartsForS5KA_PM();
+	//	createChartsForS5KA_PM();
 	//	createChartsForS5KA_QA();
 		
 	//	createChartsForCCW_PM();
@@ -418,23 +418,23 @@ public class Program {
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Weekly_Trend, id1);
 		}
 		
-		ProductData d2=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
+	/*	ProductData d2=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
 		if(null != d2)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d2, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
 			String id2=Mgr_FTVIEWSE_PM_CHART_Trend_Epic.createChartInEagleEye();
 			chartSetIDList.add(id2);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Epic, id2);
-		}
-		
-		ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
+		}*/
+	
+	/*	ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
 		if(null != d3)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d3, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
 			String id3=Mgr_FTVIEWSE_PM_CHART_Trend_Team.createChartInEagleEye();
 			chartSetIDList.add(id3);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Team, id3);
-		}
+		}*/
 		
 		ProductData d4=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint();
 		if(null != d4)
@@ -454,15 +454,26 @@ public class Program {
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint, id5);
 		}
 		
-		ProductData d6=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Feature_Progress();
+		
+	/*	ProductData d6=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_All_Epic();
 		if(null != d6)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.FTVIEWSE_PM_CHART_Feature_Progress));
 			String id6=Mgr_FTVIEWSE_PM_CHART_Feature_Progress.createChartInEagleEye();
 			chartSetIDList.add(id6);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Feature_Progress, id6);
+		}*/
+		
+		ProductData d7=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_BurnDown();
+		if(null != d7)
+		{
+			ChartManager Mgr_FTVIEWSE_PM_CHART_BurnDown=new ChartManager(d7, new LineChart(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown));
+			String id1=Mgr_FTVIEWSE_PM_CHART_BurnDown.createChartInEagleEye();
+			chartSetIDList.add(id1);
+			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown, id1);
 		}
-
+		
+	 
 		if(null != chartSetIDList && chartSetIDList.size()>0)
 		{
 			ChartSetForFTViewSE_PM=ChartManager.CreateChartSet(ConstString.FTVIEWSE_PM_CHARTSET_NAME,null,chartSetIDList);

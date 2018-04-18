@@ -226,7 +226,7 @@ public class CCWDataFactory {
 		    		
 		    		CCW_PM_Data_Trend_Epic.description=workItem.getHTMLSummary().toString();//description		
 		    		CCW_PM_Data_Trend_Epic.xTitle="Date";
-		    		CCW_PM_Data_Trend_Epic.yTitle="Number";
+		    		CCW_PM_Data_Trend_Epic.yTitle="Story Point";
 		    		CCW_PM_Data_Trend_Epic.yAxisFormat="#";
 		    		CCW_PM_Data_Trend_Epic.tableData=new DataTable();
 		    		CCW_PM_Data_Trend_Epic.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
@@ -420,7 +420,7 @@ public class CCWDataFactory {
 		    		
 		    		CCW_PM_Data_Trend_Team.description=SpeicTeam;//description		
 		    		CCW_PM_Data_Trend_Team.xTitle="Date";
-		    		CCW_PM_Data_Trend_Team.yTitle="Number";
+		    		CCW_PM_Data_Trend_Team.yTitle="Story Point";
 		    		CCW_PM_Data_Trend_Team.yAxisFormat="#";
 		    		CCW_PM_Data_Trend_Team.tableData=new DataTable();
 		    		CCW_PM_Data_Trend_Team.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
