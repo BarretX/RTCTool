@@ -12,10 +12,10 @@
 					<Chart name="Trend by Team" title="Trend by Team" url="http://apcndaec3ycs12:8080/#!/charts/5ac1a8e3023aad04acd9e077" time="2018-04-18"/>
 				</ChartGroup>
 				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="2018-04-18">
-					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/5ad6e994ccb9ec080ca5a0e5" time="2018-04-18"/>
+					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/5ad71bb7ccb9ec080ca5a0ef" time="2018-04-18"/>
 				</ChartGroup>
 				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="2018-04-18">
-					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5ad6e994ccb9ec080ca5a0e6" time="2018-04-18"/>
+					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5ad71bb7ccb9ec080ca5a0f0" time="2018-04-18"/>
 				</ChartGroup>
 				<ChartGroup name="Feature Progress" title="Feature Progress" time="2018-04-18">
 					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/5a98e72d023aad04acd9dfcd" time="2018-04-18"/>

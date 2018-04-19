@@ -565,6 +565,7 @@ public class FTViewSEDataFactory {
 	}
 	public static ProductData Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint()
 	{
+		System.out.println(IWorkItem.ID_PROPERTY);
 		if(FTVIEWSE_PM_Data_ThroughputVelocity_sprint==null)
 		{
 			ChartOfPM();
@@ -651,6 +652,27 @@ public class FTViewSEDataFactory {
 	    		
 	    		List<List<String>> resultList = getAttributesValue.GetAllNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),resultOwner,needAttributeList);
 	    		List<String> TeamResultList=getAttributesValue.GetTeamAreaList(repository, handler.getMonitor(),query.getProjectArea(), resultOwner1);	    		
+	    		
+	    		
+	    		//[test]
+	    		int test_sum=0;
+	    		for(int j=0;j<resultList.size();j++)
+				 {
+					 List<String> tempList4=resultList.get(j);
+					 //if can't get the attribute points,loop this for()
+					 if(tempList4.get(2).equals("")) 
+						 continue;
+					 
+					 String strTeam=TeamResultList.get(j);
+					 if(!Burn_Filter(tempList4.get(1),strTeam))
+							continue;
+					 
+					 test_sum+=Integer.parseInt(tempList4.get(2));
+					 
+					 System.out.println(tempList4.get(0)+"\t"+tempList4.get(1)+"\t"+tempList4.get(2)+"\t"+tempList4.get(3)+"\t"+tempList4.get(4)+"\t"+tempList4.get(5)+"\t"+strTeam);
+				 }
+	    		System.out.println(Integer.toString(test_sum));
+	    		//[test]
 	    		
 	    	    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
 	    		int Sprint_Name_Index=0;
@@ -969,8 +991,10 @@ public class FTViewSEDataFactory {
 											  "Sprint 13",
 											  "Sprint 14"
 											  );
+		
 		List<String> lstOtherTeam=Arrays.asList("TrendPro",
-												"FTView Localization");
+												"FTView Localization",
+												"CVB FTView - RTC SAFe");
 		for(String strPlanFor:lstPlanFor)
 		{
 			if(PlanFor.contains(strPlanFor))
