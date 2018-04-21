@@ -418,24 +418,24 @@ public class Program {
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Weekly_Trend, id1);
 		}
 		
-	/*	ProductData d2=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
+		ProductData d2=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_BurnDown();
 		if(null != d2)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d2, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
-			String id2=Mgr_FTVIEWSE_PM_CHART_Trend_Epic.createChartInEagleEye();
+			ChartManager Mgr_FTVIEWSE_PM_CHART_BurnDown=new ChartManager(d2, new LineChart(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown));
+			String id2=Mgr_FTVIEWSE_PM_CHART_BurnDown.createChartInEagleEye();
 			chartSetIDList.add(id2);
-			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Epic, id2);
-		}*/
-	
-	/*	ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
+			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown, id2);
+		}
+		
+		ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Plan_Actual_Sprint();
 		if(null != d3)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d3, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
-			String id3=Mgr_FTVIEWSE_PM_CHART_Trend_Team.createChartInEagleEye();
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint=new ChartManager(d3, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint));
+			String id3=Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
 			chartSetIDList.add(id3);
-			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Team, id3);
-		}*/
-		
+			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint, id3);
+		}
+	
 		ProductData d4=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint();
 		if(null != d4)
 		{
@@ -445,34 +445,32 @@ public class Program {
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_ThroughputVelocity_sprint, id4);
 		}
 		
-		ProductData d5=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Plan_Actual_Sprint();
+		ProductData d5=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
 		if(null != d5)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint=new ChartManager(d5, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint));
-			String id5=Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d5, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
+			String id5=Mgr_FTVIEWSE_PM_CHART_Trend_Team.createChartInEagleEye();
 			chartSetIDList.add(id5);
-			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint, id5);
-		}
+			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Team, id5);
+		}		
 		
-		
-	/*	ProductData d6=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_All_Epic();
+		ProductData d6=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_All_Epic();
 		if(null != d6)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.FTVIEWSE_PM_CHART_Feature_Progress));
 			String id6=Mgr_FTVIEWSE_PM_CHART_Feature_Progress.createChartInEagleEye();
 			chartSetIDList.add(id6);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Feature_Progress, id6);
-		}*/
+		}	
 		
-		ProductData d7=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_BurnDown();
+		ProductData d7=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
 		if(null != d7)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_BurnDown=new ChartManager(d7, new LineChart(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown));
-			String id1=Mgr_FTVIEWSE_PM_CHART_BurnDown.createChartInEagleEye();
-			chartSetIDList.add(id1);
-			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown, id1);
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d7, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
+			String id7=Mgr_FTVIEWSE_PM_CHART_Trend_Epic.createChartInEagleEye();
+			chartSetIDList.add(id7);
+			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Epic, id7);
 		}
-		
 	 
 		if(null != chartSetIDList && chartSetIDList.size()>0)
 		{
