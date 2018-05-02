@@ -385,7 +385,14 @@ public class JsonRenderer {
           valueJson.append(((NumberValue) value).getValue());
           break;
         case INT:
-            valueJson.append(((IntValue) value).getValue());
+        	if(((IntValue) value).getValue()<0)
+        	{
+        		valueJson.append("null");
+        	}
+        	else
+        	{
+        		valueJson.append(((IntValue) value).getValue());
+        	}
             break;
         case TEXT:
           valueJson.append("\"");

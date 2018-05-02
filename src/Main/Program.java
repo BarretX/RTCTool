@@ -430,29 +430,29 @@ public class Program {
 		ProductData d3=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Plan_Actual_Sprint();
 		if(null != d3)
 		{
-			ChartManager Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint=new ChartManager(d3, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint));
+			ChartManager Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint=new ChartManager(d3, new ComboChart(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint));
 			String id3=Mgr_FTVIEWSE_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
 			chartSetIDList.add(id3);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint, id3);
 		}
 	
-		ProductData d4=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint();
+		/*ProductData d4=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint();
 		if(null != d4)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_ThroughputVelocity_sprint=new ChartManager(d4, new ComboChart(ConstString.FTVIEWSE_PM_CHART_ThroughputVelocity_sprint));
 			String id4=Mgr_FTVIEWSE_PM_CHART_ThroughputVelocity_sprint.createChartInEagleEye();
 			chartSetIDList.add(id4);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_ThroughputVelocity_sprint, id4);
-		}
+		}*/
 		
-		ProductData d5=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
+		/*ProductData d5=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Team();
 		if(null != d5)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Team=new ChartManager(d5, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Team));
 			String id5=Mgr_FTVIEWSE_PM_CHART_Trend_Team.createChartInEagleEye();
 			chartSetIDList.add(id5);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Team, id5);
-		}		
+		}		*/
 		
 		ProductData d6=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_All_Epic();
 		if(null != d6)
@@ -463,14 +463,14 @@ public class Program {
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Feature_Progress, id6);
 		}	
 		
-		ProductData d7=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
+	/*	ProductData d7=FTViewSEDataFactory.Get_FTVIEWSE_PM_Data_Trend_Epic();
 		if(null != d7)
 		{
 			ChartManager Mgr_FTVIEWSE_PM_CHART_Trend_Epic=new ChartManager(d7, new ColumnChart(ConstString.FTVIEWSE_PM_CHART_Trend_Epic));
 			String id7=Mgr_FTVIEWSE_PM_CHART_Trend_Epic.createChartInEagleEye();
 			chartSetIDList.add(id7);
 			ChartsForFTViewSE_PM.put(ConstString.FTVIEWSE_PM_CHART_Trend_Epic, id7);
-		}
+		}*/
 	 
 		if(null != chartSetIDList && chartSetIDList.size()>0)
 		{

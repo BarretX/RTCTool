@@ -39,9 +39,10 @@ public class Chart implements  IToJson,IToEagleEye {
 		}
 		
 		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"},\"vAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
-		
+		String Legend=",\"legend\":{\"position\":\"bottom\",\"alignment\":\"center\",\"maxLines\":\"2\",\"textStyle\":{\"color\":\"#555555\"}}";
+		//String ChartArea=",\"chartArea\":{\"height\":\"175%\"}";
 		String head="\"description\": \""+description
-				+"\",\"options\":{\"title\":\""+title+"\""+colors+AxisFormat+"},\"chartType\":\""+chartType+"\",\"datatable\":";
+				+"\",\"options\":{\"title\":\""+title+"\""+colors+AxisFormat+Legend+"},\"chartType\":\""+chartType+"\",\"datatable\":";
 		String body=JsonRenderer.renderDataTable(tableData, true, true, true).toString();
 		return "{"+head+body+"}";
 	}

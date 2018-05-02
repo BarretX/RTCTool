@@ -246,9 +246,11 @@ public class FTViewSEDataFactory {
 	    		List<Integer> y9=new ArrayList<>();
 	    		List<Integer> y10=new ArrayList<>();
 	    		
-	    		//// [section 3.1] Draw All Epic	    			    			    		
-	    		for(EpicItem item:All_Epic)
+	    		//// [section 3.1] Draw All Epic
+	    		//only draw top ten epic
+	    		for(int i=0;i<All_Epic.size()&&i<10;i++)
 	    		{
+	    			EpicItem item=All_Epic.get(i);
 	    			x1.add(item.EpicName);
 	    			y1.add(item.FinishPoint);
 	    			y2.add(item.RemainPoint);
@@ -484,6 +486,8 @@ public class FTViewSEDataFactory {
 	    				
 	    	    ////Calculate the week section
 	    		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
+	    		SimpleDateFormat sdf1=new SimpleDateFormat("MM/dd/yy");
+	    		SimpleDateFormat sdf2=new SimpleDateFormat("MM/dd");
 	    		SimpleDateFormat sdfget=new SimpleDateFormat("yyyy-MM-dd");
 	    		List<Date> Week_Trend=new ArrayList<Date>();
 	    		List<Date> Week_Trend_Of_BurnDown=new ArrayList<Date>();
@@ -755,14 +759,22 @@ public class FTViewSEDataFactory {
 	    		for(List<String> item:Week_Break)
 	    		{
 	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
+	    			Date Today=new Date();
 	    			
-	    			Calendar WeekCal=Calendar.getInstance();
-	    			WeekCal.setTime(WeekDate);
+	    			Date X_Axis=sdf.parse(item.get(Week_Date_Index));
+	    			x1.add(sdf1.format(X_Axis));
 	    			
-	    			x1.add(item.get(0));
 	    			y1.add(Integer.parseInt(item.get(Week_PlanTotal_Index)));
 	    			y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
-	    			y3.add(Integer.parseInt(item.get(Week_CloseTotal_Index)));
+	    			
+	    			if(WeekDate.after(Today))
+	    			{
+	    				y3.add(-1);	
+	    			}
+	    			else
+	    			{
+	    				y3.add(Integer.parseInt(item.get(Week_CloseTotal_Index)));	
+	    			}
 	    		}
 	    	    		
 	    		Create_P1(x1,y1,y2,y3);
@@ -771,21 +783,32 @@ public class FTViewSEDataFactory {
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
-	    		y3.clear();
-	    		
+	    		y3.clear();	    		
 	    		
     			for(int i=0;i<Week_Break_BurnDown.size();i++)
 	    		{
 	    			List<String> item=Week_Break_BurnDown.get(i);
-	    			x1.add(item.get(0));
+	    			
+	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
+	    			Date Today=new Date();
+	    			
+	    			x1.add(sdf2.format(WeekDate));
 	    			y1.add(Sum_Plan_For_This_Sprint-Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			
 	    			if(i==0)
 	    			{
 	    				y2.add(Sum_Plan_For_This_Sprint);
 	    			}
 	    			else
 	    			{
-	    				y2.add(Sum_Plan_For_This_Sprint-Integer.parseInt(Week_Break_BurnDown.get(i-1).get(Week_CloseTotal_Index)));
+	    				if(WeekDate.after(Today))
+	    				{
+	    					y2.add(-1);
+	    				}
+	    				else
+	    				{
+	    					y2.add(Sum_Plan_For_This_Sprint-Integer.parseInt(Week_Break_BurnDown.get(i-1).get(Week_CloseTotal_Index)));
+	    				}
 	    			}
 	    			y3.add(Sum_Plan_For_This_Sprint);
 	    		}
@@ -825,32 +848,47 @@ public class FTViewSEDataFactory {
 	    		{
 	    			List<String> item=Point_of_Sprint.get(i);
 	    			
-	    		//	if(item.get(0).equals("Sprint 11.4")||item.get(0).equals("Sprint 12.4"))
-	    		//		continue;
-	    			
 	    			x1.add(item.get(0));
-	    			y1.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish    
-	    			y2.add(Sprint_Average);
+	    			y1.add(Sprint_Average);
+	    			y2.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish    
+	    			
 	    		}
 
-	    		Create_P6(x1,y2,y1);
+	    		Create_P6(x1,y1,y2);
 	    	    		
 	    		//P7:Draw the Plan vs Actual
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
+	    		y3.clear();
+	    		
+	    		List<Double> yy=new ArrayList<>();
 	    		
 	    		for(List<String> item:Point_of_Sprint)
 	    		{
-	    			if(item.get(0).equals("Sprint 11.4")||item.get(0).equals("Sprint 12.4"))
-	    				continue;
+	    			 Date SprintBegin = sdf.parse(item.get(Sprint_Start_Index));	
+					 Date SprintEnd   = sdf.parse(item.get(Sprint_End_Index));
+					 
+					 Date today=new Date();
+					 Calendar calendar=Calendar.getInstance();
+	    			 calendar.setTime(today);
 	    			
 	    			x1.add(item.get(0));
 	    			y1.add(Integer.parseInt(item.get(Sprint_Plan_Index)));//plan
-	    			y2.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish	    				
+	    			
+	    			if(!today.before(SprintBegin)&&!today.after(SprintEnd))
+	    			{
+	    				y2.add(0);//when current sprint, set actual = 0    				
+	    			}
+	    			else
+	    			{
+	    				y2.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish	    
+	    			}
+	    			
+	    			yy.add(614.8);
 	    		}
 	    		
-	    		Create_P7(x1,y1,y2);
+	    		Create_P7(x1,yy,y1,y2);
 	    		
 	    		//P9:Draw the TrendTeam
 	    		Create_P9(resultList,TeamResultList, Week_Trend);
@@ -909,7 +947,6 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_Weekly_Trend.title=ConstString.FTVIEWSE_PM_CHART_Weekly_Trend;
 		
 		FTVIEWSE_PM_Data_Weekly_Trend.description="";//description		
-		FTVIEWSE_PM_Data_Weekly_Trend.xTitle="Date";
 		FTVIEWSE_PM_Data_Weekly_Trend.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Weekly_Trend.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData=new DataTable();
@@ -956,7 +993,6 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_Weekly_BurnDown.title=ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown;
 		
 		FTVIEWSE_PM_Data_Weekly_BurnDown.description="";//description		
-		FTVIEWSE_PM_Data_Weekly_BurnDown.xTitle="Date";
 		FTVIEWSE_PM_Data_Weekly_BurnDown.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Weekly_BurnDown.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData=new DataTable();
@@ -1000,7 +1036,6 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.title=ConstString.CCW_PM_CHART_ThroughputVelocity_sprint;
 		
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.description="";//description		
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.xTitle="Sprint";
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.yTitle="Story Point";
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.yAxisFormat="#";
 		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData=new DataTable();
@@ -1035,26 +1070,27 @@ public class FTViewSEDataFactory {
 		}
 	}
 	
-	public static void Create_P7(List<String> x1,List<Integer> y1, List<Integer> y2)
+	public static void Create_P7(List<String> x1,List<Double> y3,List<Integer> y1, List<Integer> y2)
 	{	
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint=new ProductData();
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.title=ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint;
 		
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.description="";//description		
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.xTitle="Sprint";
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.colorList=Arrays.asList(ColorFormater.RGB2String(91,155,213),ColorFormater.RGB2String(237,125,49));
+		FTVIEWSE_PM_Data_Plan_Actual_Sprint.colorList=Arrays.asList("green",ColorFormater.RGB2String(91,155,213),ColorFormater.RGB2String(237,125,49));
 
 		
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Average"));
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Planned"));
 		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Actual"));
 		
 		//Chart data
 				//////////////////////////////////////////////
 				List<String> x_data=x1;
+				List<Double> y3_data=y3;
 				List<Integer> y1_data=y1;
 				List<Integer> y2_data=y2;
 		
@@ -1064,6 +1100,7 @@ public class FTViewSEDataFactory {
 		{
 			TableRow row = new TableRow();
 		    row.addCell(new TableCell(x_data.get(i)));
+		    row.addCell(new TableCell(y3_data.get(i)));
 		    row.addCell(new TableCell(y1_data.get(i)));
 		    row.addCell(new TableCell(y2_data.get(i)));
 		    rows.add(row);
@@ -1082,14 +1119,13 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_Feature_Progress=new ProductData();
 		FTVIEWSE_PM_Data_Feature_Progress.title=ConstString.FTVIEWSE_PM_CHART_Feature_Progress;
 		FTVIEWSE_PM_Data_Feature_Progress.description="";//description		
-		FTVIEWSE_PM_Data_Feature_Progress.xTitle="Epic";
-		FTVIEWSE_PM_Data_Feature_Progress.yTitle="Story Point";
+	//	FTVIEWSE_PM_Data_Feature_Progress.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Feature_Progress.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Feature_Progress.tableData=new DataTable();
 		FTVIEWSE_PM_Data_Feature_Progress.colorList=Arrays.asList(ColorFormater.RGB2String(112,173,71),ColorFormater.RGB2String(68,114,196));
 		
 		FTVIEWSE_PM_Data_Feature_Progress.isStacked="true";
-		FTVIEWSE_PM_Data_Feature_Progress.chartLeft=400;
+		FTVIEWSE_PM_Data_Feature_Progress.chartLeft=200;
 		
 		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
 		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
@@ -1224,7 +1260,6 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_Trend_Team.title="Trend by Team";
 		
 		FTVIEWSE_PM_Data_Trend_Team.description="";//description		
-		FTVIEWSE_PM_Data_Trend_Team.xTitle="Date";
 		FTVIEWSE_PM_Data_Trend_Team.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Trend_Team.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Trend_Team.tableData=new DataTable();

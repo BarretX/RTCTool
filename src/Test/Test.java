@@ -21,7 +21,7 @@ import ConstVar.ConstString;
 
 public class Test {
   
-	/*public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		
 		// TODO Auto-generated method stub
 		String chartID1=Create_BarChart();
@@ -529,21 +529,21 @@ public class Test {
 						2);
 				List<Integer> y2_data=Arrays.asList(
 						8,
-						7,
+						-2,
 						2,
+						3,
+						-3,
 						3,
 						3,
 						3,
 						3,
-						3,
-						3,
+						-2,
 						2,
 						2,
+						-2,
 						2,
 						2,
-						2,
-						2,
-						2,
+						-2,
 						3,
 						3,
 						3,

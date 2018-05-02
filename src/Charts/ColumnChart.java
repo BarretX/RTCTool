@@ -26,9 +26,9 @@ public class ColumnChart extends Chart {
 		}
 		
 		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"},\"vAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
-		
+		String Legend=",\"legend\":{\"position\":\"bottom\",\"alignment\":\"center\",\"maxLines\":\"2\",\"textStyle\":{\"color\":\"#555555\"}}";
 		String head="\"description\": \""+description
-				+"\",\"options\":{\"title\":\""+title+"\""+",\"isStacked\": "+isStacked+colors+AxisFormat+"},\"chartType\":\""+chartType+"\",\"datatable\":";
+				+"\",\"options\":{\"title\":\""+title+"\""+",\"isStacked\": "+isStacked+colors+AxisFormat+Legend+"},\"chartType\":\""+chartType+"\",\"datatable\":";
 		
 		String body=JsonRenderer.renderDataTable(tableData, true, true, true).toString();
 		return "{"+head+body+"}";
