@@ -28,7 +28,9 @@ import java.text.SimpleDateFormat;
 public class Program {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		System.out.println("RTC Tool Starting!");
+
 		 Date DateBegin=new Date();
 		loginRTC();
 		createCharts();
@@ -134,9 +136,12 @@ public class Program {
 	public static void saveChartsToXML()
 	{
 		Document document=XmlParseHelper.load("config.xml");
-		saveS5KA_UrlToXml(document);
-		saveFTViewSE_UrlToXml(document);
+		//saveS5KA_UrlToXml(document);
+		//saveFTViewSE_UrlToXml(document);
 		//updateXmlTime(document);
+		
+		saveFTViewArt_UrlToXml(document);
+		
 		XmlParseHelper.persist(document,"config.xml");
 	}
 	
@@ -547,6 +552,35 @@ public class Program {
 			}
 		}
 		updateXmlTime(FTViewSENode);
+	}
+	
+	public static void saveFTViewArt_UrlToXml(Document document)
+	{
+		if(document==null)
+			return;
+		Node FTViewArtNode=document.selectSingleNode("/Products/Bucket[@name='FTView']/Product[@name ='FTView ART']");
+		if(FTViewArtNode==null)
+			return;
+		if(ChartsForFTViewSE_PM!=null)
+		{
+			for(String key:ChartsForFTViewSE_PM.keySet())
+			{
+				Element e=(Element)FTViewArtNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_PM.get(key));
+			}
+		}
+
+		if(ChartsForFTViewSE_QA!=null)
+		{
+			for(String key:ChartsForFTViewSE_QA.keySet())
+			{
+				Element e=(Element)FTViewArtNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_QA.get(key));
+			}
+		}
+		updateXmlTime(FTViewArtNode);
 	}
 	
 	private static void updateXmlTime(Node document)

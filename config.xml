@@ -2,120 +2,25 @@
 <Products name="Program">
 	<Bucket name="FTView" title="FTView" id="ftview">
 		<Product name="FTView ART" title="FTView ART" id="ftview_art">
-		</Product>
-		<Product name="FTView SE" title="FTView SE" id="ftview_se">
 			<!-- Charts for PM -->
 			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
-				<ChartGroup name="Trend" title="Trend" time="2018-05-02">
-					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/5a98e45e023aad04acd9dfc9" time="2018-05-02"/>
-					<Chart name="Trend by Epic" title="Trend by Epic" url="http://apcndaec3ycs12:8080/#!/charts/5adaddbbccb9ec080ca5a12b" time="2018-05-02"/>
-					<Chart name="Trend by Team" title="Trend by Team" url="http://apcndaec3ycs12:8080/#!/charts/5adadcfeccb9ec080ca5a129" time="2018-05-02"/>
+				<ChartGroup name="Overall" title="Overall" time="2018-05-04">
+					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5ae988b5ccb9ec080ca5a1c2" time="2018-05-04"/>
 				</ChartGroup>
-				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="2018-05-02">
-					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/5adadcfeccb9ec080ca5a128" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="2018-05-02">
-					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5ae92067ccb9ec080ca5a1ac" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Feature Progress" title="Feature Progress" time="2018-05-02">
-					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/5a98e72d023aad04acd9dfcd" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Resource" title="Resource" time="2018-05-02">
-					<Chart name="Resource by Sprint" title="Resource by Sprint" url="#" time="2018-05-02"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-05-04">
+					<Chart name="FTView Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5aebf3d2ccb9ec080ca5a1d7" time="2018-05-04"/>
+					<Chart name="PI12 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5aebf3d3ccb9ec080ca5a1d8" time="2018-05-04"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5aebf3d3ccb9ec080ca5a1d9" time="2018-05-04"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5aebf464ccb9ec080ca5a1da" time="2018-05-04"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
 			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">	
 			</Charts>
-		</Product>
-		<Product name="FTView ME" title="FTView ME" id="ftview_me">
-		</Product>
-		<Product name="FTVP" title="FTVP" id="ftvp">
-		</Product>
-		<Product name="FTAE" title="FTAE" id="ftae">
 		</Product>
 	</Bucket>
 	<Bucket name="Services" title="Services" id="services">
-		<Product name="FTSP" title="FTSP" id="ftsp">
-		</Product>
-		<Product name="RSNetWorx" title="RSNetWorx" id="rsnetworx">
-		</Product>
-		<Product name="COMM Software(ART)" title="COMM Software(ART)" id="comm_software_art">
-		</Product>
-		<Product name="FTAC" title="FTAC" id="ftac">
-		</Product>
-		<Product name="RSLC" title="RSLC" id="rslc">
-		</Product>
-		<Product name="FTLE" title="FTLE" id="ftle">
-		</Product>
-		<Product name="FTLD" title="FTLD" id="ftld">
-		</Product>
-		<Product name="FTGW" title="FTGW" id="ftgw">
-		</Product>
-		<Product name="OPC UA" title="OPC UA" id="opc_ua">
-		</Product>
 	</Bucket>
 	<Bucket name="Logix" title="Logix" id="logix">
-		<Product name="S5KA" title="S5KA" id="s5ka">
-			<!-- Charts for PM -->
-			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">	
-			</Charts>
-			<!-- Charts for QA -->
-			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">
-				<ChartGroup name="FY17 Anomlay Backlog_3.0" title="S5KA FY17 Anomlay Backlog_3.0" time="2018-05-02">
-					<Chart name="FY17 Anomlay Backlog_3.0 Weekly" title="S5KA FY17 Anomlay Backlog_3.0 Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a5810f8536a9a08b41859a2" time="2018-05-02"/>
-					<Chart name="FY17 Anomlay Backlog_3.0 Monthly" title="S5KA FY17 Anomlay Backlog_3.0 Monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a5810f8536a9a08b41859a3" time="2018-05-02"/>
-					<Chart name="FY17 Anomlay Backlog_3.0 Sprint" title="S5KA FY17 Anomlay Backlog_3.0 Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a5810f8536a9a08b41859a4" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Shippable State RC anomaly" title="Shippable State_S5KA RC anomaly" time="2018-05-02">
-					<Chart name="Shippable State RC anomaly Weekly" title="Shippable State_S5KA RC anomaly Weekly" url="http://apcndaec3ycs12:8080/#!/charts/5a5810f8536a9a08b41859a5" time="2018-05-02"/>
-					<Chart name="Shippable State RC anomaly monthly" title="Shippable State_S5KA RC anomaly monthly" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf422c" time="2018-05-02"/>
-					<Chart name="Shippable State RC anomaly Sprint" title="Shippable State_S5KA RC anomaly Sprint" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf422d" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Runrate" title="S5KA Runrate" time="2018-05-02">
-					<Chart name="Runrate (all anomaly)" title="S5KA Runrate (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf422e" time="2018-05-02"/>
-					<Chart name="Runrate (RC)" title="S5KA Runrate (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf422f" time="2018-05-02"/>
-				</ChartGroup>
-				<ChartGroup name="Stability" title="S5KA Stability" time="2018-05-02">
-					<Chart name="Stability (all anomaly)" title="S5KA Stability (all anomaly)" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf4230" time="2018-05-02"/>
-					<Chart name="Stability (RC)" title="S5KA Stability (RC)" url="http://apcndaec3ycs12:8080/#!/charts/5a783ab75303b408a8bf4231" time="2018-05-02"/>
-				</ChartGroup>	
-			</Charts>
-		</Product>
-		<Product name="Compare Tool" title="Compare Tool" id="compare_tool">
-		</Product>
-		<Product name="Control Flash Plus" title="Control Flash Plus" id="control_flash_plus">
-		</Product>
-		<Product name="CCW" title="CCW" id="ccw">
-			<!-- Charts for PM -->
-			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
-				<ChartGroup name="Trend" title="Trend" time="2017-12-12">
-					<Chart name="Weekly Trend" title="Weekly Trend" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f2e" time="2017-12-12"/>
-					<Chart name="Trend by Epic" title="Trend by Epic" url="#" time="2017-12-12"/>
-					<Chart name="Trend by Team" title="Trend by Team" url="#" time="2017-12-12"/>
-				</ChartGroup>
-				<ChartGroup name="Throughput-Velocity" title="Throughput-Velocity" time="2017-12-12">
-					<Chart name="Throughput-Velocity by sprint" title="Throughput-Velocity by sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f30" time="2017-12-12"/>
-				</ChartGroup>
-				<ChartGroup name="Plan vs Actual" title="Plan vs Actual" time="2017-12-12">
-					<Chart name="Plan vs Actual by Sprint" title="Plan vs Actual by Sprint" url="http://apcndaec3ycs12:8080/#!/charts/59f17038a8e8eb07883a2f31" time="2017-12-12"/>
-				</ChartGroup>
-				<ChartGroup name="Feature Progress" title="Feature Progress" time="2017-12-12">
-					<Chart name="Feature Progress" title="Feature Progress" url="http://apcndaec3ycs12:8080/#!/charts/59f6ead7a8e8eb07883a2f7a" time="2017-12-12"/>
-				</ChartGroup>
-				<ChartGroup name="Resource" title="Resource" time="2017-12-12">
-					<Chart name="Resource by Sprint" title="Resource by Sprint" url="#" time="2017-12-12"/>
-				</ChartGroup>	
-			</Charts>
-			<!-- Charts for QA -->
-			<Charts name="QUALITY MATRIX" title="QUALITY MATRIX">	
-			</Charts>
-		</Product>
-		<Product name="PV800" title="PV800" id="pv800">
-		</Product>
-		<Product name="SSCB Optoelectronics" title="SSCB Optoelectronics" id="sscb_optoelectronics">
-		</Product>
-		<Product name="SSCB Safety Relay" title="SSCB Safety Relay" id="sscb_safety_relay">
-		</Product>
 	</Bucket>
 </Products>

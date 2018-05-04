@@ -9,6 +9,7 @@ public class ConstString {
 	//Get const string from API.config
 	static
 	{
+		System.out.println("读取配置文件开始");
 		Document document=XmlParseHelper.load("APP.Config");
 
 		Element CHART_URL_element=(Element)document.selectSingleNode("/configuration/urls/url[@name ='CHART_URL']");
@@ -101,8 +102,7 @@ public class ConstString {
 	public final static String FTVIEWSE_PM_CHART_Trend_Team="Trend by Team";
 	public final static String FTVIEWSE_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
 	public final static String FTVIEWSE_PM_CHART_Plan_Actual_Sprint="Plan vs Actual by Sprint";
-	public final static String FTVIEWSE_PM_CHART_Feature_Progress="All Epic";  //all epic
+	public final static String FTVIEWSE_PM_CHART_Feature_Progress="Top 10 Epics";  //all epic
 //	public final static String FTVIEWSE_PM_CHART_Resource_Sprint="Resource by Sprint";
-
 
 }
