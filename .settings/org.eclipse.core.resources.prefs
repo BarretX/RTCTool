@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/ConstVar/ConstString.java=UTF-8
+encoding//src/DataForChart/CommunicationsDataFactory.java=UTF-8
+encoding//src/DataForChart/FTSPDataFactory.java=UTF-8
 encoding//src/DataForChart/S5KADataFactory.java=UTF-8
 encoding//src/Helper/XmlParseHelper.java=UTF-8
 encoding//src/Main/Program.java=UTF-8

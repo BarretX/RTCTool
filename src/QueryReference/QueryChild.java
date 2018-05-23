@@ -17,6 +17,7 @@ import com.ibm.team.workitem.common.model.IWorkItem;
 import com.ibm.team.workitem.common.model.IWorkItemHandle;
 import com.ibm.team.workitem.common.model.IWorkItemReferences;
 import com.ibm.team.workitem.common.model.ItemProfile;
+import com.ibm.team.workitem.common.model.WorkItemEndPoints;
 import com.ibm.team.workitem.common.query.IQueryResult;
 import com.ibm.team.workitem.common.query.IResolvedResult;
 
@@ -95,7 +96,9 @@ public class QueryChild {
 		List<IWorkItem> ChildList = new ArrayList<>();
 		for (IEndPointDescriptor iEndPointDescriptor : endpoints) {
 			//System.out.println("Endpoint	"	+ iEndPointDescriptor.getDisplayName());
-			List<IReference> typedReferences = references.getReferences(iEndPointDescriptor);
+			//List<IReference> typedReferences = references.getReferences(iEndPointDescriptor);
+			
+			List<IReference> typedReferences = references.getReferences(WorkItemEndPoints.CHILD_WORK_ITEMS);
 			for (IReference iReference : typedReferences) {
 				IWorkItem item = null;
 				item = analyzeReference(teamRepository,iReference);
@@ -105,8 +108,21 @@ public class QueryChild {
 				}
 			}
 		}
+		removeDuplicate(ChildList);
 		return ChildList;
 	}
+	
+	public void removeDuplicate(List<IWorkItem> list) {
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = list.size() - 1; j > i; j--) {
+                if (list.get(j).equals(list.get(i))) {
+                    list.remove(j);
+                }
+            }
+        }
+    }
+	
+	
 	
 	public List<IWorkItem> FindEpicChild(IWorkItem epic,ITeamRepository teamRepository,IProgressMonitor monitor)
 	{

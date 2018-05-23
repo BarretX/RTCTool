@@ -29,7 +29,6 @@ import com.ibm.team.workitem.common.query.IResolvedResult;
 
 import ConstVar.ConstString;
 import GetAttributeDispValue.GetAttributesValue;
-import Helper.Calendar_Compare;
 import Helper.TrendLine;
 import Helper.ColorFormater;
 import Helper.EpicItem;
@@ -39,272 +38,31 @@ import QueryReference.QueryChild;
 import SearchWorkItem.MulConditionQuery;
 import SearchWorkItem.SearchCondition;
 
-public class FTViewSEDataFactory {
+public class CommunicationsDataFactory {
 	private static LoginHandler handler=Program.handler;
 	private static ITeamRepository repository=Program.repository;	
-    public static Map<String, EpicItem> mapFeature=new HashMap<String,EpicItem>();
+	public static Map<String, EpicItem> mapFeature=new HashMap<String,EpicItem>();
     public static Map<String, EpicItem> mapEpic=new HashMap<String,EpicItem>();
 	
-	public static ProductData Get_FTVIEWSE_PM_Data_Weekly_Trend()
+	public static ProductData Get_Communications_PM_Data_Weekly_Trend()
 	{
-		if(FTVIEWSE_PM_Data_Weekly_Trend==null)
+		if(Communications_PM_Data_Weekly_Trend==null)
 		{
 			ChartOfPM();
 		}
 		
-		return FTVIEWSE_PM_Data_Weekly_Trend;
+		return Communications_PM_Data_Weekly_Trend;
 	}
 	
-	public static ProductData Get_FTVIEWSE_PM_Data_BurnDown()
+	public static ProductData Get_Communications_PM_Data_BurnDown()
 	{
-		if(FTVIEWSE_PM_Data_Weekly_BurnDown==null)
+		if(Communications_PM_Data_Weekly_BurnDown==null)
 		{
 			ChartOfPM();
 		}
 		
-		return FTVIEWSE_PM_Data_Weekly_BurnDown;
+		return Communications_PM_Data_Weekly_BurnDown;
 	}
-	
-	public static void ChartOfPM_About_Epic()
-	{
-		//[start]
-		int nProjectNumber=0;
-	    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
-	    List<String> projectAreaNames = new ArrayList<>();
-	    for(int i = 0;i<iProcessAreas.size();i++)
-		{
-	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
-	    	projectAreaNames.add(iProcessArea.getName());
-	    	
-			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
-			{
-				nProjectNumber=i;
-			}
-		}
-	    //[end]
-	    
-	    // there suppose you take the first value
-	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
-		
-	    List<SearchCondition> conditionsList = new ArrayList<>(); 
-	    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
-	    
-	    List<SearchCondition> conditionsList1 = new ArrayList<>(); 
-	    
-	    conditionsList1.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.feature", AttributeOperation.EQUALS));
-	    
-	    List<String> needAttributeList = new ArrayList<>();
-	    needAttributeList.add("Id");                    //pass        0
-	    needAttributeList.add("Planned For");           //pass        1 
-	    needAttributeList.add("Story Points (numeric)");//pass        2
-	    needAttributeList.add("Status");                //pass        3
-	    needAttributeList.add("Creation Date");         //pass        4
-	    needAttributeList.add("Risk Estimate");         //pass        5
-	    needAttributeList.add("Type");                  //pass        6
-		
-		 //the definition of the array:0-Epic Summary; 1-Finish Point; 2-Remain Point;
-		List<EpicItem> All_Epic=new ArrayList<>();
-		 
-	    try {
-		    MulConditionQuery query=new MulConditionQuery();
-	    	
-		    IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);	
-		    IQueryResult<IResolvedResult<IWorkItem>> resultOwner1 = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList1);		    
-		    
-	    	if(resultOwner!=null)
-	    	{
-	    		resultOwner.setLimit(10000);
-	    			
-	    		IWorkItem workItem = null;
-	    		IResolvedResult<IWorkItem> resolved =null;
-				 
-				while(resultOwner.hasNext(handler.getMonitor()))
-				{	
-					resolved = resultOwner.next(handler.getMonitor());
-					 workItem = (IWorkItem)resolved.getItem(); 
-					 
-					 //test
-					 System.out.println("Parent: "+workItem.getId()+"\t"+workItem.getHTMLSummary());
-					
-					 EpicItem One_Epic=new EpicItem(); 
-					 
-					 QueryChild queryChild = new QueryChild();
-					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
-					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
-					 List<IWorkItem> ChildList = new ArrayList<>();
-					 ChildList = queryChild.analyzeReferences(repository,references);					 
-					 
-					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
-					 				 					 
-					//// [section 2] Calculate all Point of every epic[begin]
-					 int Epic_Plan_Point=0;
-					 int Epic_Finish_Point=0;
-					 int Epic_Remain_Point=0;
-					 int Epic_Risk_Point=0;
-					 for(List<String> tempList4:resultList)   //the story status of the sprint
-					 {
-						 //test
-						 System.out.println("Child: \t"+tempList4.get(0)+"\t"+tempList4.get(6));
-						 
-						 if(tempList4.get(6).contains("feature")||tempList4.get(6).contains("programEpic"))
-						{
-							One_Epic.ChildID.add(tempList4.get(0));  //if this is feature or epic, only record
-							continue;
-						}
-						 
-						 //if can't get the attribute points,loop this for()
-						 if(tempList4.get(2).equals("")) 
-							 tempList4.set(2, "0");
-						 
-						 //get the plan point and add to the record
-						 Epic_Plan_Point+= Integer.parseInt(tempList4.get(2));
-						 
-						 //get the status ,if the status is "closed",add to finish
-						 if(tempList4.get(3).equals("Closed"))
-						 {									 
-							 Epic_Finish_Point+=Integer.parseInt(tempList4.get(2));								 
-						 }
-						 
-						 if(!tempList4.get(5).equals(""))
-						 {
-							 Epic_Risk_Point+=Integer.parseInt(tempList4.get(5));
-						 }
-					 }
-					Epic_Remain_Point=Epic_Plan_Point-Epic_Finish_Point;
-					
-					 //the record will be used to draw Chart : All Epic
-					
-					One_Epic.TotalPoint=Epic_Finish_Point+Epic_Remain_Point;
-					One_Epic.EpicName=workItem.getHTMLSummary().toString();
-					One_Epic.FinishPoint=Epic_Finish_Point;
-					One_Epic.RemainPoint=Epic_Remain_Point;
-					One_Epic.RiskEstimate=Epic_Risk_Point;
-					One_Epic.EpicID=Integer.toString(workItem.getId());
-					
-					mapEpic.put(One_Epic.EpicID, One_Epic);
-					
-					////Calculate all Epic Point [end]
-				}	   		
-	    	} 	
-	    		    	
-	    	if(resultOwner1!=null)
-	    	{
-	    		resultOwner1.setLimit(10000);
-	    			
-	    		IWorkItem workItem = null;
-	    		IResolvedResult<IWorkItem> resolved =null;
-				 
-				while(resultOwner1.hasNext(handler.getMonitor()))
-				{					 
-					resolved = resultOwner1.next(handler.getMonitor());
-					 workItem = (IWorkItem)resolved.getItem(); 
-					
-					 EpicItem One_Epic=new EpicItem(); 
-					 
-					 QueryChild queryChild = new QueryChild();
-					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
-					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
-					 List<IWorkItem> ChildList = new ArrayList<>();
-					 ChildList = queryChild.analyzeReferences(repository,references);					 
-					 
-					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
-					 				 					 
-					//// [section 2] Calculate all Point of every epic[begin]
-					 int Epic_Plan_Point=0;
-					 int Epic_Finish_Point=0;
-					 int Epic_Remain_Point=0;
-					 int Epic_Risk_Point=0;
-					 for(List<String> tempList4:resultList)   //the story status of the sprint
-					 {
-						if(tempList4.get(6).contains("feature"))
-						{
-							One_Epic.ChildID.add(tempList4.get(0));  //if this is feature or epic, only record
-							continue;
-						}
-						 
-						 //if can't get the attribute points,loop this for()
-						 if(tempList4.get(2).equals("")) 
-							 tempList4.set(2, "0");
-						 
-						 //get the plan point and add to the record
-						 Epic_Plan_Point+= Integer.parseInt(tempList4.get(2));
-						 
-						 //get the status ,if the status is "closed",add to finish
-						 if(tempList4.get(3).equals("Closed"))
-						 {									 
-							 Epic_Finish_Point+=Integer.parseInt(tempList4.get(2));								 
-						 }
-						 
-						 if(!tempList4.get(5).equals(""))
-						 {
-							 Epic_Risk_Point+=Integer.parseInt(tempList4.get(5));
-						 }
-					 }
-					Epic_Remain_Point=Epic_Plan_Point-Epic_Finish_Point;
-					
-					 //the record will be used to draw Chart : All Epic
-					
-					One_Epic.TotalPoint=Epic_Finish_Point+Epic_Remain_Point;
-					One_Epic.EpicName=workItem.getHTMLSummary().toString();
-					One_Epic.FinishPoint=Epic_Finish_Point;
-					One_Epic.RemainPoint=Epic_Remain_Point;
-					One_Epic.RiskEstimate=Epic_Risk_Point;
-					One_Epic.EpicID=Integer.toString(workItem.getId());
-					
-					mapFeature.put(One_Epic.EpicID, One_Epic);
-				}	   		
-	    	}
-			
-	    	for(EpicItem entry : mapEpic.values())
-	    	{
-	    		EpicItem temp=entry;
-	    		CalculateEpicStoryPoint(temp,0);
-	    		mapEpic.put(temp.EpicID, temp);
-	    	}
-	    	
-	    	List<EpicItem> needEpic=new ArrayList<>();
-	    	
-	    	for(EpicItem entry: mapEpic.values())
-	    	{
-	    		System.out.println(entry.EpicID +"\t"+
-			    				entry.EpicName +"\t"+
-			    				entry.m_nlevel +"\t"+
-			    				entry.TotalPoint +"\t"+
-			    				entry.FinishPoint +"\t"+
-			    				entry.RemainPoint +"\t"+			    				
-								entry.RiskEstimate +"\t");
-	    		
-	    		needEpic.add(entry);
-	    	}
-	    	
-			//// [section 2] Calculate the top 10 epic
-			Collections.sort(needEpic);	 
-		
-			List<String> x1=new ArrayList<>();
-			List<Integer> y1=new ArrayList<>();
-			List<Integer> y2=new ArrayList<>();
-			List<Integer> y3=new ArrayList<>();
-			
-			//// [section 3.1] Draw All Epic
-			//only draw top ten epic
-			for(int i=0;i<needEpic.size()&&i<10;i++)
-			{
-				EpicItem item=needEpic.get(i);
-				x1.add(item.EpicName);
-				y1.add(item.FinishPoint);
-				y2.add(item.RemainPoint-item.RiskEstimate);
-				y3.add(item.RiskEstimate);
-			}
-			
-			Create_P8(x1,y1,y2,y3);
-	    	
-	    }
-	    catch(Exception e)
-	    {
-	    	System.out.println(e);
-	    }
-	}
-	
 /*	
 	public static void ChartOfPM_About_Epic()
 	{
@@ -317,7 +75,7 @@ public class FTViewSEDataFactory {
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
 	    	
-			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
+			if(iProcessArea.getName().equals("CVB Communications - RTC"))
 			{
 				nProjectNumber=i;
 			}
@@ -360,8 +118,8 @@ public class FTViewSEDataFactory {
 				 Date Date_Min=new Date();
 				 Date Date_Max=new Date();
 				 
-				 Date_Min=sdf.parse("12/20/2017");  //Sprint 11 .1 start
-				 Date_Max=sdf.parse("5/22/2018");    //Sprint 12 .4 finish 
+				 Date_Min=sdf.parse("12/26/2017");  //Sprint 11 .1 start
+				 Date_Max=sdf.parse("11/1/2018");    //Sprint 12 .4 finish 
 				 
 				 List<Date> Week_Trend=new ArrayList<Date>();
 				 Week_Trend.add(Date_Min);
@@ -533,27 +291,27 @@ public class FTViewSEDataFactory {
 	    		}
 	    		
 	    		
-	    		FTVIEWSE_PM_Data_Trend_Epic=new ProductData();
-	    		FTVIEWSE_PM_Data_Trend_Epic.title="Trend by Epic";
+	    		Communications_PM_Data_Trend_Epic=new ProductData();
+	    		Communications_PM_Data_Trend_Epic.title="Trend by Epic";
 	    		
-	    		FTVIEWSE_PM_Data_Trend_Epic.description="";//description		
-	    		FTVIEWSE_PM_Data_Trend_Epic.xTitle="Date";
-	    		FTVIEWSE_PM_Data_Trend_Epic.yTitle="Story Point";
-	    		FTVIEWSE_PM_Data_Trend_Epic.yAxisFormat="#";
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData=new DataTable();
-	    		FTVIEWSE_PM_Data_Trend_Epic.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
+	    		Communications_PM_Data_Trend_Epic.description="";//description		
+	    		Communications_PM_Data_Trend_Epic.xTitle="Date";
+	    		Communications_PM_Data_Trend_Epic.yTitle="Story Point";
+	    		Communications_PM_Data_Trend_Epic.yAxisFormat="#";
+	    		Communications_PM_Data_Trend_Epic.tableData=new DataTable();
+	    		Communications_PM_Data_Trend_Epic.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
 	    		
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, NeedEpicTrendLine.get(0).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, NeedEpicTrendLine.get(1).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, NeedEpicTrendLine.get(2).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y4", ValueType.INT, NeedEpicTrendLine.get(3).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, NeedEpicTrendLine.get(4).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y6", ValueType.INT, NeedEpicTrendLine.get(5).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y7", ValueType.INT, NeedEpicTrendLine.get(6).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y8", ValueType.INT, NeedEpicTrendLine.get(7).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y9", ValueType.INT, NeedEpicTrendLine.get(8).EpicName));
-	    		FTVIEWSE_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y10", ValueType.INT, NeedEpicTrendLine.get(9).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, NeedEpicTrendLine.get(0).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, NeedEpicTrendLine.get(1).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, NeedEpicTrendLine.get(2).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y4", ValueType.INT, NeedEpicTrendLine.get(3).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, NeedEpicTrendLine.get(4).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y6", ValueType.INT, NeedEpicTrendLine.get(5).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y7", ValueType.INT, NeedEpicTrendLine.get(6).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y8", ValueType.INT, NeedEpicTrendLine.get(7).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y9", ValueType.INT, NeedEpicTrendLine.get(8).EpicName));
+	    		Communications_PM_Data_Trend_Epic.tableData.addColumn(new ColumnDescription("y10", ValueType.INT, NeedEpicTrendLine.get(9).EpicName));
 	    		
 	    		
 	    		int dataCount=x1.size();
@@ -577,7 +335,7 @@ public class FTViewSEDataFactory {
 	    		
 	    		try 
 	    		{
-	    			FTVIEWSE_PM_Data_Trend_Epic.tableData.addRows(rows);
+	    			Communications_PM_Data_Trend_Epic.tableData.addRows(rows);
 	    		}catch(Exception e)
 	    		{
 	    			System.out.println("Import Exception!");
@@ -589,67 +347,313 @@ public class FTViewSEDataFactory {
 	    	System.out.println(e);
 	    }
 	}
-*/
-	public static ProductData Get_FTVIEWSE_PM_Data_Trend_Team()
+*/	
+
+	public static void ChartOfPM_About_Epic()
+	{
+		//[start]
+		int nProjectNumber=0;
+	    List<?> iProcessAreas = handler.GetAllProcessArea(repository, handler.getMonitor());
+	    List<String> projectAreaNames = new ArrayList<>();
+	    for(int i = 0;i<iProcessAreas.size();i++)
+		{
+	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
+	    	projectAreaNames.add(iProcessArea.getName());
+	    	
+			if(iProcessArea.getName().equals("CVB Communications - RTC"))
+			{
+				nProjectNumber=i;
+			}
+		}
+	    //[end]
+	    
+	    // there suppose you take the first value
+	    GetAttributesValue getAttributesValue = new GetAttributesValue(repository,handler.getMonitor(), (IProjectArea)iProcessAreas.get(nProjectNumber));
+		
+	    List<SearchCondition> conditionsList = new ArrayList<>(); 
+	    conditionsList.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.programEpic", AttributeOperation.EQUALS));
+	    
+	    List<SearchCondition> conditionsList1 = new ArrayList<>(); 
+	    
+	    conditionsList1.add(new SearchCondition(IWorkItem.TYPE_PROPERTY, "com.ibm.team.workitem.workItemType.feature", AttributeOperation.EQUALS));
+	    
+	    List<String> needAttributeList = new ArrayList<>();
+	    needAttributeList.add("Id");                    //pass        0
+	    needAttributeList.add("Planned For");           //pass        1 
+	    needAttributeList.add("Story Points (numeric)");//pass        2
+	    needAttributeList.add("Status");                //pass        3
+	    needAttributeList.add("Creation Date");         //pass        4
+	    needAttributeList.add("Risk Estimate");         //pass        5
+	    needAttributeList.add("Type");                  //pass        6
+		
+		 //the definition of the array:0-Epic Summary; 1-Finish Point; 2-Remain Point;
+		 
+	    try {
+		    MulConditionQuery query=new MulConditionQuery();
+	    	
+		    IQueryResult<IResolvedResult<IWorkItem>> resultOwner = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList);	
+		    IQueryResult<IResolvedResult<IWorkItem>> resultOwner1 = query.queryByCondition(repository, handler.getMonitor(), projectAreaNames.get(nProjectNumber), null, conditionsList1);		    
+		    
+	    	if(resultOwner!=null)
+	    	{
+	    		resultOwner.setLimit(10000);
+	    			
+	    		IWorkItem workItem = null;
+	    		IResolvedResult<IWorkItem> resolved =null;
+				 
+				while(resultOwner.hasNext(handler.getMonitor()))
+				{	
+					resolved = resultOwner.next(handler.getMonitor());
+					 workItem = (IWorkItem)resolved.getItem(); 
+					 
+					 //test
+					// System.out.println("Parent: "+workItem.getId()+"\t"+workItem.getHTMLSummary());
+					
+					 EpicItem One_Epic=new EpicItem(); 
+					 
+					 QueryChild queryChild = new QueryChild();
+					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
+					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
+					 List<IWorkItem> ChildList = new ArrayList<>();
+					 ChildList = queryChild.analyzeReferences(repository,references);					 
+					 
+					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
+					 				 					 
+					//// [section 2] Calculate all Point of every epic[begin]
+					 int Epic_Plan_Point=0;
+					 int Epic_Finish_Point=0;
+					 int Epic_Remain_Point=0;
+					 int Epic_Risk_Point=0;
+					 for(List<String> tempList4:resultList)   //the story status of the sprint
+					 {
+						 //test
+						 //System.out.println("Child: \t"+tempList4.get(0)+"\t"+tempList4.get(6));
+						 
+						 if(tempList4.get(6).contains("feature")||tempList4.get(6).contains("programEpic"))
+						{
+							One_Epic.ChildID.add(tempList4.get(0));  //if this is feature or epic, only record
+							continue;
+						}
+						 
+						 //if can't get the attribute points,loop this for()
+						 if(tempList4.get(2).equals("")) 
+							 tempList4.set(2, "0");
+						 
+						 //get the plan point and add to the record
+						 Epic_Plan_Point+= Integer.parseInt(tempList4.get(2));
+						 
+						 //get the status ,if the status is "closed",add to finish
+						 if(tempList4.get(3).equals("Closed"))
+						 {									 
+							 Epic_Finish_Point+=Integer.parseInt(tempList4.get(2));								 
+						 }
+						 
+						 if(!tempList4.get(5).equals(""))
+						 {
+							 Epic_Risk_Point+=Integer.parseInt(tempList4.get(5));
+						 }
+					 }
+					Epic_Remain_Point=Epic_Plan_Point-Epic_Finish_Point;
+					
+					 //the record will be used to draw Chart : All Epic
+					
+					One_Epic.TotalPoint=Epic_Finish_Point+Epic_Remain_Point;
+					One_Epic.EpicName=workItem.getHTMLSummary().toString();
+					One_Epic.FinishPoint=Epic_Finish_Point;
+					One_Epic.RemainPoint=Epic_Remain_Point;
+					One_Epic.RiskEstimate=Epic_Risk_Point;
+					One_Epic.EpicID=Integer.toString(workItem.getId());
+					
+					mapEpic.put(One_Epic.EpicID, One_Epic);
+					
+					////Calculate all Epic Point [end]
+				}	   		
+	    	} 	
+	    		    	
+	    	if(resultOwner1!=null)
+	    	{
+	    		resultOwner1.setLimit(10000);
+	    			
+	    		IWorkItem workItem = null;
+	    		IResolvedResult<IWorkItem> resolved =null;
+				 
+				while(resultOwner1.hasNext(handler.getMonitor()))
+				{					 
+					resolved = resultOwner1.next(handler.getMonitor());
+					 workItem = (IWorkItem)resolved.getItem(); 
+					
+					 EpicItem One_Epic=new EpicItem(); 
+					 
+					 QueryChild queryChild = new QueryChild();
+					 IWorkItemCommon common= (IWorkItemCommon) ((ITeamRepository)workItem.getOrigin()).getClientLibrary(IWorkItemCommon.class);
+					 IWorkItemReferences references = common.resolveWorkItemReferences(workItem, null);
+					 List<IWorkItem> ChildList = new ArrayList<>();
+					 ChildList = queryChild.analyzeReferences(repository,references);					 
+					 
+					 List<List<String>> resultList=getAttributesValue.GetPointNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),ChildList,needAttributeList);
+					 				 					 
+					//// [section 2] Calculate all Point of every epic[begin]
+					 int Epic_Plan_Point=0;
+					 int Epic_Finish_Point=0;
+					 int Epic_Remain_Point=0;
+					 int Epic_Risk_Point=0;
+					 for(List<String> tempList4:resultList)   //the story status of the sprint
+					 {
+						if(tempList4.get(6).contains("feature"))
+						{
+							One_Epic.ChildID.add(tempList4.get(0));  //if this is feature or epic, only record
+							continue;
+						}
+						 
+						 //if can't get the attribute points,loop this for()
+						 if(tempList4.get(2).equals("")) 
+							 tempList4.set(2, "0");
+						 
+						 //get the plan point and add to the record
+						 Epic_Plan_Point+= Integer.parseInt(tempList4.get(2));
+						 
+						 //get the status ,if the status is "closed",add to finish
+						 if(tempList4.get(3).equals("Closed"))
+						 {									 
+							 Epic_Finish_Point+=Integer.parseInt(tempList4.get(2));								 
+						 }
+						 
+						 if(!tempList4.get(5).equals(""))
+						 {
+							 Epic_Risk_Point+=Integer.parseInt(tempList4.get(5));
+						 }
+					 }
+					Epic_Remain_Point=Epic_Plan_Point-Epic_Finish_Point;
+					
+					 //the record will be used to draw Chart : All Epic
+					
+					One_Epic.TotalPoint=Epic_Finish_Point+Epic_Remain_Point;
+					One_Epic.EpicName=workItem.getHTMLSummary().toString();
+					One_Epic.FinishPoint=Epic_Finish_Point;
+					One_Epic.RemainPoint=Epic_Remain_Point;
+					One_Epic.RiskEstimate=Epic_Risk_Point;
+					One_Epic.EpicID=Integer.toString(workItem.getId());
+					
+					mapFeature.put(One_Epic.EpicID, One_Epic);
+				}	   		
+	    	}
+			
+	    	for(EpicItem entry : mapEpic.values())
+	    	{
+	    		EpicItem temp=entry;
+	    		CalculateEpicStoryPoint(temp,0);
+	    		mapEpic.put(temp.EpicID, temp);
+	    	}
+	    	
+	    	List<EpicItem> needEpic=new ArrayList<>();
+	    	
+	    	for(EpicItem entry: mapEpic.values())
+	    	{	    		
+	    		System.out.println(entry.EpicID +"\t"+
+	    				entry.EpicName +"\t"+
+	    				entry.m_nlevel +"\t"+
+	    				entry.TotalPoint +"\t"+
+	    				entry.FinishPoint +"\t"+
+	    				entry.RemainPoint +"\t"+			    				
+						entry.RiskEstimate +"\t");
+	    		
+	    		if(entry.EpicName.contains("Dummy")||entry.EpicName.contains("SoTA"))
+	    		{
+	    			continue;
+	    		}
+	    		
+	    		if(entry.m_nlevel==2)
+	    		{
+	    			needEpic.add(entry);
+	    		}
+	    	}
+	    	
+			//// [section 2] Calculate the top 10 epic
+			Collections.sort(needEpic);	 
+		
+			List<String> x1=new ArrayList<>();
+			List<Integer> y1=new ArrayList<>();
+			List<Integer> y2=new ArrayList<>();
+			List<Integer> y3=new ArrayList<>();
+			
+			//// [section 3.1] Draw All Epic
+			//only draw top ten epic
+			for(int i=0;i<needEpic.size()&&i<10;i++)
+			{
+				EpicItem item=needEpic.get(i);
+				x1.add(item.EpicName);
+				y1.add(item.FinishPoint);
+				y2.add(item.RemainPoint-item.RiskEstimate);
+				y3.add(item.RiskEstimate);
+			}
+			
+			Create_P8(x1,y1,y2,y3);
+	    	
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println(e);
+	    }
+	}
+	public static ProductData Get_Communications_PM_Data_Trend_Team()
 	{		
-		if(FTVIEWSE_PM_Data_Trend_Team==null)
+		if(Communications_PM_Data_Trend_Team==null)
 		{
 			ChartOfPM();
 		}
 		
-		return FTVIEWSE_PM_Data_Trend_Team;
+		return Communications_PM_Data_Trend_Team;
 	}
-	public static ProductData Get_FTVIEWSE_PM_Data_ThroughputVelocity_sprint()
+	public static ProductData Get_Communications_PM_Data_ThroughputVelocity_sprint()
 	{
-		if(FTVIEWSE_PM_Data_ThroughputVelocity_sprint==null)
+		if(Communications_PM_Data_ThroughputVelocity_sprint==null)
 		{
 			ChartOfPM();
 		}
 		
-		return FTVIEWSE_PM_Data_ThroughputVelocity_sprint;
+		return Communications_PM_Data_ThroughputVelocity_sprint;
 	}
-	public static ProductData Get_FTVIEWSE_PM_Data_Plan_Actual_Sprint()
+	public static ProductData Get_Communications_PM_Data_Plan_Actual_Sprint()
 	{
-		if(FTVIEWSE_PM_Data_Plan_Actual_Sprint==null)
+		if(Communications_PM_Data_Plan_Actual_Sprint==null)
 		{
 			ChartOfPM();
 		}
 		
-		return FTVIEWSE_PM_Data_Plan_Actual_Sprint;
+		return Communications_PM_Data_Plan_Actual_Sprint;
 	}
 	
-	public static ProductData Get_FTVIEWSE_PM_Data_Trend_Epic()
+	public static ProductData Get_Communications_PM_Data_Trend_Epic()
 	{
-		if(FTVIEWSE_PM_Data_Trend_Epic==null)
+		if(Communications_PM_Data_Trend_Epic==null)
 		{
 			ChartOfPM_About_Epic();
 		}
 		
-		return FTVIEWSE_PM_Data_Trend_Epic;
+		return Communications_PM_Data_Trend_Epic;
 	}
 	
-	public static ProductData Get_FTVIEWSE_PM_Data_All_Epic()
+	public static ProductData Get_Communications_PM_Data_All_Epic()
 	{
-		if(FTVIEWSE_PM_Data_Feature_Progress==null)
+		if(Communications_PM_Data_Feature_Progress==null)
 		{
 			ChartOfPM_About_Epic();
 		}
 		
-		return FTVIEWSE_PM_Data_Feature_Progress;
+		return Communications_PM_Data_Feature_Progress;
 	}
 		
 	
-	public static ProductData FTVIEWSE_PM_Data_Weekly_Trend=null;
-	public static ProductData FTVIEWSE_PM_Data_Weekly_BurnDown=null;
-	public static ProductData FTVIEWSE_PM_Data_Trend_Epic=null;
-	public static ProductData FTVIEWSE_PM_Data_Trend_Team=null;
-	public static ProductData FTVIEWSE_PM_Data_ThroughputVelocity_sprint=null;
-	public static ProductData FTVIEWSE_PM_Data_Plan_Actual_Sprint=null;
-	public static ProductData FTVIEWSE_PM_Data_Feature_Progress=null;
+	public static ProductData Communications_PM_Data_Weekly_Trend=null;
+	public static ProductData Communications_PM_Data_Weekly_BurnDown=null;
+	public static ProductData Communications_PM_Data_Trend_Epic=null;
+	public static ProductData Communications_PM_Data_Trend_Team=null;
+	public static ProductData Communications_PM_Data_ThroughputVelocity_sprint=null;
+	public static ProductData Communications_PM_Data_Plan_Actual_Sprint=null;
+	public static ProductData Communications_PM_Data_Feature_Progress=null;
 	
 	//public static List<String> EpicGroup=Arrays.asList("Some fancy multi-release feature","Ron's epic","[Technical Debt]");
-	public static List<String> TeamGroup=Arrays.asList("FTAE","FTView CI-CM","FTView Localization","FTView Maintenance",
-													   "FTView SoTA","FTVP","ME","SE1","SE2","System Test","TrendPro");
+	public static List<String> TeamGroup=Arrays.asList("Communications Dalian Team","Communications Team 2 (For Metrics Generation)");
 	
 	public static void ChartOfPM()
 	{	
@@ -662,7 +666,7 @@ public class FTViewSEDataFactory {
 	    	IProcessArea iProcessArea = (IProcessArea)iProcessAreas.get(i);
 	    	projectAreaNames.add(iProcessArea.getName());
 	    	
-			if(iProcessArea.getName().equals("CVB FTView - RTC SAFe"))
+			if(iProcessArea.getName().equals("CVB Communications - RTC"))
 			{
 				nProjectNumber=i;
 			}
@@ -708,13 +712,13 @@ public class FTViewSEDataFactory {
 	    		int Sprint_Plan_Index=3;
 	    		int Sprint_Finish_Index=4;
 	    		List<List<String>> Point_of_Sprint=Arrays.asList(
-	    													   Arrays.asList("Sprint 11.1","12/20/2017","1/9/2018","0","0"),
-	    													   Arrays.asList("Sprint 11.2","1/10/2018","1/30/2018","0","0"),
-	    													   Arrays.asList("Sprint 11.3","1/31/2018","2/20/2018","0","0"),
+	    													   Arrays.asList("Sprint 6.1","12/26/2017","1/15/2018","0","0"),
+	    													   Arrays.asList("Sprint 6.2","1/16/2018","2/5/2018","0","0"),
+	    													   Arrays.asList("Sprint 6.3","2/6/2018","2/26/2018","0","0"),
 	    													 //  Arrays.asList("Sprint 11.4","2/21/2018","3/6/2018","0","0"),
-	    													   Arrays.asList("Sprint 12.1","3/7/2018","3/27/2018","0","0"),
-	    													   Arrays.asList("Sprint 12.2","3/28/2018","4/17/2018","0","0"),
-	    													   Arrays.asList("Sprint 12.3","4/18/2018","5/8/2018","0","0"));
+	    													   Arrays.asList("Sprint 7.1","3/13/2018","4/2/2018","0","0"),
+	    													   Arrays.asList("Sprint 7.2","4/3/2018","4/23/2018","0","0"),
+	    													   Arrays.asList("Sprint 7.3","4/24/2018","5/14/2018","0","0"));
 	    													 //  Arrays.asList("Sprint 12.4","5/9/2018","5/22/2018","0","0"));
 	    				
 	    	    ////Calculate the week section
@@ -730,7 +734,7 @@ public class FTViewSEDataFactory {
 	    		
 	    		try
 	    		{
-	    			 Date_Min = sdf.parse(Point_of_Sprint.get(0).get(Sprint_Start_Index));	
+	    			 Date_Min = sdf.parse("12/26/2017");	
 	    			 Date_Max = sdf.parse("11/1/2018");	
 	    		}
 	    		catch (ParseException e1) 
@@ -877,7 +881,7 @@ public class FTViewSEDataFactory {
 					if(!Burn_Filter(tempList4.get(1),strTeam))
 						continue;
 					
-					if((!tempList4.get(1).contains("Sprint 12"))||(tempList4.get(1).contains("Sprint 12.4"))) 
+					if((!tempList4.get(1).contains("Sprint 7"))||(tempList4.get(1).contains("Sprint 7.4"))) 
 						 continue;                    //if not plan for sprint 12 or plan for 12.4
 					 
 					 Sum_Plan_For_This_Sprint+=Integer.parseInt(tempList4.get(2));	
@@ -962,8 +966,9 @@ public class FTViewSEDataFactory {
 	    		for(int i=0;i<Week_Break.size();i++)
 	    		{
 	    			List<String> tempList6=Week_Break.get(i);
-	    			int should=sum_plan/(Week_Break.size()-1)*i;
-	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(should));
+	    			double dShould=(double)sum_plan/(Week_Break.size()-1)*i;
+	    			int nShould=(int)dShould;
+	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(nShould));
 	    		}
 	    		
 	    		int sum_close_burndown=0;
@@ -1118,7 +1123,7 @@ public class FTViewSEDataFactory {
 	    				y2.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish	    
 	    			}
 	    			
-	    			yy.add(614.8);
+	    			yy.add((double)Sprint_Average);
 	    		}
 	    		
 	    		Create_P7(x1,yy,y1,y2);
@@ -1139,20 +1144,18 @@ public class FTViewSEDataFactory {
 		boolean isTimed=false;
 		boolean isNeedTeam=true;
 		List<String> lstPlanFor=Arrays.asList(
-											  "FTView 11.00",						  											  
-											  "FTView PI 11",
-											  "FTView PI 12",
-											  "FTView PI 13",
-											  "FTView PI 14",
-											  "Sprint 11",
-											  "Sprint 12",
-											  "Sprint 13",
-											  "Sprint 14"
+											  "CPR9 SR11 Release",						  											  
+											  "PI 6",
+											  "PI 7",
+											  "PI 8",
+											  "PI 9",
+											  "Sprint 6",
+											  "Sprint 7",
+											  "Sprint 8",
+											  "Sprint 9"
 											  );
 		
-		List<String> lstOtherTeam=Arrays.asList("TrendPro",
-												"FTView Localization",
-												"CVB FTView - RTC SAFe");
+		List<String> lstOtherTeam=Arrays.asList();
 		for(String strPlanFor:lstPlanFor)
 		{
 			if(PlanFor.contains(strPlanFor))
@@ -1176,19 +1179,19 @@ public class FTViewSEDataFactory {
 	//Lane Ma, Modify the demo to draw specific chart
 	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
 	{	
-		FTVIEWSE_PM_Data_Weekly_Trend=new ProductData();
-		FTVIEWSE_PM_Data_Weekly_Trend.title=ConstString.FTVIEWSE_PM_CHART_Weekly_Trend;
+		Communications_PM_Data_Weekly_Trend=new ProductData();
+		Communications_PM_Data_Weekly_Trend.title=ConstString.Communications_PM_CHART_Weekly_Trend;
 		
-		FTVIEWSE_PM_Data_Weekly_Trend.description="";//description		
-		FTVIEWSE_PM_Data_Weekly_Trend.yTitle="Story Point";
-		FTVIEWSE_PM_Data_Weekly_Trend.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Weekly_Trend.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),ColorFormater.RGB2String(255,255,255));
+		Communications_PM_Data_Weekly_Trend.description="";//description		
+		Communications_PM_Data_Weekly_Trend.yTitle="Story Point";
+		Communications_PM_Data_Weekly_Trend.yAxisFormat="#";
+		Communications_PM_Data_Weekly_Trend.tableData=new DataTable();
+		Communications_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),ColorFormater.RGB2String(255,255,255));
 		
-		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
-		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Total Estimate"));
-		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Ideal Closed Estimate"));
-		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Closed Estimate"));
+		Communications_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		Communications_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Total Estimate"));
+		Communications_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Ideal Closed Estimate"));
+		Communications_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Closed Estimate"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -1212,7 +1215,7 @@ public class FTViewSEDataFactory {
 		}
 		try 
 		{
-			FTVIEWSE_PM_Data_Weekly_Trend.tableData.addRows(rows);
+			Communications_PM_Data_Weekly_Trend.tableData.addRows(rows);
 		}catch(Exception e)
 		{
 			System.out.println("Import Exception!");
@@ -1222,19 +1225,19 @@ public class FTViewSEDataFactory {
 	//Lane Ma, Modify the demo to draw specific chart
 	public static void Create_P2(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
 	{	
-		FTVIEWSE_PM_Data_Weekly_BurnDown=new ProductData();
-		FTVIEWSE_PM_Data_Weekly_BurnDown.title=ConstString.FTVIEWSE_PM_CHART_Weekly_BurnDown;
+		Communications_PM_Data_Weekly_BurnDown=new ProductData();
+		Communications_PM_Data_Weekly_BurnDown.title=ConstString.Communications_PM_CHART_Weekly_BurnDown;
 		
-		FTVIEWSE_PM_Data_Weekly_BurnDown.description="";//description		
-		FTVIEWSE_PM_Data_Weekly_BurnDown.yTitle="Story Point";
-		FTVIEWSE_PM_Data_Weekly_BurnDown.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Weekly_BurnDown.colorList=Arrays.asList(ColorFormater.RGB2String(20,83,114),ColorFormater.RGB2String(176,38,59),ColorFormater.RGB2String(230,230,230));
+		Communications_PM_Data_Weekly_BurnDown.description="";//description		
+		Communications_PM_Data_Weekly_BurnDown.yTitle="Story Point";
+		Communications_PM_Data_Weekly_BurnDown.yAxisFormat="#";
+		Communications_PM_Data_Weekly_BurnDown.tableData=new DataTable();
+		Communications_PM_Data_Weekly_BurnDown.colorList=Arrays.asList(ColorFormater.RGB2String(20,83,114),ColorFormater.RGB2String(176,38,59),ColorFormater.RGB2String(230,230,230));
 		
-		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
-		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Ideal Line"));
-		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "ToDo"));
-		FTVIEWSE_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "All"));
+		Communications_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		Communications_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Ideal Line"));
+		Communications_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "ToDo"));
+		Communications_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "All"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -1256,7 +1259,7 @@ public class FTViewSEDataFactory {
 		}
 		try 
 		{
-			FTVIEWSE_PM_Data_Weekly_BurnDown.tableData.addRows(rows);
+			Communications_PM_Data_Weekly_BurnDown.tableData.addRows(rows);
 		}catch(Exception e)
 		{
 			System.out.println("Import Exception!");
@@ -1265,18 +1268,18 @@ public class FTViewSEDataFactory {
 	
 	public static void Create_P6(List<String> x1,List<Integer> y1, List<Integer> y2)
 	{	
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint=new ProductData();
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.title=ConstString.CCW_PM_CHART_ThroughputVelocity_sprint;
+		Communications_PM_Data_ThroughputVelocity_sprint=new ProductData();
+		Communications_PM_Data_ThroughputVelocity_sprint.title=ConstString.CCW_PM_CHART_ThroughputVelocity_sprint;
 		
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.description="";//description		
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.yTitle="Story Point";
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.yAxisFormat="#";
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData=new DataTable();
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.colorList=Arrays.asList(ColorFormater.RGB2String(238,118,37),ColorFormater.RGB2String(91,155,213));
+		Communications_PM_Data_ThroughputVelocity_sprint.description="";//description		
+		Communications_PM_Data_ThroughputVelocity_sprint.yTitle="Story Point";
+		Communications_PM_Data_ThroughputVelocity_sprint.yAxisFormat="#";
+		Communications_PM_Data_ThroughputVelocity_sprint.tableData=new DataTable();
+		Communications_PM_Data_ThroughputVelocity_sprint.colorList=Arrays.asList(ColorFormater.RGB2String(238,118,37),ColorFormater.RGB2String(91,155,213));
 		
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "AVERAGE"));
-		FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Story Point"));
+		Communications_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Sprint"));
+		Communications_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "AVERAGE"));
+		Communications_PM_Data_ThroughputVelocity_sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Story Point"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -1296,7 +1299,7 @@ public class FTViewSEDataFactory {
 		}
 		try 
 		{
-			FTVIEWSE_PM_Data_ThroughputVelocity_sprint.tableData.addRows(rows);
+			Communications_PM_Data_ThroughputVelocity_sprint.tableData.addRows(rows);
 		}catch(Exception e)
 		{
 			System.out.println("Import Exception!");
@@ -1305,20 +1308,20 @@ public class FTViewSEDataFactory {
 	
 	public static void Create_P7(List<String> x1,List<Double> y3,List<Integer> y1, List<Integer> y2)
 	{	
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint=new ProductData();
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.title=ConstString.FTVIEWSE_PM_CHART_Plan_Actual_Sprint;
+		Communications_PM_Data_Plan_Actual_Sprint=new ProductData();
+		Communications_PM_Data_Plan_Actual_Sprint.title=ConstString.Communications_PM_CHART_Plan_Actual_Sprint;
 		
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.description="";//description		
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.yTitle="Story Point";
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.colorList=Arrays.asList("green",ColorFormater.RGB2String(91,155,213),ColorFormater.RGB2String(237,125,49));
+		Communications_PM_Data_Plan_Actual_Sprint.description="";//description		
+		Communications_PM_Data_Plan_Actual_Sprint.yTitle="Story Point";
+		Communications_PM_Data_Plan_Actual_Sprint.yAxisFormat="#";
+		Communications_PM_Data_Plan_Actual_Sprint.tableData=new DataTable();
+		Communications_PM_Data_Plan_Actual_Sprint.colorList=Arrays.asList("green",ColorFormater.RGB2String(91,155,213),ColorFormater.RGB2String(237,125,49));
 
 		
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Average"));
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Planned"));
-		FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Actual"));
+		Communications_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		Communications_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Average"));
+		Communications_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Planned"));
+		Communications_PM_Data_Plan_Actual_Sprint.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Actual"));
 		
 		//Chart data
 				//////////////////////////////////////////////
@@ -1340,7 +1343,7 @@ public class FTViewSEDataFactory {
 		}
 		try 
 		{
-			FTVIEWSE_PM_Data_Plan_Actual_Sprint.tableData.addRows(rows);
+			Communications_PM_Data_Plan_Actual_Sprint.tableData.addRows(rows);
 		}catch(Exception e)
 		{
 			System.out.println("Import Exception!");
@@ -1349,21 +1352,21 @@ public class FTViewSEDataFactory {
 	
 	public static void Create_P8(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
 	{	
-		FTVIEWSE_PM_Data_Feature_Progress=new ProductData();
-		FTVIEWSE_PM_Data_Feature_Progress.title=ConstString.FTVIEWSE_PM_CHART_Feature_Progress;
-		FTVIEWSE_PM_Data_Feature_Progress.description="";//description		
-	//	FTVIEWSE_PM_Data_Feature_Progress.yTitle="Story Point";
-		FTVIEWSE_PM_Data_Feature_Progress.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Feature_Progress.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Feature_Progress.colorList=Arrays.asList(ColorFormater.RGB2String(112,173,71),ColorFormater.RGB2String(68,114,196),ColorFormater.RGB2String(255,20,20));
+		Communications_PM_Data_Feature_Progress=new ProductData();
+		Communications_PM_Data_Feature_Progress.title=ConstString.Communications_PM_CHART_Feature_Progress;
+		Communications_PM_Data_Feature_Progress.description="";//description		
+	//	Communications_PM_Data_Feature_Progress.yTitle="Story Point";
+		Communications_PM_Data_Feature_Progress.yAxisFormat="#";
+		Communications_PM_Data_Feature_Progress.tableData=new DataTable();
+		Communications_PM_Data_Feature_Progress.colorList=Arrays.asList(ColorFormater.RGB2String(112,173,71),ColorFormater.RGB2String(68,114,196),ColorFormater.RGB2String(255,20,20));
 		
-		FTVIEWSE_PM_Data_Feature_Progress.isStacked="true";
-		FTVIEWSE_PM_Data_Feature_Progress.chartLeft=200;
+		Communications_PM_Data_Feature_Progress.isStacked="true";
+		Communications_PM_Data_Feature_Progress.chartLeft=200;
 		
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remain"));
-		FTVIEWSE_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Risk"));
+		Communications_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
+		Communications_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
+		Communications_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Remain"));
+		Communications_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Risk"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -1385,7 +1388,7 @@ public class FTViewSEDataFactory {
 		}
 		try 
 		{
-			FTVIEWSE_PM_Data_Feature_Progress.tableData.addRows(rows);
+			Communications_PM_Data_Feature_Progress.tableData.addRows(rows);
 		}catch(Exception e)
 		{
 			System.out.println("Import Exception!");
@@ -1493,27 +1496,27 @@ public class FTViewSEDataFactory {
 		}
 		    		
 		    		
-		FTVIEWSE_PM_Data_Trend_Team=new ProductData();
-		FTVIEWSE_PM_Data_Trend_Team.title="Trend by Team";
+		Communications_PM_Data_Trend_Team=new ProductData();
+		Communications_PM_Data_Trend_Team.title="Trend by Team";
 		
-		FTVIEWSE_PM_Data_Trend_Team.description="";//description		
-		FTVIEWSE_PM_Data_Trend_Team.yTitle="Story Point";
-		FTVIEWSE_PM_Data_Trend_Team.yAxisFormat="#";
-		FTVIEWSE_PM_Data_Trend_Team.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Trend_Team.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
+		Communications_PM_Data_Trend_Team.description="";//description		
+		Communications_PM_Data_Trend_Team.yTitle="Story Point";
+		Communications_PM_Data_Trend_Team.yAxisFormat="#";
+		Communications_PM_Data_Trend_Team.tableData=new DataTable();
+		Communications_PM_Data_Trend_Team.colorList=Arrays.asList(ColorFormater.RGB2String(158,158,158));
 		
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, TeamLine.get(0).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, TeamLine.get(1).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, TeamLine.get(2).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y4", ValueType.INT, TeamLine.get(3).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, TeamLine.get(4).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y6", ValueType.INT, TeamLine.get(5).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y7", ValueType.INT, TeamLine.get(6).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y8", ValueType.INT, TeamLine.get(7).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y9", ValueType.INT, TeamLine.get(8).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y10", ValueType.INT, TeamLine.get(9).EpicName));
-		FTVIEWSE_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y11", ValueType.INT, TeamLine.get(10).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, TeamLine.get(0).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, TeamLine.get(1).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, TeamLine.get(2).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y4", ValueType.INT, TeamLine.get(3).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, TeamLine.get(4).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y6", ValueType.INT, TeamLine.get(5).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y7", ValueType.INT, TeamLine.get(6).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y8", ValueType.INT, TeamLine.get(7).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y9", ValueType.INT, TeamLine.get(8).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y10", ValueType.INT, TeamLine.get(9).EpicName));
+		Communications_PM_Data_Trend_Team.tableData.addColumn(new ColumnDescription("y11", ValueType.INT, TeamLine.get(10).EpicName));
 		    		
 		    		
 			int dataCount=x1.size();
@@ -1537,13 +1540,12 @@ public class FTViewSEDataFactory {
 			}
 		try 
 		{
-			FTVIEWSE_PM_Data_Trend_Team.tableData.addRows(rows);
+			Communications_PM_Data_Trend_Team.tableData.addRows(rows);
 		}
 		catch(Exception e)
 		{
 			System.out.println("Import Exception!");
 		}
-
 	}
 	
 	public static void AddEpicLevel(EpicItem item)

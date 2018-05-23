@@ -25,10 +25,13 @@ public class ComboChart extends Chart {
 			colors+="]";
 		}
 		
-		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"},\"vAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
+		String Window=",\"viewWindow\":{\"min\":0}";
+		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"},\"vAxis\":{\"title\":\""+yTitle+"\""+Window+",\"format\":\""+yAxisFormat+"\"}";
+	
 		String Legend=",\"legend\":{\"position\":\"bottom\",\"alignment\":\"center\",\"maxLines\":\"2\",\"textStyle\":{\"color\":\"#555555\"}}";
 		String head="\"description\": \""+description
 				+"\",\"options\":{\"title\":\""+title+"\""+",\"seriesType\": \"bars\""+",\"series\": {\""+baseLineIndex+"\": {\"type\": \"line\"}}"+colors+AxisFormat+Legend+"},\"chartType\":\""+chartType+"\",\"datatable\":";
+
 		String body=JsonRenderer.renderDataTable(tableData, true, true, true).toString();
 		return "{"+head+body+"}";
 	}	

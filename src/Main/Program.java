@@ -15,6 +15,8 @@ import com.ibm.team.repository.client.ITeamRepository;
 import Login.LoginHandler;
 import ConstVar.*;
 import DataForChart.CCWDataFactory;
+import DataForChart.CommunicationsDataFactory;
+import DataForChart.FTSPDataFactory;
 import DataForChart.FTViewSEDataFactory;
 import DataForChart.ProductData;
 import DataForChart.S5KADataFactory;
@@ -34,12 +36,10 @@ public class Program {
 		 Date DateBegin=new Date();
 		loginRTC();
 		createCharts();
-		createChartSet();
 		logoffRTC();
 		
 		//Output
 		printCharts();
-		saveChartsToXML();	
 		Date DateEnd=new Date();
 		
 		System.out.println(DateBegin.toString());
@@ -56,24 +56,14 @@ public class Program {
 	    repository=handler.login();
 	}
 	public static void createCharts()
-	{
+	{			
+		createChartsForFTViewSE_PM();	saveFTViewArt_UrlToXml();	
+		createChartsForFTSP_PM();		saveFTSP_UrlToXml();
+		createChartsForCommunications_PM();	saveCommunications_UrlToXml();	
+	}
 	
-	//	createChartsForS5KA_PM();
-	//	createChartsForS5KA_QA();
-		
-	//	createChartsForCCW_PM();
-	//	createChartsForCCW_QA();
-		
-	//	createChartsForFTAC_PM();
-	//	createChartsForFTAC_QA();
-		
-	createChartsForFTViewSE_PM();
-	//	createChartsForFTViewSE_QA();
-	}
 	public static Map<String,String> ChartSets=new HashMap<String,String>();
-	public static void createChartSet()
-	{
-	}
+
 	public static void logoffRTC()
 	{
 	    handler.logoff();
@@ -88,36 +78,6 @@ public class Program {
 		System.out.println("**********************Chart Output Begin**********************");
 		System.out.println("**************************************************************");
 		
-		System.out.println(ConstString.S5KA_NAME);
-		if(ChartSetForS5KA_PM!=null)
-			System.out.println("*ChartSet*"+ConstString.S5KA_PM_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForS5KA_PM);
-		if(ChartsForS5KA_PM!=null)
-			printMap(ChartsForS5KA_PM);
-		if(ChartSetForS5KA_QA!=null)
-			System.out.println("*ChartSet*"+ConstString.S5KA_QA_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForS5KA_QA);
-		if(ChartsForS5KA_QA!=null)
-			printMap(ChartsForS5KA_QA);
-		
-		System.out.println(ConstString.CCW_NAME);
-		if(ChartSetForCCW_PM!=null)
-			System.out.println("*ChartSet*"+ConstString.CCW_PM_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForCCW_PM);
-		if(ChartsForCCW_PM!=null)
-			printMap(ChartsForCCW_PM);
-		if(ChartSetForCCW_QA!=null)
-			System.out.println("*ChartSet*"+ConstString.CCW_QA_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForCCW_QA);
-		if(ChartsForCCW_QA!=null)
-			printMap(ChartsForCCW_QA);
-		
-		System.out.println(ConstString.FTAC_NAME);
-		if(ChartSetForFTAC_PM!=null)
-			System.out.println("*ChartSet*"+ConstString.FTAC_PM_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForFTAC_PM);
-		if(ChartsForFTAC_PM!=null)
-			printMap(ChartsForFTAC_PM);
-		if(ChartSetForFTAC_QA!=null)
-			System.out.println("*ChartSet*"+ConstString.FTAC_QA_CHARTSET_NAME+":    "+ ConstString.CHART_SET_URL + ChartSetForFTAC_QA);
-		if(ChartsForFTAC_QA!=null)
-			printMap(ChartsForFTAC_QA);
-		
 		System.out.println(ConstString.FTVIEWSE_NAME);
 		if(ChartSetForFTViewSE_PM!=null)
 			System.out.println("*ChartSet*"+ConstString.FTVIEWSE_PM_CHARTSET_NAME+": "+ ConstString.CHART_SET_URL + ChartSetForFTViewSE_PM);
@@ -128,21 +88,22 @@ public class Program {
 		if(ChartsForFTViewSE_QA!=null)
 			printMap(ChartsForFTViewSE_QA);
 		
+		System.out.println(ConstString.FTSP_NAME);
+		if(ChartSetForFTSP_PM!=null)
+			System.out.println("*ChartSet*"+ConstString.FTSP_PM_CHARTSET_NAME+": "+ ConstString.CHART_SET_URL + ChartSetForFTSP_PM);
+		if(ChartsForFTSP_PM!=null)
+			printMap(ChartsForFTSP_PM);
+		
+		System.out.println(ConstString.Communications_NAME);
+		if(ChartSetForCommunications_PM!=null)
+			System.out.println("*ChartSet*"+ConstString.Communications_PM_CHARTSET_NAME+": "+ ConstString.CHART_SET_URL + ChartSetForCommunications_PM);
+		if(ChartsForCommunications_PM!=null)
+			printMap(ChartsForCommunications_PM);
+		
 		System.out.println("**********************Chart Output End************************");
 		System.out.println("**************************************************************");
 		System.out.println();
 		System.out.println();
-	}
-	public static void saveChartsToXML()
-	{
-		Document document=XmlParseHelper.load("config.xml");
-		//saveS5KA_UrlToXml(document);
-		//saveFTViewSE_UrlToXml(document);
-		//updateXmlTime(document);
-		
-		saveFTViewArt_UrlToXml(document);
-		
-		XmlParseHelper.persist(document,"config.xml");
 	}
 	
 	
@@ -484,6 +445,107 @@ public class Program {
 		}
 	}
 	
+		public static Map<String,String> ChartsForFTSP_PM= null;
+		public static String ChartSetForFTSP_PM=null;
+		public static void createChartsForFTSP_PM()
+		{
+			List<String> chartSetIDList=new ArrayList<String>();
+			ChartsForFTSP_PM = new HashMap<String,String>();
+			
+			ProductData d1=FTSPDataFactory.Get_FTSP_PM_Data_Weekly_Trend();
+			if(null != d1)
+			{
+				ChartManager Mgr_FTSP_PM_CHART_Weekly_Trend=new ChartManager(d1, new LineChart(ConstString.FTSP_PM_CHART_Weekly_Trend));
+				String id1=Mgr_FTSP_PM_CHART_Weekly_Trend.createChartInEagleEye();
+				chartSetIDList.add(id1);
+				ChartsForFTSP_PM.put(ConstString.FTSP_PM_CHART_Weekly_Trend, id1);
+			}
+			
+			ProductData d2=FTSPDataFactory.Get_FTSP_PM_Data_BurnDown();
+			if(null != d2)
+			{
+				ChartManager Mgr_FTSP_PM_CHART_BurnDown=new ChartManager(d2, new LineChart(ConstString.FTSP_PM_CHART_Weekly_BurnDown));
+				String id2=Mgr_FTSP_PM_CHART_BurnDown.createChartInEagleEye();
+				chartSetIDList.add(id2);
+				ChartsForFTSP_PM.put(ConstString.FTSP_PM_CHART_Weekly_BurnDown, id2);
+			}
+			
+			ProductData d3=FTSPDataFactory.Get_FTSP_PM_Data_Plan_Actual_Sprint();
+			if(null != d3)
+			{
+				ChartManager Mgr_FTSP_PM_CHART_Plan_Actual_Sprint=new ChartManager(d3, new ComboChart(ConstString.FTSP_PM_CHART_Plan_Actual_Sprint));
+				String id3=Mgr_FTSP_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
+				chartSetIDList.add(id3);
+				ChartsForFTSP_PM.put(ConstString.FTSP_PM_CHART_Plan_Actual_Sprint, id3);
+			}
+			
+			ProductData d6=FTSPDataFactory.Get_FTSP_PM_Data_All_Epic();
+			if(null != d6)
+			{
+				ChartManager Mgr_FTSP_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.FTSP_PM_CHART_Feature_Progress));
+				String id6=Mgr_FTSP_PM_CHART_Feature_Progress.createChartInEagleEye();
+				chartSetIDList.add(id6);
+				ChartsForFTSP_PM.put(ConstString.FTSP_PM_CHART_Feature_Progress, id6);
+			}	
+					 
+			if(null != chartSetIDList && chartSetIDList.size()>0)
+			{
+				ChartSetForFTSP_PM=ChartManager.CreateChartSet(ConstString.FTSP_PM_CHARTSET_NAME,null,chartSetIDList);
+				ChartSets.put(ConstString.FTSP_PM_CHARTSET_NAME, ChartSetForFTSP_PM);
+			}
+		}
+		
+		public static Map<String,String> ChartsForCommunications_PM= null;
+		public static String ChartSetForCommunications_PM=null;
+		public static void createChartsForCommunications_PM()
+		{
+			List<String> chartSetIDList=new ArrayList<String>();
+			ChartsForCommunications_PM = new HashMap<String,String>();
+			
+			ProductData d1=CommunicationsDataFactory.Get_Communications_PM_Data_Weekly_Trend();
+			if(null != d1)
+			{
+				ChartManager Mgr_Communications_PM_CHART_Weekly_Trend=new ChartManager(d1, new LineChart(ConstString.Communications_PM_CHART_Weekly_Trend));
+				String id1=Mgr_Communications_PM_CHART_Weekly_Trend.createChartInEagleEye();
+				chartSetIDList.add(id1);
+				ChartsForCommunications_PM.put(ConstString.Communications_PM_CHART_Weekly_Trend, id1);
+			}
+			
+			ProductData d2=CommunicationsDataFactory.Get_Communications_PM_Data_BurnDown();
+			if(null != d2)
+			{
+				ChartManager Mgr_Communications_PM_CHART_BurnDown=new ChartManager(d2, new LineChart(ConstString.Communications_PM_CHART_Weekly_BurnDown));
+				String id2=Mgr_Communications_PM_CHART_BurnDown.createChartInEagleEye();
+				chartSetIDList.add(id2);
+				ChartsForCommunications_PM.put(ConstString.Communications_PM_CHART_Weekly_BurnDown, id2);
+			}
+			
+			ProductData d3=CommunicationsDataFactory.Get_Communications_PM_Data_Plan_Actual_Sprint();
+			if(null != d3)
+			{
+				ChartManager Mgr_Communications_PM_CHART_Plan_Actual_Sprint=new ChartManager(d3, new ComboChart(ConstString.Communications_PM_CHART_Plan_Actual_Sprint));
+				String id3=Mgr_Communications_PM_CHART_Plan_Actual_Sprint.createChartInEagleEye();
+				chartSetIDList.add(id3);
+				ChartsForCommunications_PM.put(ConstString.Communications_PM_CHART_Plan_Actual_Sprint, id3);
+			}
+			
+			ProductData d6=CommunicationsDataFactory.Get_Communications_PM_Data_All_Epic();
+			if(null != d6)
+			{
+				ChartManager Mgr_Communications_PM_CHART_Feature_Progress=new ChartManager(d6, new BarChart(ConstString.Communications_PM_CHART_Feature_Progress));
+				String id6=Mgr_Communications_PM_CHART_Feature_Progress.createChartInEagleEye();
+				chartSetIDList.add(id6);
+				ChartsForCommunications_PM.put(ConstString.Communications_PM_CHART_Feature_Progress, id6);
+			}	
+					 
+			if(null != chartSetIDList && chartSetIDList.size()>0)
+			{
+				ChartSetForCommunications_PM=ChartManager.CreateChartSet(ConstString.Communications_PM_CHARTSET_NAME,null,chartSetIDList);
+				ChartSets.put(ConstString.Communications_PM_CHARTSET_NAME, ChartSetForCommunications_PM);
+			}
+		}
+		
+		
 	public static Map<String,String> ChartsForFTViewSE_QA= null;
 	public static String ChartSetForFTViewSE_QA=null;
 	public static void createChartsForFTViewSE_QA()
@@ -554,8 +616,10 @@ public class Program {
 		updateXmlTime(FTViewSENode);
 	}
 	
-	public static void saveFTViewArt_UrlToXml(Document document)
+	public static void saveFTViewArt_UrlToXml()
 	{
+		Document document=XmlParseHelper.load("config.xml");
+		
 		if(document==null)
 			return;
 		Node FTViewArtNode=document.selectSingleNode("/Products/Bucket[@name='FTView']/Product[@name ='FTView ART']");
@@ -580,7 +644,76 @@ public class Program {
 					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTViewSE_QA.get(key));
 			}
 		}
+		
+		if(ChartSetForFTViewSE_PM!=null)
+		{
+				Element e=(Element)FTViewArtNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", ConstString.FTVIEWSE_PM_CHARTSET_NAME));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTViewSE_PM);
+		}
 		updateXmlTime(FTViewArtNode);
+		
+		XmlParseHelper.persist(document,"config.xml");
+	}
+	
+	public static void saveCommunications_UrlToXml()
+	{
+		Document document=XmlParseHelper.load("config.xml");
+		
+		if(document==null)
+			return;
+		Node CommunicationsNode=document.selectSingleNode("/Products/Bucket[@name='Services']/Product[@name ='Communications']");
+		if(CommunicationsNode==null)
+			return;
+		if(ChartsForCommunications_PM!=null)
+		{
+			for(String key:ChartsForCommunications_PM.keySet())
+			{
+				Element e=(Element)CommunicationsNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForCommunications_PM.get(key));
+			}
+		}
+		
+		if(ChartSetForCommunications_PM!=null)
+		{
+			Element e=(Element)CommunicationsNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", ConstString.Communications_PM_CHARTSET_NAME));
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForCommunications_PM);
+		}
+		updateXmlTime(CommunicationsNode);
+		
+		XmlParseHelper.persist(document,"config.xml");
+	}
+	
+	public static void saveFTSP_UrlToXml()
+	{
+		Document document=XmlParseHelper.load("config.xml");
+		
+		if(document==null)
+			return;
+		Node FTSPNode=document.selectSingleNode("/Products/Bucket[@name='Services']/Product[@name ='FTSP']");
+		if(FTSPNode==null)
+			return;
+		if(ChartsForFTSP_PM!=null)
+		{
+			for(String key:ChartsForFTSP_PM.keySet())
+			{
+				Element e=(Element)FTSPNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", key));
+				if(e != null)
+					e.addAttribute("url", ConstString.CHART_URL + ChartsForFTSP_PM.get(key));
+			}
+		}
+		
+		if(ChartSetForFTSP_PM!=null)
+		{
+			Element e=(Element)FTSPNode.selectSingleNode(String.format(".//Chart[@name=\'%s\']", ConstString.FTSP_PM_CHARTSET_NAME));
+			if(e != null)
+				e.addAttribute("url", ConstString.CHART_SET_URL + ChartSetForFTSP_PM);
+		}
+		updateXmlTime(FTSPNode);
+		
+		XmlParseHelper.persist(document,"config.xml");
 	}
 	
 	private static void updateXmlTime(Node document)
