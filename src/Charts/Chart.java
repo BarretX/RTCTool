@@ -20,6 +20,7 @@ public class Chart implements  IToJson,IToEagleEye {
 	public String isStacked= "true";
 	public int chartLeft=200;
 	public int baseLineIndex=2;
+	public List<String> ticks=null;
 	
 	@Override
 	public String ToJson() {
@@ -38,7 +39,23 @@ public class Chart implements  IToJson,IToEagleEye {
 			colors+="]";
 		}
 		
-		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"},\"vAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
+		String Ticks="";
+		String format="";
+		String dateformat="M/d/yy";
+		if(ticks!=null&&ticks.size()!=0)
+		{
+			Ticks+=",\"ticks\": [";
+			for(int i=0;i<ticks.size();++i)
+			{			
+				Ticks+="\""+ticks.get(i)+"\"";
+				if(i!=ticks.size()-1)
+					Ticks+=",";
+			}
+			Ticks+="]";
+			format+=",\"format\":\""+dateformat+"\"";  //if you set ticket, is possible a line trend, date is the x_Axis
+		}
+		
+		String AxisFormat=",\"hAxis\":{\"title\":\""+xTitle+"\"" +format+Ticks+ "},\"vAxis\":{\"title\":\""+yTitle+"\",\"format\":\""+yAxisFormat+"\"}";
 		String Legend=",\"legend\":{\"position\":\"bottom\",\"alignment\":\"center\",\"maxLines\":\"2\",\"textStyle\":{\"color\":\"#555555\"}}";
 		//String ChartArea=",\"chartArea\":{\"height\":\"175%\"}";
 		String head="\"description\": \""+description

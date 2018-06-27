@@ -15,4 +15,6 @@ public class ProductData {
 	public String isStacked= "false";
 	public int chartLeft=200;
 	public int baseLineIndex=2;
+	
+	public List<String> ticks=null;
 }

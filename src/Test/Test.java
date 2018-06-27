@@ -1,6 +1,7 @@
 package Test;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.google.common.collect.Lists;
@@ -17,6 +18,7 @@ import Charts.ColumnChart;
 import Charts.ComboChart;
 import Charts.LineChart;
 import ConstVar.ConstString;
+import Helper.ColorFormater;
 
 
 public class Test {
@@ -24,19 +26,23 @@ public class Test {
 /*	public static void main(String[] args) {
 		
 		// TODO Auto-generated method stub
-		String chartID1=Create_BarChart();
-		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID1);
-		String chartID2=Create_LineChart();
-		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID2);
-		String chartID3=Create_ColumnChart();
-		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID3);
-		String chartID4=Create_AreaChart();
-		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID4);
-		String chartID5=Create_ComboChart();
-		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID5);
+		//String chartID1=Create_BarChart();
+		//System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID1);
 		
-		String chartSetID=CreateChartSet(Arrays.asList(chartID1,chartID2,chartID3,chartID4,chartID5));
-		System.out.println("chartSet url:\n"+ ConstString.CHART_SET_URL + chartSetID);
+		//String chartID2=Create_LineChart();
+		
+		String chartID2=TestTicks();
+		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID2);
+		
+		//String chartID3=Create_ColumnChart();
+		//System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID3);
+	//	String chartID4=Create_AreaChart();
+	//	System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID4);
+	//	String chartID5=Create_ComboChart();
+	//	System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID5);
+		
+	//	String chartSetID=CreateChartSet(Arrays.asList(chartID1,chartID2,chartID3,chartID4,chartID5));
+	//	System.out.println("chartSet url:\n"+ ConstString.CHART_SET_URL + chartSetID);
 		//Example:  http://apcndaec3ycs12:8080/#!/chart-sets/59ed906da8e8eb07883a2ed8
 		
 	}*/
@@ -475,9 +481,7 @@ public class Test {
 		S5KA_One_Chart.yAxisFormat="#";
 		S5KA_One_Chart.tableData=new DataTable();
 		S5KA_One_Chart.colorList=Arrays.asList("red","green");
-		//((ColumnChart)S5KA_One_Chart).isStacked="false";
-		//((AreaChart)S5KA_One_Chart).isStacked="true";
-		//((BarChart)S5KA_One_Chart).isStacked="true";
+		S5KA_One_Chart.ticks=new ArrayList<>();
 		
 		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
@@ -558,6 +562,73 @@ public class Test {
 		    row.addCell(new TableCell(y1_data.get(i)));
 		    row.addCell(new TableCell(y2_data.get(i)));
 		    rows.add(row);
+		    
+		    if(i%3==0)
+		    {
+		    	S5KA_One_Chart.ticks.add(x_data.get(i));
+		    }
+		}
+		try 
+		{
+			S5KA_One_Chart.tableData.addRows(rows);
+		}catch(Exception e)
+		{
+			System.out.println("Import Exception!");
+			return null;
+		}
+		
+		return S5KA_One_Chart.ToEagleEye();
+	}
+	
+	public static String TestTicks()
+	{						
+		Chart S5KA_One_Chart=new LineChart("S5KA FY17 Anomlay Backlog_3.0");//Title
+		
+		S5KA_One_Chart.description="Goal (Customer impact16):15";//description		
+		S5KA_One_Chart.yAxisFormat="#";
+		S5KA_One_Chart.tableData=new DataTable();
+		S5KA_One_Chart.colorList=Arrays.asList("red","green");
+		S5KA_One_Chart.ticks=new ArrayList<>();
+		
+		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("x", ValueType.DATE, "Time"));
+		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "RC"));
+		S5KA_One_Chart.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Customer impact(24,16]"));
+		
+		//Chart data
+				//////////////////////////////////////////////
+				List<String> x_data=Arrays.asList(
+						"1/14/2015",
+						"1/15/2015",
+						"1/16/2015",
+						"1/17/2015",
+						"1/18/2015");
+				List<Integer> y1_data=Arrays.asList(
+						1,
+						2,
+						3,
+						4,
+						5);
+				List<Integer> y2_data=Arrays.asList(
+						8,
+						-2,
+						2,
+						3,
+						-3);
+		
+		int dataCount=x_data.size();
+		List<TableRow> rows = Lists.newArrayList();
+		for(int i=0;i<dataCount;i++)
+		{
+			TableRow row = new TableRow();
+		    row.addCell(new TableCell(ColorFormater.Str2JSStr(x_data.get(i))));
+		    row.addCell(new TableCell(y1_data.get(i)));
+		    row.addCell(new TableCell(y2_data.get(i)));
+		    rows.add(row);
+		    
+		    if(i%3==0)
+		    {
+		    //	S5KA_One_Chart.ticks.add(ColorFormater.Str2JSStr(x_data.get(i)));
+		    }
 		}
 		try 
 		{

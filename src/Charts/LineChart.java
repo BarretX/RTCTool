@@ -1,5 +1,6 @@
 package Charts;
 
+import com.google.visualization.datasource.render.JsonRenderer;
 
 public class LineChart extends Chart {
 	
@@ -7,5 +8,5 @@ public class LineChart extends Chart {
 	{
 		chartType="LineChart";
 		title=chartName;
-	}		
+	}
 }

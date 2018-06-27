@@ -77,27 +77,21 @@ public class ConstString {
 
 
 	public final static String CCW_NAME="CCW";
-	public final static String CCW_PM_CHARTSET_NAME="CCW_For_PM";
+	public final static String CCW_PM_CHARTSET_NAME="Project Metrics";
 	public final static String CCW_QA_CHARTSET_NAME="CCW_For_QA";
-	public final static String CCW_PM_CHART_Weekly_Trend="Weekly Trend";
+	public final static String CCW_PM_CHART_Weekly_Trend="CCW Release Burnup";
+	public final static String CCW_PM_CHART_Weekly_BurnDown="R12-PI1 Burn Down";
 	public final static String CCW_PM_CHART_Trend_Epic="Trend by Epic";
 	public final static String CCW_PM_CHART_Trend_Team="Trend by Team";
 	public final static String CCW_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
 	public final static String CCW_PM_CHART_Plan_Actual_Sprint="Plan vs Actual by Sprint";
-	public final static String CCW_PM_CHART_Feature_Progress="Feature Progress";
-	public final static String CCW_PM_CHART_Resource_Sprint="Resource by Sprint";
-	
-	
-	public final static String FTAC_NAME="FTAC";
-	public final static String FTAC_PM_CHARTSET_NAME="FTAC_For_PM";
-	public final static String FTAC_QA_CHARTSET_NAME="FTAC_For_QA";
-	
+	public final static String CCW_PM_CHART_Feature_Progress="Top 10 Epics";  //all epic
 	
 	public final static String FTVIEWSE_NAME="FTViewSE";
 	public final static String FTVIEWSE_PM_CHARTSET_NAME="Project Metrics";
 	public final static String FTVIEWSE_QA_CHARTSET_NAME="FTViewSE_For_QA";
 	public final static String FTVIEWSE_PM_CHART_Weekly_Trend="FTView Release Burnup";
-	public final static String FTVIEWSE_PM_CHART_Weekly_BurnDown="PI12 Burn Down";
+	public final static String FTVIEWSE_PM_CHART_Weekly_BurnDown="PI13 Burn Down";
 	public final static String FTVIEWSE_PM_CHART_Trend_Epic="Trend by Epic";
 	public final static String FTVIEWSE_PM_CHART_Trend_Team="Trend by Team";
 	public final static String FTVIEWSE_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
@@ -109,7 +103,7 @@ public class ConstString {
 	public final static String FTSP_PM_CHARTSET_NAME="Project Metrics";
 	public final static String FTSP_QA_CHARTSET_NAME="FTSP_For_QA";
 	public final static String FTSP_PM_CHART_Weekly_Trend="FTSP Release Burnup";
-	public final static String FTSP_PM_CHART_Weekly_BurnDown="PI7 Burn Down";
+	public final static String FTSP_PM_CHART_Weekly_BurnDown="PI8 Burn Down";
 	public final static String FTSP_PM_CHART_Trend_Epic="Trend by Epic";
 	public final static String FTSP_PM_CHART_Trend_Team="Trend by Team";
 	public final static String FTSP_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
@@ -126,5 +120,16 @@ public class ConstString {
 	public final static String Communications_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
 	public final static String Communications_PM_CHART_Plan_Actual_Sprint="Plan vs Actual by Sprint";
 	public final static String Communications_PM_CHART_Feature_Progress="Top 10 Epics";  //all epic
+	
+	public final static String FTAC_NAME="FTAC";
+	public final static String FTAC_PM_CHARTSET_NAME="Project Metrics";
+	public final static String FTAC_QA_CHARTSET_NAME="FTAC_For_QA";
+	public final static String FTAC_PM_CHART_Weekly_Trend="FTAC Release Burnup";
+	public final static String FTAC_PM_CHART_Weekly_BurnDown="Sprint 25 Burn Down";
+	public final static String FTAC_PM_CHART_Trend_Epic="Trend by Epic";
+	public final static String FTAC_PM_CHART_Trend_Team="Trend by Team";
+	public final static String FTAC_PM_CHART_ThroughputVelocity_sprint="Throughput-Velocity by sprint";
+	public final static String FTAC_PM_CHART_Plan_Actual_Sprint="Plan vs Actual by Sprint";
+	public final static String FTAC_PM_CHART_Feature_Progress="Top 10 Epics";  //all epic
 
 }

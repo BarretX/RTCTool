@@ -29,6 +29,7 @@ public class ChartManager {
 		chart.isStacked= data.isStacked;
 		chart.chartLeft=data.chartLeft;
 		chart.baseLineIndex=data.baseLineIndex;
+		chart.ticks=data.ticks;
 	}
 	
 	public String createChartInEagleEye()

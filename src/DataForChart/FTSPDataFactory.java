@@ -65,24 +65,6 @@ public class FTSPDataFactory {
 		return FTSP_PM_Data_Weekly_BurnDown;
 	}
 	
-	public static ProductData Get_FTSP_PM_Data_Trend_Team()
-	{		
-		if(FTSP_PM_Data_Trend_Team==null)
-		{
-			ChartOfPM();
-		}
-		
-		return FTSP_PM_Data_Trend_Team;
-	}
-	public static ProductData Get_FTSP_PM_Data_ThroughputVelocity_sprint()
-	{
-		if(FTSP_PM_Data_ThroughputVelocity_sprint==null)
-		{
-			ChartOfPM();
-		}
-		
-		return FTSP_PM_Data_ThroughputVelocity_sprint;
-	}
 	public static ProductData Get_FTSP_PM_Data_Plan_Actual_Sprint()
 	{
 		if(FTSP_PM_Data_Plan_Actual_Sprint==null)
@@ -91,16 +73,6 @@ public class FTSPDataFactory {
 		}
 		
 		return FTSP_PM_Data_Plan_Actual_Sprint;
-	}
-	
-	public static ProductData Get_FTSP_PM_Data_Trend_Epic()
-	{
-		if(FTSP_PM_Data_Trend_Epic==null)
-		{
-			ChartOfPM_About_Epic();
-		}
-		
-		return FTSP_PM_Data_Trend_Epic;
 	}
 	
 	public static ProductData Get_FTSP_PM_Data_All_Epic()
@@ -141,7 +113,7 @@ public class FTSPDataFactory {
 				nProjectNumber=i;
 			}
 	    	
-			System.out.println(iProcessArea.getName());
+		//	System.out.println(iProcessArea.getName());
 		}
 	    //[end]
 	    
@@ -188,13 +160,16 @@ public class FTSPDataFactory {
 	    													 //  Arrays.asList("Sprint 11.4","2/21/2018","3/6/2018","0","0"),
 	    													   Arrays.asList("Sprint 7.1","3/13/2018","4/2/2018","0","0"),
 	    													   Arrays.asList("Sprint 7.2","4/3/2018","4/23/2018","0","0"),
-	    													   Arrays.asList("Sprint 7.3","4/24/2018","5/14/2018","0","0"));
+	    													   Arrays.asList("Sprint 7.3","4/24/2018","5/14/2018","0","0"),
 	    													 //  Arrays.asList("Sprint 12.4","5/9/2018","5/22/2018","0","0"));
+												    		  Arrays.asList("Sprint 8.1","5/29/2018","6/18/2018","0","0"),
+															  Arrays.asList("Sprint 8.2","6/19/2018","7/9/2018","0","0"),
+															  Arrays.asList("Sprint 8.3","7/10/2018","7/30/2018","0","0"));
 	    				
 	    	    ////Calculate the week section
 	    		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 	    		SimpleDateFormat sdf1=new SimpleDateFormat("MM/dd/yy");
-	    		SimpleDateFormat sdf2=new SimpleDateFormat("MM/dd");
+	    		//SimpleDateFormat sdf2=new SimpleDateFormat("MM/dd");
 	    		SimpleDateFormat sdfget=new SimpleDateFormat("yyyy-MM-dd");
 	    		List<Date> Week_Trend=new ArrayList<Date>();
 	    		List<Date> Week_Trend_Of_BurnDown=new ArrayList<Date>();
@@ -217,7 +192,7 @@ public class FTSPDataFactory {
 	    		
 	    		try
 	    		{
-	    			Date_Min_BurnDown = sdf.parse(Point_of_Sprint.get(3).get(Sprint_Start_Index));	
+	    			Date_Min_BurnDown = sdf.parse(Point_of_Sprint.get(Point_of_Sprint.size()-3).get(Sprint_Start_Index));	
 	    			Date_Max_BurnDown = sdf.parse(Point_of_Sprint.get(Point_of_Sprint.size()-1).get(Sprint_End_Index));
 	    		}
 	    		catch (ParseException e1) 
@@ -232,7 +207,7 @@ public class FTSPDataFactory {
 	    		 {
 	    			 Calendar calendar=Calendar.getInstance();
 	    			 calendar.setTime(temp);
-	    			 calendar.add(Calendar.WEEK_OF_MONTH,1);
+	    			 calendar.add(Calendar.DAY_OF_MONTH,2);
 	    			 temp=calendar.getTime();
 	    			 Week_Trend.add(temp);
 	    		 }
@@ -241,7 +216,7 @@ public class FTSPDataFactory {
 	    		 {
 	    			 Calendar calendar=Calendar.getInstance();
 	    			 calendar.setTime(temp);
-	    			 calendar.add(Calendar.WEEK_OF_MONTH,1);
+	    			 calendar.add(Calendar.DAY_OF_MONTH,2);
 	    			 temp=calendar.getTime();
 	    			 Week_Trend_Of_BurnDown.add(temp);
 	    		 }
@@ -328,7 +303,7 @@ public class FTSPDataFactory {
 						 
 						 Calendar temp=Calendar.getInstance();
 						 temp.setTime(WeekDate);
-						 temp.add(Calendar.WEEK_OF_MONTH,1);
+						 temp.add(Calendar.DAY_OF_MONTH,2);
 						 
 						 Date WeekEnd=temp.getTime();
 						 						 
@@ -373,7 +348,7 @@ public class FTSPDataFactory {
 						 
 						 Calendar temp=Calendar.getInstance();
 						 temp.setTime(WeekDate);
-						 temp.add(Calendar.WEEK_OF_MONTH,1);
+						 temp.add(Calendar.DAY_OF_MONTH,2);
 						 
 						 Date WeekEnd=temp.getTime();
 						 						 
@@ -505,7 +480,7 @@ public class FTSPDataFactory {
 	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
 	    			Date Today=new Date();
 	    			
-	    			x1.add(sdf2.format(WeekDate));
+	    			x1.add(sdf.format(WeekDate));
 	    			y1.add(Sum_Plan_For_This_Sprint-Integer.parseInt(item.get(Week_ShouldTotal_Index)));
 	    			
 	    			if(i==0)
@@ -671,7 +646,7 @@ public class FTSPDataFactory {
 					 workItem = (IWorkItem)resolved.getItem(); 
 					 
 					 //test
-					 System.out.println("Parent: "+workItem.getId()+"\t"+workItem.getHTMLSummary());
+					// System.out.println("Parent: "+workItem.getId()+"\t"+workItem.getHTMLSummary());
 					
 					 EpicItem One_Epic=new EpicItem(); 
 					 
@@ -691,7 +666,7 @@ public class FTSPDataFactory {
 					 for(List<String> tempList4:resultList)   //the story status of the sprint
 					 {
 						 //test
-						 System.out.println("Child: \t"+tempList4.get(0)+"\t"+tempList4.get(6));
+						// System.out.println("Child: \t"+tempList4.get(0)+"\t"+tempList4.get(6));
 						 
 						 if(tempList4.get(6).contains("feature")||tempList4.get(6).contains("programEpic"))
 						{
@@ -813,13 +788,13 @@ public class FTSPDataFactory {
 	    	
 	    	for(EpicItem entry: mapEpic.values())
 	    	{
-	    		System.out.println(entry.EpicID +"\t"+
+	    	/*	System.out.println(entry.EpicID +"\t"+
 			    				entry.EpicName +"\t"+
 			    				entry.m_nlevel +"\t"+
 			    				entry.TotalPoint +"\t"+
 			    				entry.FinishPoint +"\t"+
 			    				entry.RemainPoint +"\t"+			    				
-								entry.RiskEstimate +"\t");
+								entry.RiskEstimate +"\t");*/
 	    		
 	    		needEpic.add(entry);
 	    	}
@@ -831,19 +806,24 @@ public class FTSPDataFactory {
 			List<Integer> y1=new ArrayList<>();
 			List<Integer> y2=new ArrayList<>();
 			List<Integer> y3=new ArrayList<>();
+			int lengthMax=0;
 			
 			//// [section 3.1] Draw All Epic
 			//only draw top ten epic
 			for(int i=0;i<needEpic.size()&&i<10;i++)
 			{
 				EpicItem item=needEpic.get(i);
+				
+				int legth=item.EpicName.length();				
+				if(legth>=lengthMax) lengthMax=legth;
+				
 				x1.add(item.EpicName);
 				y1.add(item.FinishPoint);
 				y2.add(item.RemainPoint-item.RiskEstimate);
 				y3.add(item.RiskEstimate);
 			}
 			
-			Create_P8(x1,y1,y2,y3);
+			Create_P8(x1,y1,y2,y3,lengthMax);
 	    	
 	    }
 	    catch(Exception e)
@@ -948,9 +928,10 @@ public class FTSPDataFactory {
 		FTSP_PM_Data_Weekly_BurnDown.yTitle="Story Point";
 		FTSP_PM_Data_Weekly_BurnDown.yAxisFormat="#";
 		FTSP_PM_Data_Weekly_BurnDown.tableData=new DataTable();
+		FTSP_PM_Data_Weekly_BurnDown.ticks=new ArrayList<>();
 		FTSP_PM_Data_Weekly_BurnDown.colorList=Arrays.asList(ColorFormater.RGB2String(20,83,114),ColorFormater.RGB2String(176,38,59),ColorFormater.RGB2String(230,230,230));
 		
-		FTSP_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
+		FTSP_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("x", ValueType.DATE, "Time"));
 		FTSP_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Ideal Line"));
 		FTSP_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "ToDo"));
 		FTSP_PM_Data_Weekly_BurnDown.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "All"));
@@ -967,11 +948,17 @@ public class FTSPDataFactory {
 		for(int i=0;i<dataCount;i++)
 		{
 			TableRow row = new TableRow();
-		    row.addCell(new TableCell(x_data.get(i)));
+		    row.addCell(new TableCell(ColorFormater.Str2JSStr(x_data.get(i))));
 		    row.addCell(new TableCell(y1_data.get(i)));
 		    row.addCell(new TableCell(y2_data.get(i)));
 		    row.addCell(new TableCell(y3_data.get(i)));
 		    rows.add(row);
+		    
+		    //Calculate the data more, but show x_axis less, every 3 data show x..
+		    if(i%3==0)
+		    {
+		    	FTSP_PM_Data_Weekly_BurnDown.ticks.add(ColorFormater.Str2JSStr(x_data.get(i)));
+		    }
 		}
 		try 
 		{
@@ -1066,7 +1053,7 @@ public class FTSPDataFactory {
 		}
 	}
 	
-	public static void Create_P8(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
+	public static void Create_P8(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3,int length)
 	{	
 		FTSP_PM_Data_Feature_Progress=new ProductData();
 		FTSP_PM_Data_Feature_Progress.title=ConstString.FTSP_PM_CHART_Feature_Progress;
@@ -1077,7 +1064,7 @@ public class FTSPDataFactory {
 		FTSP_PM_Data_Feature_Progress.colorList=Arrays.asList(ColorFormater.RGB2String(112,173,71),ColorFormater.RGB2String(68,114,196),ColorFormater.RGB2String(255,20,20));
 		
 		FTSP_PM_Data_Feature_Progress.isStacked="true";
-		FTSP_PM_Data_Feature_Progress.chartLeft=200;
+		FTSP_PM_Data_Feature_Progress.chartLeft=7*length;
 		
 		FTSP_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Epic"));
 		FTSP_PM_Data_Feature_Progress.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Completed"));
