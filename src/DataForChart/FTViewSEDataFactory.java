@@ -191,7 +191,6 @@ public class FTViewSEDataFactory {
 	    	    ////Calculate the week section
 	    		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 	    		SimpleDateFormat sdf1=new SimpleDateFormat("MM/dd/yy");
-	    		//SimpleDateFormat sdf2=new SimpleDateFormat("MM/dd");
 	    		SimpleDateFormat sdfget=new SimpleDateFormat("yyyy-MM-dd");
 	    		List<Date> Week_Trend=new ArrayList<Date>();
 	    		List<Date> Week_Trend_Of_BurnDown=new ArrayList<Date>();
@@ -202,7 +201,7 @@ public class FTViewSEDataFactory {
 	    		try
 	    		{
 	    			 Date_Min = sdf.parse(Point_of_Sprint.get(0).get(Sprint_Start_Index));	
-	    			 Date_Max = sdf.parse("11/1/2018");	
+	    			 Date_Max = sdf.parse("1/8/2019");	
 	    		}
 	    		catch (ParseException e1) 
 	    		{
@@ -404,7 +403,7 @@ public class FTViewSEDataFactory {
 							 Date CreationDate = sdfget.parse(tempList4.get(4));
 							 
 							// if((!CreationDate.after(SprintBegin))&&tempList4.get(1).contains(tempList3.get(0)))
-							 if(tempList4.get(1).contains(tempList3.get(0)))
+							 if((CreationDate.before(SprintEnd))&&tempList4.get(1).contains(tempList3.get(0)))
 							 {
 								 //get the plan point and add to the record
 								 int temp_plan_point= Integer.parseInt(tempList3.get(Sprint_Plan_Index))+Integer.parseInt(tempList4.get(2));
@@ -463,6 +462,120 @@ public class FTViewSEDataFactory {
 	    		List<Integer> y2=new ArrayList<>();
 	    		List<Integer> y3=new ArrayList<>();
 	    		
+	    		//P1:Draw the Release Burn up, x1-date, y1-PlanTotal, y2-ShouldTotal, y3-CloseTotal, 
+	    		//y4-forecasted trajectory 1(On Time),y5-forecasted trajectory 2(The trend in recent month)
+
+	    		List<Double> y4=new ArrayList<>();	//forecasted trajectory 1
+	    		List<Double> y5 = new ArrayList<>();	//forecasted trajectory 2
+	    		
+	    		int Plantotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_PlanTotal_Index));		//plantotal
+    			int Closetotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_CloseTotal_Index));	//closetotal
+    			int plan_remain = Plantotal - Closetotal;																//
+    			
+    			Date time_today=new Date();
+    			int days = (int) ((Date_Max.getTime() - time_today.getTime()) / (1000*3600*24));
+    			double ave_plan_daily = (double)plan_remain / (days + 2);
+	    	    
+	    	    //least square method in recent month
+	    	    double t1=0.0, t2=0.0, t3=0.0, t4=0.0;
+	    	    double a_forcast = 0.0, b_forcast = 0.0;
+	    	    List<Integer> x_leastsquare = new ArrayList<>();
+	    	    List<Integer> y_leastsquare = new ArrayList<>();
+	    	    Date endDate = new Date();	//forecast completed date
+	    	    
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	Date Today=new Date();
+	    	    	if(!week_date.after(Today))
+	    	    	{
+	    	    		x_leastsquare.add(i);
+	    	    		y_leastsquare.add(Integer.parseInt((Week_Break.get(i)).get(Week_CloseTotal_Index)));
+	    	    	}
+	    	    }
+	    	    if(x_leastsquare.size() > 0)
+	    	    {
+	    	    	for(int i = 0; i < x_leastsquare.size(); i++)
+		    	    {
+		    	    	t1 += x_leastsquare.get(i) * x_leastsquare.get(i);
+		    	    	t2 += x_leastsquare.get(i);
+		    	    	t3 += x_leastsquare.get(i) * y_leastsquare.get(i);
+		    	    	t4 += y_leastsquare.get(i);
+		    	    }
+		    	    a_forcast = (t3*x_leastsquare.size() - t2*t4) / (t1*x_leastsquare.size() - t2*t2);
+		    	    b_forcast = (t1*t4 - t2*t3) / (t1*x_leastsquare.size()- t2*t2);
+		    	    
+		    	    double x = 0.0;
+		    	    x = (((double)Plantotal - b_forcast) /a_forcast) * 2 - 315;
+		    	    int add_count = (int)(x/2);
+		    	    if (x > 0)
+		    	    {
+			    	    for(int i = 1; i < add_count; i++)
+			    	    {
+			    	    	Calendar add_date = Calendar.getInstance();
+				    	    add_date.setTime(Date_Max);
+				    	    add_date.add(Calendar.DAY_OF_MONTH, (i + 1)*2);
+				    	    Date temp_date = add_date.getTime();
+				    	    List<String> temp = new ArrayList<>();
+				    	    temp.add(sdf.format(temp_date));
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    Week_Break.add(temp);
+				    	    endDate = temp_date;
+			    	    }
+		    		}
+		    	    else
+		    	    {
+		    	    	Calendar add_date = Calendar.getInstance();
+			    	    add_date.setTime(Date_Max);
+			    	    add_date.add(Calendar.DAY_OF_MONTH, (add_count-1)*2);
+			    	    Date temp_date = add_date.getTime();
+			    	    endDate = temp_date;
+		    	    }
+		    	
+	    	    }
+	    	    
+	    	  //Forecasted trajectory 1, complete on time
+	    		int start_show_count = 0;
+	    		
+	    	    for(int i=0;i<Week_Break.size();i++)
+	    	    {
+	    	    	Date WeekDate=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    			Date Today=new Date();
+	    	    	if(!WeekDate.before(Today) && WeekDate.before(Date_Max))
+	    	    	{
+	    	    		start_show_count++;
+	    	    		y4.add((double)Closetotal + start_show_count * ave_plan_daily * 2);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		y4.add(-1.0);
+	    	    	}
+	    	    }
+	    	    
+	    	    //forecasted trajectory (2) based on least square method
+	    	    int plan_total = 0;
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	
+	    	    	List<String> temp = Week_Break.get(i);
+	    	    	plan_total+=Integer.parseInt(temp.get(Week_Plan_Index));
+	    	    	temp.set(Week_PlanTotal_Index, Integer.toString(plan_total));
+	    	    	
+	    	    	if(week_date.before(time_today) || week_date.after(endDate))
+	    	    	{
+	    	    		y5.add(-1.0);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		y5.add(a_forcast * i + b_forcast);
+	    	    	}
+	    	    }
+	    	    
 	    		for(List<String> item:Week_Break)
 	    		{
 	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
@@ -472,7 +585,15 @@ public class FTViewSEDataFactory {
 	    			x1.add(sdf1.format(X_Axis));
 	    			
 	    			y1.add(Integer.parseInt(item.get(Week_PlanTotal_Index)));
-	    			y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			
+	    			if(WeekDate.after(Date_Max))
+	    			{
+	    				y2.add(-1);
+	    			}
+	    			else
+	    			{
+	    				y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			}
 	    			
 	    			if(WeekDate.after(Today))
 	    			{
@@ -483,14 +604,15 @@ public class FTViewSEDataFactory {
 	    				y3.add(Integer.parseInt(item.get(Week_CloseTotal_Index)));	
 	    			}
 	    		}
-	    	    		
-	    		Create_P1(x1,y1,y2,y3);
+	    	   
+	    		Create_P1(x1,y1,y2,y3,y5);
 	    		
 	    		//P2:Draw the Release BurnDown
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
-	    		y3.clear();	    		
+	    		y3.clear();	 
+	    		y5.clear();   		
 	    		
     			for(int i=0;i<Week_Break_BurnDown.size();i++)
 	    		{
@@ -811,7 +933,16 @@ public class FTViewSEDataFactory {
 				
 				y1.add(item.FinishPoint);
 				y2.add(item.RemainPoint-item.RiskEstimate);
-				y3.add(item.RiskEstimate);
+				//y3.add(item.RiskEstimate);
+				
+				if(item.RiskEstimate == 0)
+				{
+					y3.add(-1);
+				}
+				else
+				{
+					y3.add(item.RiskEstimate);
+				}
 			}
 			
 			Create_P8(x1,y1,y2,y3,lengthMax);
@@ -865,7 +996,7 @@ public class FTViewSEDataFactory {
 		return isTimed&isNeedTeam;
 	}
 	//Lane Ma, Modify the demo to draw specific chart
-	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
+	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3,List<Double> y5)
 	{	
 		FTVIEWSE_PM_Data_Weekly_Trend=new ProductData();
 		FTVIEWSE_PM_Data_Weekly_Trend.title=ConstString.FTVIEWSE_PM_CHART_Weekly_Trend;
@@ -874,12 +1005,14 @@ public class FTViewSEDataFactory {
 		FTVIEWSE_PM_Data_Weekly_Trend.yTitle="Story Point";
 		FTVIEWSE_PM_Data_Weekly_Trend.yAxisFormat="#";
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData=new DataTable();
-		FTVIEWSE_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),ColorFormater.RGB2String(255,255,255));
+		FTVIEWSE_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),
+																ColorFormater.RGB2String(72,118,255),ColorFormater.RGB2String(255,255,255));
 		
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Total Estimate"));
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Ideal Closed Estimate"));
 		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Closed Estimate"));
+		FTVIEWSE_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, "Forecasted Trajectory"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -887,6 +1020,13 @@ public class FTViewSEDataFactory {
 		List<Integer> y1_data=y1;
 		List<Integer> y2_data=y2;
 		List<Integer> y3_data=y3;
+		List<Integer> y5_data = new ArrayList<>();
+		
+		for(int i = 0; i < y5.size();i++)
+		{
+			int temp = Integer.parseInt(new java.text.DecimalFormat("0").format(y5.get(i)));
+			y5_data.add(temp);
+		}
 		
 		int dataCount=x_data.size();
 
@@ -899,6 +1039,7 @@ public class FTViewSEDataFactory {
 		    row.addCell(new TableCell(y1_data.get(i)));
 		    row.addCell(new TableCell(y2_data.get(i)));
 		    row.addCell(new TableCell(y3_data.get(i)));
+		    row.addCell(new TableCell(y5_data.get(i)));
 		    rows.add(row);
 		}
 		try 

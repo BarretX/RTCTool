@@ -170,9 +170,6 @@ public class CCWDataFactory {
 	    		List<List<String>> resultList = getAttributesValue.GetAllNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),resultOwner,needAttributeList);
 	    		List<String> TeamResultList=getAttributesValue.GetTeamAreaList(repository, handler.getMonitor(),query.getProjectArea(), resultOwner1);	    		
 	    		
-	    		//List<List<String>> resultList=new ArrayList<>();
-	    		//List<String> TeamResultList=new ArrayList<>();
-	    		
 	    	    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
 	    		int Sprint_Name_Index=0;
 	    		int Sprint_Start_Index=1;
@@ -187,7 +184,10 @@ public class CCWDataFactory {
 	    													   Arrays.asList("MS0 - Sprint4","4/9/2018","4/27/2018","0","0"),
 	    													   Arrays.asList("R12-PI1_Sprint1","5/2/2018","5/22/2018","0","0"),
 													    		Arrays.asList("R12-PI1_Sprint2","5/23/2018","6/12/2018","0","0"),
-													    		Arrays.asList("R12-PI1_Sprint3","6/13/2018","7/3/2018","0","0"));
+													    		Arrays.asList("R12-PI1_Sprint3","6/13/2018","7/3/2018","0","0"),
+													    		Arrays.asList("R12-PI2_Sprint1","7/18/2018","8/7/2018","0","0"),
+													    		Arrays.asList("R12-PI2_Sprint2","8/8/2018","8/28/2018","0","0"),
+													    		Arrays.asList("R12-PI2_Sprint3","8/29/2018","9/18/2018","0","0"));
 	    				
 	    	    ////Calculate the week section
 	    		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
@@ -281,13 +281,6 @@ public class CCWDataFactory {
 	    			Week_Break_BurnDown.add(temp);			
 	    		}	    		
 	    		
-	    		//[test]
-	    		/*for(int i=0;i<resultList.size();i++)
-				 {
-					List<String> tempList4=resultList.get(i); 
-					System.out.print(tempList4.get(0)+"\t"+tempList4.get(1)+"\t"+tempList4.get(2)+"\t"+tempList4.get(3)+"\t"+tempList4.get(4)+"\t");
-				 }*/
-	    		
 				 //Format the Week_Break
 				for(int i=0;i<resultList.size();i++)
 				 {
@@ -359,7 +352,7 @@ public class CCWDataFactory {
 					if(!Burn_Filter(tempList4.get(1),strTeam))
 						continue;
 					
-					if(!tempList4.get(1).contains("R12-PI1")) 
+					if(!tempList4.get(1).contains("R12-PI2")) 
 						 continue;                    //if not plan for sprint 12 or plan for 12.4
 					 
 					 Sum_Plan_For_This_Sprint+=Integer.parseInt(tempList4.get(2));	
@@ -389,8 +382,9 @@ public class CCWDataFactory {
 						 }			 					 
 					 }
 				 }
-	    					 
-				 for(int i=0;i<Point_of_Sprint.size();i++)
+	    			
+				//add data to Point_of_Sprint
+				for(int i=0;i<Point_of_Sprint.size();i++)
 				 {
 					 List<String> tempList3=Point_of_Sprint.get(i);
 					 Date SprintBegin = sdf.parse(tempList3.get(Sprint_Start_Index));	
@@ -428,7 +422,7 @@ public class CCWDataFactory {
 						 }
 					 }
 				 }
-	    	    		
+				
 	    		int sum_plan=0;
 	    		int sum_close=0;
 	    		for(int i=0;i<Week_Break.size();i++)
@@ -444,9 +438,8 @@ public class CCWDataFactory {
 	    		for(int i=0;i<Week_Break.size();i++)
 	    		{
 	    			List<String> tempList6=Week_Break.get(i);
-	    			double dShould=(double)sum_plan/(Week_Break.size()-1)*i;
-	    			int nShould=(int)dShould;
-	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(nShould));
+	    			int should=sum_plan/(Week_Break.size()-1)*i;
+	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(should));
 	    		}
 	    		
 	    		int sum_close_burndown=0;
@@ -463,15 +456,143 @@ public class CCWDataFactory {
 	    			List<String> tempList6=Week_Break_BurnDown.get(i);
 	    			int should=Sum_Plan_For_This_Sprint/(Week_Break_BurnDown.size()-1)*i;
 	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(should));
-	    		}
-	    	    		   		
-	    	    		
-	    		//P1:Draw the Release Burn up
+	    		}    		
+	    		
+	    	    		 
 	    		List<String> x1=new ArrayList<>();
 	    		List<Integer> y1=new ArrayList<>();
 	    		List<Integer> y2=new ArrayList<>();
 	    		List<Integer> y3=new ArrayList<>();
+	    	    		
+	    		//P1:Draw the Release Burn up, x1-date, y1-PlanTotal, y2-ShouldTotal, y3-CloseTotal, 
+	    		//y4-forecasted trajectory 1(On Time),y5-forecasted trajectory 2(The trend in recent month)
+
+	    		List<Double> y4=new ArrayList<>();	//forecasted trajectory 1
+	    		List<Double> y5 = new ArrayList<>();	//forecasted trajectory 2
 	    		
+	    		int Plantotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_PlanTotal_Index));		//plantotal
+    			int Closetotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_CloseTotal_Index));	//closetotal
+    			int plan_remain = Plantotal - Closetotal;																//
+    			
+    			Date time_today=new Date();
+    			int days = (int) ((Date_Max.getTime() - time_today.getTime()) / (1000*3600*24));
+    			double ave_plan_daily = (double)plan_remain / (days + 2);
+	    	    
+	    	    //least square method in recent month
+	    	    double t1=0.0, t2=0.0, t3=0.0, t4=0.0;
+	    	    double a_forcast = 0.0, b_forcast = 0.0;
+	    	    List<Integer> x_leastsquare = new ArrayList<>();
+	    	    List<Integer> y_leastsquare = new ArrayList<>();
+	    	    Date endDate = new Date();	//forecast completed date
+	    	    
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	Date Today=new Date();
+	    	    	if(!week_date.after(Today))
+	    	    	{
+	    	    		x_leastsquare.add(i);
+	    	    		y_leastsquare.add(Integer.parseInt((Week_Break.get(i)).get(Week_CloseTotal_Index)));
+	    	    	}
+	    	    }
+	    	    if(x_leastsquare.size() > 0)
+	    	    {
+	    	    	if(x_leastsquare.size() > 15)
+	    	    	{
+		    	    	for(int i = (x_leastsquare.size() - 15); i < x_leastsquare.size(); i++)
+			    	    {
+			    	    	t1 += x_leastsquare.get(i) * x_leastsquare.get(i);
+			    	    	t2 += x_leastsquare.get(i);
+			    	    	t3 += x_leastsquare.get(i) * y_leastsquare.get(i);
+			    	    	t4 += y_leastsquare.get(i);
+			    	    }
+			    	    a_forcast = (t3*15 - t2*t4) / (t1*15 - t2*t2);
+			    	    b_forcast = (t1*t4 - t2*t3) / (t1*15- t2*t2);
+	    	    	}
+	    	    	else
+	    	    	{
+		    	    	for(int i = 0; i < x_leastsquare.size(); i++)
+			    	    {
+			    	    	t1 += x_leastsquare.get(i) * x_leastsquare.get(i);
+			    	    	t2 += x_leastsquare.get(i);
+			    	    	t3 += x_leastsquare.get(i) * y_leastsquare.get(i);
+			    	    	t4 += y_leastsquare.get(i);
+			    	    }
+			    	    a_forcast = (t3*x_leastsquare.size() - t2*t4) / (t1*x_leastsquare.size() - t2*t2);
+			    	    b_forcast = (t1*t4 - t2*t3) / (t1*x_leastsquare.size()- t2*t2);
+	    	    	}
+		    	    
+		    	    double x = 0.0;
+		    	    x = (((double)Plantotal - b_forcast) /a_forcast) * 2 - 337;
+		    	    int add_count = (int)(x/2);
+		    	    if (x > 0)
+		    	    {
+			    	    for(int i = 1; i < add_count; i++)
+			    	    {
+			    	    	Calendar add_date = Calendar.getInstance();
+				    	    add_date.setTime(Date_Max);
+				    	    add_date.add(Calendar.DAY_OF_MONTH, (i + 1)*2);
+				    	    Date temp_date = add_date.getTime();
+				    	    List<String> temp = new ArrayList<>();
+				    	    temp.add(sdf.format(temp_date));
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    Week_Break.add(temp);
+				    	    endDate = temp_date;
+			    	    }
+		    		}
+		    	    else
+		    	    {
+		    	    	Calendar add_date = Calendar.getInstance();
+			    	    add_date.setTime(Date_Max);
+			    	    add_date.add(Calendar.DAY_OF_MONTH, (add_count-1)*2);
+			    	    Date temp_date = add_date.getTime();
+			    	    endDate = temp_date;
+		    	    }
+		    	
+	    	    }
+	    	    
+	    	  //Forecasted trajectory 1, complete on time
+	    		int start_show_count = 0;
+	    		
+	    	    for(int i=0;i<Week_Break.size();i++)
+	    	    {
+	    	    	Date WeekDate=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    			Date Today=new Date();
+	    	    	if(!WeekDate.before(Today) && WeekDate.before(Date_Max))
+	    	    	{
+	    	    		start_show_count++;
+	    	    		y4.add((double)Closetotal + start_show_count * ave_plan_daily * 2);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		y4.add(-1.0);
+	    	    	}
+	    	    }
+	    	    
+	    	    //forecasted trajectory (2) based on least square method
+	    	    int plan_total = 0;
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	
+	    	    	List<String> temp = Week_Break.get(i);
+	    	    	plan_total+=Integer.parseInt(temp.get(Week_Plan_Index));
+	    	    	temp.set(Week_PlanTotal_Index, Integer.toString(plan_total));
+
+	    	    	if(week_date.before(time_today) || week_date.after(endDate))
+		    	    {
+		    	    	y5.add(-1.0);
+		    	    }
+		    	    else
+		    	    {
+		    	    	y5.add(a_forcast * i + b_forcast);
+		    	    }
+	    	    }
+	    	    
 	    		for(List<String> item:Week_Break)
 	    		{
 	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
@@ -481,7 +602,15 @@ public class CCWDataFactory {
 	    			x1.add(sdf1.format(X_Axis));
 	    			
 	    			y1.add(Integer.parseInt(item.get(Week_PlanTotal_Index)));
-	    			y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			
+	    			if(WeekDate.after(Date_Max))
+	    			{
+	    				y2.add(-1);
+	    			}
+	    			else
+	    			{
+	    				y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			}
 	    			
 	    			if(WeekDate.after(Today))
 	    			{
@@ -492,14 +621,15 @@ public class CCWDataFactory {
 	    				y3.add(Integer.parseInt(item.get(Week_CloseTotal_Index)));	
 	    			}
 	    		}
-	    	    		
-	    		Create_P1(x1,y1,y2,y3);
+	    	   
+	    		Create_P1(x1,y1,y2,y3,y5);
 	    		
 	    		//P2:Draw the Release BurnDown
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
-	    		y3.clear();	    		
+	    		y3.clear();
+	    		y5.clear();
 	    		
     			for(int i=0;i<Week_Break_BurnDown.size();i++)
 	    		{
@@ -848,7 +978,14 @@ public class CCWDataFactory {
 				x1.add(item.EpicName);
 				y1.add(item.FinishPoint);
 				y2.add(item.RemainPoint-item.RiskEstimate);
-				y3.add(item.RiskEstimate);
+				if(item.RiskEstimate == 0)
+				{
+					y3.add(-1);
+				}
+				else
+				{
+					y3.add(item.RiskEstimate);
+				}
 			}
 			
 			Create_P8(x1,y1,y2,y3,lengthMax);
@@ -903,7 +1040,7 @@ public class CCWDataFactory {
 		return isTimed&isNeedTeam;
 	}
 	//Lane Ma, Modify the demo to draw specific chart
-	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
+	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3,List<Double> y5)
 	{	
 		CCW_PM_Data_Weekly_Trend=new ProductData();
 		CCW_PM_Data_Weekly_Trend.title=ConstString.CCW_PM_CHART_Weekly_Trend;
@@ -912,12 +1049,14 @@ public class CCWDataFactory {
 		CCW_PM_Data_Weekly_Trend.yTitle="Story Point";
 		CCW_PM_Data_Weekly_Trend.yAxisFormat="#";
 		CCW_PM_Data_Weekly_Trend.tableData=new DataTable();
-		CCW_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),ColorFormater.RGB2String(255,255,255));
+		CCW_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),
+														ColorFormater.RGB2String(72,118,255),ColorFormater.RGB2String(255,255,255));
 		
 		CCW_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 		CCW_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Total Estimate"));
 		CCW_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Ideal Closed Estimate"));
 		CCW_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Closed Estimate"));
+		CCW_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, "Forecasted Trajectory"));
 		
 		//Chart data
 		//////////////////////////////////////////////
@@ -925,6 +1064,13 @@ public class CCWDataFactory {
 		List<Integer> y1_data=y1;
 		List<Integer> y2_data=y2;
 		List<Integer> y3_data=y3;
+		List<Integer> y5_data = new ArrayList<>();
+		
+		for(int i = 0; i < y5.size();i++)
+		{
+			int temp = Integer.parseInt(new java.text.DecimalFormat("0").format(y5.get(i)));
+			y5_data.add(temp);
+		}
 		
 		int dataCount=x_data.size();
 
@@ -937,6 +1083,7 @@ public class CCWDataFactory {
 		    row.addCell(new TableCell(y1_data.get(i)));
 		    row.addCell(new TableCell(y2_data.get(i)));
 		    row.addCell(new TableCell(y3_data.get(i)));
+		    row.addCell(new TableCell(y5_data.get(i)));
 		    rows.add(row);
 		}
 		try 

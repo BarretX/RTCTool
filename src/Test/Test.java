@@ -23,7 +23,7 @@ import Helper.ColorFormater;
 
 public class Test {
   
-/*	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		
 		// TODO Auto-generated method stub
 		//String chartID1=Create_BarChart();
@@ -34,7 +34,7 @@ public class Test {
 		String chartID2=TestTicks();
 		System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID2);
 		
-		//String chartID3=Create_ColumnChart();
+		String chartID3=Create_ColumnChart();
 		//System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID3);
 	//	String chartID4=Create_AreaChart();
 	//	System.out.println("chart url:\n"+ ConstString.CHART_URL + chartID4);

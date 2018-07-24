@@ -384,8 +384,8 @@ public class JsonRenderer {
         case NUMBER:
           valueJson.append(((NumberValue) value).getValue());
           break;
-        case INT:
-        	if(((IntValue) value).getValue()<0)
+        case INT: 
+        	if(((IntValue) value).getValue()<0)  //[emptyline]Barrent Xiong, we use this to set empty line
         	{
         		valueJson.append("null");
         	}

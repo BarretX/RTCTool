@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.text.Region;
+import org.w3c.dom.ls.LSInput;
+
 import com.google.common.collect.Lists;
 import com.google.visualization.datasource.datatable.ColumnDescription;
 import com.google.visualization.datasource.datatable.DataTable;
@@ -146,10 +149,10 @@ public class FTACDataFactory {
 						// System.out.println("Child: \t"+tempList4.get(0)+"\t"+tempList4.get(6));
 						 
 						 if(tempList4.get(6).contains("feature")||tempList4.get(6).contains("programEpic"))
-						{
+						 {
 							One_Epic.ChildID.add(tempList4.get(0));  //if this is feature or epic, only record
 							continue;
-						}
+						 }
 						 
 						 //if can't get the attribute points,loop this for()
 						 if(tempList4.get(2).equals("")) 
@@ -292,7 +295,14 @@ public class FTACDataFactory {
 				x1.add(item.EpicName);
 				y1.add(item.FinishPoint);
 				y2.add(item.RemainPoint-item.RiskEstimate);
-				y3.add(item.RiskEstimate);
+				if(item.RiskEstimate == 0)
+				{
+					y3.add(-1);
+				}
+				else
+				{
+					y3.add(item.RiskEstimate);
+				}
 			}
 			
 			Create_P8(x1,y1,y2,y3,lengthMax);
@@ -385,7 +395,7 @@ public class FTACDataFactory {
 	    		List<List<String>> resultList = getAttributesValue.GetAllNeedAttribute(repository,handler.getMonitor(), query.getProjectArea(),resultOwner,needAttributeList);
 	    		List<String> TeamResultList=getAttributesValue.GetTeamAreaList(repository, handler.getMonitor(),query.getProjectArea(), resultOwner1);	    		
 	    		
-	    	    //the definition of the array:0-Sprint 1-date 2-planed 3-remained
+	    	    //the definition of the array:0-Sprint 1-start date 2-end date 3-planed 4-remained
 	    		int Sprint_Name_Index=0;
 	    		int Sprint_Start_Index=1;
 	    		int Sprint_End_Index=2;
@@ -418,7 +428,7 @@ public class FTACDataFactory {
 	    		try
 	    		{
 	    			 Date_Min = sdf.parse(Point_of_Sprint.get(0).get(Sprint_Start_Index));	
-	    			 Date_Max = sdf.parse("11/1/2018");	
+	    			 Date_Max = sdf.parse("1/18/2019");	
 	    		}
 	    		catch (ParseException e1) 
 	    		{
@@ -431,8 +441,8 @@ public class FTACDataFactory {
 	    		try
 	    		{
 	    			//Sprint start and end
-	    			Date_Min_BurnDown = sdf.parse("6/11/2018");	
-	    			Date_Max_BurnDown = sdf.parse("6/30/2018");
+	    			Date_Min_BurnDown = sdf.parse("7/2/2018");	
+	    			Date_Max_BurnDown = sdf.parse("7/21/2018");
 	    		}
 	    		catch (ParseException e1) 
 	    		{
@@ -500,22 +510,22 @@ public class FTACDataFactory {
 				 //Format the Week_Break
 				for(int i=0;i<resultList.size();i++)
 				 {
-					List<String> tempList4=resultList.get(i); 
+					List<String> tempList4=resultList.get(i); 	//get one data of FTAC project 
 					String strTeam=TeamResultList.get(i);
 					
-					if(tempList4.get(4).equals(""))  //if no [CreationDate], ignore this story
+					if(tempList4.get(4).equals(""))  	//if no [CreationDate], ignore this story
 						 continue;
 					if(tempList4.get(2).equals("")) 
-						 continue;                    //if no [StoryPoint], ignore this story
+						 continue;                    	//if no [StoryPoint], ignore this story
 					 
 					if(!Burn_Filter(tempList4.get(1),strTeam))
-						continue;
+						continue;						//if [planned for] not contained by lstPlanFor, ignore this story
 					
 					 Date CreationDate = sdfget.parse(tempList4.get(4));
 					 
 					 for (List<String> tempList3:Week_Break )//the record of the sprint point
 					 {
-						 Date WeekDate     = sdf.parse(tempList3.get(Week_Date_Index));
+						 Date WeekDate = sdf.parse(tempList3.get(Week_Date_Index));
 						 if(CreationDate.before(WeekDate))
 						 {
 							//get the plan point and add to the record
@@ -544,8 +554,8 @@ public class FTACDataFactory {
 						 if(!ResolutionDate.before(WeekDate)&&ResolutionDate.before(WeekEnd))
 						 {
 							//get the plan point and add to the record
-							 int temp_plan_point= Integer.parseInt(tempList3.get(Week_Finish_Index))+Integer.parseInt(tempList4.get(2));
-							 tempList3.set(Week_Finish_Index,Integer.toString(temp_plan_point));
+							 int temp_finish_point= Integer.parseInt(tempList3.get(Week_Finish_Index))+Integer.parseInt(tempList4.get(2));
+							 tempList3.set(Week_Finish_Index,Integer.toString(temp_finish_point));
 							 break;
 						 }			 					 
 					 }
@@ -589,14 +599,15 @@ public class FTACDataFactory {
 						 if(!ResolutionDate.before(WeekDate)&&ResolutionDate.before(WeekEnd))
 						 {
 							//get the plan point and add to the record
-							 int temp_plan_point= Integer.parseInt(tempList3.get(Week_Finish_Index))+Integer.parseInt(tempList4.get(2));
-							 tempList3.set(Week_Finish_Index,Integer.toString(temp_plan_point));
+							 int temp_finish_point= Integer.parseInt(tempList3.get(Week_Finish_Index))+Integer.parseInt(tempList4.get(2));
+							 tempList3.set(Week_Finish_Index,Integer.toString(temp_finish_point));
 							 break;
 						 }			 					 
 					 }
 				 }
-	    					 
-				 for(int i=0;i<Point_of_Sprint.size();i++)
+				
+				//add data to Point_of_Sprint
+				for(int i=0;i<Point_of_Sprint.size();i++)
 				 {
 					 List<String> tempList3=Point_of_Sprint.get(i);
 					 Date SprintBegin = sdf.parse(tempList3.get(Sprint_Start_Index));	
@@ -618,7 +629,7 @@ public class FTACDataFactory {
 						 {
 							 Date CreationDate = sdfget.parse(tempList4.get(4));
 							 
-							 if((!CreationDate.after(SprintBegin))&&tempList4.get(1).contains(tempList3.get(0)))
+							 if((CreationDate.before(SprintEnd))&&tempList4.get(1).contains(tempList3.get(0)))	//To be modified
 							 {
 								 //get the plan point and add to the record
 								 int temp_plan_point= Integer.parseInt(tempList3.get(Sprint_Plan_Index))+Integer.parseInt(tempList4.get(2));
@@ -634,6 +645,7 @@ public class FTACDataFactory {
 						 }
 					 }
 				 }
+				
 	    	    		
 	    		int sum_plan=0;
 	    		int sum_close=0;
@@ -669,14 +681,146 @@ public class FTACDataFactory {
 	    			int should=Sum_Plan_For_This_Sprint/(Week_Break_BurnDown.size()-1)*i;
 	    			tempList6.set(Week_ShouldTotal_Index, Integer.toString(should));
 	    		}
-	    	    		   		
-	    	    		
-	    		//P1:Draw the Release Burn up
+	    		
+	    		//add data to Point_of_Sprint
+	    		/*for(int i = 0; i < Week_Break.size(); i++)
+		    	{
+					List<String> tempList4 = Week_Break.get(i);
+					
+		    	    Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+		    	    Date Today=new Date();
+		    	    if(week_date.before(Today))
+		    	    {
+		    	    	for(int j=0;j<Point_of_Sprint.size();j++)
+						{
+							List<String> tempList3 = Point_of_Sprint.get(j);
+							Date SprintBegin = sdf.parse(tempList3.get(Sprint_Start_Index));
+							Date SprintEnd = sdf.parse(tempList3.get(Sprint_End_Index));
+							
+							if(week_date.before(SprintEnd))
+							{
+								int temp_plan_point = Integer.parseInt(tempList3.get(Sprint_Plan_Index)) + Integer.parseInt(tempList4.get(1));
+								tempList3.set(Sprint_Plan_Index,Integer.toString(temp_plan_point));
+							
+								int temp_finish_point = Integer.parseInt(tempList3.get(Sprint_Finish_Index)) + Integer.parseInt(tempList4.get(2));
+								tempList3.set(Sprint_Finish_Index, Integer.toString(temp_finish_point));
+							}
+						}
+		    	    }
+		    	    
+		    	}*/
+	    	    		 
 	    		List<String> x1=new ArrayList<>();
 	    		List<Integer> y1=new ArrayList<>();
 	    		List<Integer> y2=new ArrayList<>();
 	    		List<Integer> y3=new ArrayList<>();
+	    	    		
+	    		//P1:Draw the Release Burn up, x1-date, y1-PlanTotal, y2-ShouldTotal, y3-CloseTotal, 
+	    		//y4-forecasted trajectory 1(On Time),y5-forecasted trajectory 2(The trend in recent month)
+
+	    		List<Double> y4=new ArrayList<>();	//forecasted trajectory 1
+	    		List<Double> y5 = new ArrayList<>();	//forecasted trajectory 2
 	    		
+	    		int Plantotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_PlanTotal_Index));		//plantotal
+    			int Closetotal = Integer.parseInt((Week_Break.get(Week_Break.size()-1)).get(Week_CloseTotal_Index));	//closetotal
+    			int plan_remain = Plantotal - Closetotal;																//
+    			
+    			Date time_today=new Date();
+    			int days = (int) ((Date_Max.getTime() - time_today.getTime()) / (1000*3600*24));
+    			double ave_plan_daily = (double)plan_remain / (days + 2);
+	    	    
+	    	    //least square method in recent month
+	    	    double t1=0.0, t2=0.0, t3=0.0, t4=0.0;
+	    	    double a_forcast = 0.0, b_forcast = 0.0;
+	    	    List<Integer> x_leastsquare = new ArrayList<>();
+	    	    List<Integer> y_leastsquare = new ArrayList<>();
+	    	    Date endDate = new Date();	//forecast completed date
+	    	    
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	Date Today=new Date();
+	    	    	if(!week_date.after(Today))
+	    	    	{
+	    	    		x_leastsquare.add(i);
+	    	    		y_leastsquare.add(Integer.parseInt((Week_Break.get(i)).get(Week_CloseTotal_Index)));
+	    	    	}
+	    	    }
+	    	    if(x_leastsquare.size() > 0)
+	    	    {
+	    	    	for(int i = 0; i < x_leastsquare.size(); i++)
+		    	    {
+		    	    	t1 += x_leastsquare.get(i) * x_leastsquare.get(i);
+		    	    	t2 += x_leastsquare.get(i);
+		    	    	t3 += x_leastsquare.get(i) * y_leastsquare.get(i);
+		    	    	t4 += y_leastsquare.get(i);
+		    	    }
+		    	    a_forcast = (t3*x_leastsquare.size() - t2*t4) / (t1*x_leastsquare.size() - t2*t2);
+		    	    b_forcast = (t1*t4 - t2*t3) / (t1*x_leastsquare.size()- t2*t2);
+		    	    
+		    	    double x = 0.0;
+		    	    x = (((double)Plantotal - b_forcast) /a_forcast) * 2 - 331;
+		    	    if (x > 0)
+		    	    {
+			    	    int add_count = (int)(x/2);
+			    	    for(int i = 1; i < add_count; i++)
+			    	    {
+			    	    	Calendar add_date = Calendar.getInstance();
+				    	    add_date.setTime(Date_Max);
+				    	    add_date.add(Calendar.DAY_OF_MONTH, (i + 1)*2);
+				    	    Date temp_date = add_date.getTime();
+				    	    List<String> temp = new ArrayList<>();
+				    	    temp.add(sdf.format(temp_date));
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    temp.add("0");
+				    	    Week_Break.add(temp);
+				    	    endDate = temp_date;
+			    	    }
+		    		}
+		    	
+	    	    }
+	    	    
+	    	  //Forecasted trajectory 1, complete on time
+	    		int start_show_count = 0;
+	    		
+	    	    for(int i=0;i<Week_Break.size();i++)
+	    	    {
+	    	    	Date WeekDate=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    			Date Today=new Date();
+	    	    	if(!WeekDate.before(Today) && WeekDate.before(Date_Max))
+	    	    	{
+	    	    		start_show_count++;
+	    	    		y4.add((double)Closetotal + start_show_count * ave_plan_daily * 2);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		y4.add(-1.0);
+	    	    	}
+	    	    }
+	    	    
+	    	    //forecasted trajectory (2) based on least square method
+	    	    int plan_total = 0;
+	    	    for(int i = 0; i < Week_Break.size(); i++)
+	    	    {
+	    	    	Date week_date=sdf.parse((Week_Break.get(i)).get(Week_Date_Index));
+	    	    	
+	    	    	List<String> temp = Week_Break.get(i);
+	    	    	plan_total+=Integer.parseInt(temp.get(Week_Plan_Index));
+	    	    	temp.set(Week_PlanTotal_Index, Integer.toString(plan_total));
+	    	    	
+	    	    	if(week_date.before(time_today) || week_date.after(endDate))
+	    	    	{
+	    	    		y5.add(-1.0);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		y5.add(a_forcast * i + b_forcast);
+	    	    	}
+	    	    }
+	    	    
 	    		for(List<String> item:Week_Break)
 	    		{
 	    			Date WeekDate=sdf.parse(item.get(Week_Date_Index));
@@ -686,7 +830,15 @@ public class FTACDataFactory {
 	    			x1.add(sdf1.format(X_Axis));
 	    			
 	    			y1.add(Integer.parseInt(item.get(Week_PlanTotal_Index)));
-	    			y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			
+	    			if(WeekDate.after(Date_Max))
+	    			{
+	    				y2.add(-1);
+	    			}
+	    			else
+	    			{
+	    				y2.add(Integer.parseInt(item.get(Week_ShouldTotal_Index)));
+	    			}
 	    			
 	    			if(WeekDate.after(Today))
 	    			{
@@ -697,14 +849,17 @@ public class FTACDataFactory {
 	    				y3.add(Integer.parseInt(item.get(Week_CloseTotal_Index)));	
 	    			}
 	    		}
-	    	    		
-	    		Create_P1(x1,y1,y2,y3);
+	    	   
+	    		Create_P1(x1,y1,y2,y3,y5);
 	    		
+	    		              
 	    		//P2:Draw the Release BurnDown
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
-	    		y3.clear();	    		
+	    		y3.clear();
+	    		y4.clear();
+	    		y5.clear();
 	    		
     			for(int i=0;i<Week_Break_BurnDown.size();i++)
 	    		{
@@ -735,64 +890,73 @@ public class FTACDataFactory {
 	    		}
 	    		
 	    		Create_P2(x1,y1,y2,y3);
+    	    		
 	    	    		
-	    	    		
-	    		//P7:Draw the Plan vs Actual
+	    		//P3:Draw the Plan vs Actual
 	    		x1.clear();
 	    		y1.clear();
 	    		y2.clear();
 	    		y3.clear();
+	    		y4.clear();
+	    		y5.clear();
+	    		
+	    		List<Double> yy=new ArrayList<>();	//finished average of Sprint
+	    		
+	    		int sprint_plan_total = 0;
+	    		int sprint_finish_total = 0;
 	    		
 	    		int Sprint_Average=0;
-	    		
-	    		Calendar Today=Calendar.getInstance();
 	    		int TodayCount=0;
 	    		
-	    		for(List<String> item:Point_of_Sprint)
-	    		{  
-					 Date SprintBegin = sdf.parse(item.get(Sprint_Start_Index));	
-					 Date SprintEnd   = sdf.parse(item.get(Sprint_End_Index));
-					 
-					 Calendar cldSprintEnd=Calendar.getInstance();
-					 cldSprintEnd.setTime(SprintEnd);
-					 if(!Today.after(cldSprintEnd))
-						 break;
-					 
-					 TodayCount++;
-						 
-	    			Sprint_Average+=Integer.parseInt(item.get(Sprint_Finish_Index));
-	    		}
-	    		Sprint_Average=Sprint_Average/TodayCount;  	    		
-
-	    		List<Double> yy=new ArrayList<>();
+				Date today=new Date();
+				Calendar calendar=Calendar.getInstance();
+    			calendar.setTime(today);
 	    		
 	    		for(List<String> item:Point_of_Sprint)
 	    		{
-	    			 Date SprintBegin = sdf.parse(item.get(Sprint_Start_Index));	
-					 Date SprintEnd   = sdf.parse(item.get(Sprint_End_Index));
-					 
-					 System.out.println(item.get(0)+"\t"+item.get(1)+"\t"+item.get(2));
-					 
-					 Date today=new Date();
-					 Calendar calendar=Calendar.getInstance();
-	    			 calendar.setTime(today);
+	    			Date SprintBegin = sdf.parse(item.get(Sprint_Start_Index));	
+					//Date SprintEnd   = sdf.parse(item.get(Sprint_End_Index));
+					
+					System.out.println(item.get(0)+"\t"+item.get(1)+"\t"+item.get(2));
 	    			
 	    			x1.add(item.get(0));
-	    			y1.add(Integer.parseInt(item.get(Sprint_Plan_Index)));//plan
-	    			
-	    			if(!today.before(SprintBegin)&&!today.after(SprintEnd))
+
+	    			if(today.after(SprintBegin))
 	    			{
-	    				y2.add(0);//when current sprint, set actual = 0    				
+	    				TodayCount++;
+	    				sprint_plan_total = Integer.parseInt(item.get(Sprint_Plan_Index));
+		    			y1.add(sprint_plan_total);//plan
+		    			
+		    			sprint_finish_total = Integer.parseInt(item.get(Sprint_Finish_Index));
+	    				y2.add(sprint_finish_total);//finish
+	    				
+	    				Sprint_Average += sprint_finish_total;
 	    			}
 	    			else
 	    			{
-	    				y2.add(Integer.parseInt(item.get(Sprint_Finish_Index)));//finish	    
+	    				y1.add(0);
+	    				y2.add(0);//when current sprint, set actual = 0  
 	    			}
-	    			
-	    			yy.add((double)Sprint_Average);
 	    		}
 	    		
-	    		Create_P7(x1,yy,y1,y2);
+	    		if(TodayCount == 0)
+	    		{
+	    			TodayCount++;
+	    		}
+	    		Sprint_Average = sprint_finish_total/TodayCount;
+	    		
+	    		for(List<String> item:Point_of_Sprint)
+	    		{
+	    			Date SprintBegin = sdf.parse(item.get(Sprint_Start_Index));	
+	    			
+	    			if(today.after(SprintBegin))
+	    			{
+	    				yy.add((double)Sprint_Average);
+	    			}
+	    		}
+	    		
+	    		
+	    		Create_P3(x1,yy,y1,y2);
 	    	}
 	    }
 	    catch(Exception e1)
@@ -845,8 +1009,9 @@ public class FTACDataFactory {
 		return isTimed&isNeedTeam;
 	}
 	//Lane Ma, Modify the demo to draw specific chart
-	public  static void Create_P1(List<String> x1,List<Integer> y1, List<Integer> y2,List<Integer> y3)
+	public  static void Create_P1(List<String> x1,List<Integer> y1,List<Integer> y2,List<Integer> y3,List<Double> y5)	//,List<Double> y4
 	{	
+		// 
 		FTAC_PM_Data_Weekly_Trend=new ProductData();
 		FTAC_PM_Data_Weekly_Trend.title=ConstString.FTAC_PM_CHART_Weekly_Trend;
 		
@@ -854,31 +1019,50 @@ public class FTACDataFactory {
 		FTAC_PM_Data_Weekly_Trend.yTitle="Story Point";
 		FTAC_PM_Data_Weekly_Trend.yAxisFormat="#";
 		FTAC_PM_Data_Weekly_Trend.tableData=new DataTable();
-		FTAC_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),ColorFormater.RGB2String(255,255,255));
+		FTAC_PM_Data_Weekly_Trend.colorList=Arrays.asList(ColorFormater.RGB2String(145,38,41),ColorFormater.RGB2String(129,173,81),ColorFormater.RGB2String(58,63,113),
+														ColorFormater.RGB2String(72,118,255),ColorFormater.RGB2String(255,255,255));		//ColorFormater.RGB2String(222,63,255),
 		
 		FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("x", ValueType.TEXT, "Time"));
 		FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y1", ValueType.INT, "Total Estimate"));
 		FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y2", ValueType.INT, "Ideal Closed Estimate"));
 		FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y3", ValueType.INT, "Closed Estimate"));
+		//FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y4", ValueType.INT, "Forecasted Trajectory1"));
+		FTAC_PM_Data_Weekly_Trend.tableData.addColumn(new ColumnDescription("y5", ValueType.INT, "Forecasted Trajectory"));
 		
 		//Chart data
 		//////////////////////////////////////////////
 		List<String> x_data=x1;
 		List<Integer> y1_data=y1;
-		List<Integer> y2_data=y2;
+		List<Integer> y2_data=y2;		// TO Optimize
 		List<Integer> y3_data=y3;
+		//List<Integer> y4_data = new ArrayList<>();
+		List<Integer> y5_data = new ArrayList<>();
 		
-		int dataCount=x_data.size();
+		/*for(int i = 0; i < y4.size();i++)
+		{
+			int temp = Integer.parseInt(new java.text.DecimalFormat("0").format(y4.get(i)));
+			y4_data.add(i, temp);
+		}*/
+		for(int i = 0; i < y5.size();i++)
+		{
+			int temp = Integer.parseInt(new java.text.DecimalFormat("0").format(y5.get(i)));
+			y5_data.add(i, temp);
+		}
+		
+		
+		int dataCount1=x_data.size();
 
 		List<TableRow> rows = Lists.newArrayList();
 				
-		for(int i=0;i<dataCount;i++)
+		for(int i=0;i<dataCount1;i++)
 		{
 			TableRow row = new TableRow();
 		    row.addCell(new TableCell(x_data.get(i)));
 		    row.addCell(new TableCell(y1_data.get(i)));
-		    row.addCell(new TableCell(y2_data.get(i)));
+			row.addCell(new TableCell(y2_data.get(i)));
 		    row.addCell(new TableCell(y3_data.get(i)));
+			//row.addCell(new TableCell(y4_data.get(i)));
+		    row.addCell(new TableCell(y5_data.get(i)));
 		    rows.add(row);
 		}
 		try 
@@ -934,7 +1118,7 @@ public class FTACDataFactory {
 		}
 	}
 	
-	public static void Create_P7(List<String> x1,List<Double> y3,List<Integer> y1, List<Integer> y2)
+	public static void Create_P3(List<String> x1,List<Double> y3,List<Integer> y1, List<Integer> y2)
 	{	
 		FTAC_PM_Data_Plan_Actual_Sprint=new ProductData();
 		FTAC_PM_Data_Plan_Actual_Sprint.title=ConstString.FTAC_PM_CHART_Plan_Actual_Sprint;
@@ -1086,5 +1270,6 @@ public class FTACDataFactory {
 		epic.m_nlevel=parentLevel;
 		epic.m_isCompleted=true;
 	}
+	
 }
 

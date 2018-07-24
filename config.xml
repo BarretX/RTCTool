@@ -3,15 +3,15 @@
 	<Bucket name="FTView" title="FTView" id="ftview">
 		<Product name="FTView ART" title="FTView ART" id="ftview_art">
 			<!-- Charts for PM -->
-			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRICS">
-				<ChartGroup name="Overall" title="Overall" time="2018-06-21">
-					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b2b61ee623b5107f094c65f" time="2018-06-21"/>
+			<Charts name="FTView Project Metrics" title="PROGRESS MATRICS">
+				<ChartGroup name="Overall" title="Overall" time="2018-07-20">
+					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b4d9e3dc9b8cc083c39ac81" time="2018-07-20"/>
 				</ChartGroup>
-				<ChartGroup name="Detail" title="Detail" time="2018-06-21">
-					<Chart name="FTView Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b2b6100623b5107f094c65b" time="2018-06-21"/>
-					<Chart name="PI13 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b2b6100623b5107f094c65c" time="2018-06-21"/>
-					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b2b6100623b5107f094c65d" time="2018-06-21"/>
-					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b2b61ee623b5107f094c65e" time="2018-06-21"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-07-20">
+					<Chart name="FTView Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b5137e8c9b8cc083c39ad34" time="2018-07-20"/>
+					<Chart name="PI13 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b5137e8c9b8cc083c39ad35" time="2018-07-20"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b5137e8c9b8cc083c39ad36" time="2018-07-20"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b513a73c9b8cc083c39ad37" time="2018-07-20"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
@@ -23,15 +23,15 @@
 	<Bucket name="Services" title="Services" id="services">
 		<Product name="FTSP" title="FTSP" id="FTSP">
 			<!-- Charts for PM -->
-			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRICS">
-				<ChartGroup name="Overall" title="Overall" time="2018-05-31">
-					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b0f552690c8c204541aaee4" time="2018-05-31"/>
+			<Charts name="Project Metrics" title="PROGRESS MATRICS">
+				<ChartGroup name="Overall" title="Overall" time="2018-07-20">
+					<Chart name="FTSP Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b4d9ef1c9b8cc083c39ac86" time="2018-07-20"/>
 				</ChartGroup>
-				<ChartGroup name="Detail" title="Detail" time="2018-05-31">
-					<Chart name="FTSP Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b0f54f090c8c204541aaee0" time="2018-05-31"/>
-					<Chart name="PI8 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b0f54f090c8c204541aaee1" time="2018-05-31"/>
-					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b0f54f090c8c204541aaee2" time="2018-05-31"/>
-					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b0f552690c8c204541aaee3" time="2018-05-31"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-07-20">
+					<Chart name="FTSP Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b513ac4c9b8cc083c39ad39" time="2018-07-20"/>
+					<Chart name="PI8 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b513ac5c9b8cc083c39ad3a" time="2018-07-20"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b513ac5c9b8cc083c39ad3b" time="2018-07-20"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b513af8c9b8cc083c39ad3c" time="2018-07-20"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
@@ -41,14 +41,14 @@
 		<Product name="Communications" title="Communications" id="Communications">
 			<!-- Charts for PM -->
 			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
-				<ChartGroup name="Overall" title="Overall" time="2018-05-31">
-					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b0f57e490c8c204541aaee9" time="2018-05-31"/>
+				<ChartGroup name="Overall" title="Overall" time="2018-07-20">
+					<Chart name="Communications Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b4da1c5c9b8cc083c39ac8d" time="2018-07-20"/>
 				</ChartGroup>
-				<ChartGroup name="Detail" title="Detail" time="2018-05-31">
-					<Chart name="Communications Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b0f570b90c8c204541aaee5" time="2018-05-31"/>
-					<Chart name="PI8 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b0bcd9890c8c204541aae0c" time="2018-05-31"/>
-					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b0f570b90c8c204541aaee7" time="2018-05-31"/>
-					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b0f57e490c8c204541aaee8" time="2018-05-31"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-07-20">
+					<Chart name="Communications Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b513cf0c9b8cc083c39ad3e" time="2018-07-20"/>
+					<Chart name="PI8 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b0bcd9890c8c204541aae0c" time="2018-07-20"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b513cf0c9b8cc083c39ad40" time="2018-07-20"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b513f7bc9b8cc083c39ad41" time="2018-07-20"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
@@ -58,15 +58,15 @@
 		
 		<Product name="FTAC" title="FTAC" id="FTAC">
 			<!-- Charts for PM -->
-			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
-				<ChartGroup name="Overall" title="Overall" time="2018-06-27">
-					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b333f7a623b5107f094c6fa" time="2018-06-27"/>
+			<Charts name="Project Metrics" title="PROGRESS MATRIX">
+				<ChartGroup name="Overall" title="Overall" time="2018-07-20">
+					<Chart name="FTAC Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b4db0cfc9b8cc083c39ac98" time="2018-07-20"/>
 				</ChartGroup>
-				<ChartGroup name="Detail" title="Detail" time="2018-06-27">
-					<Chart name="FTAC Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b333ecc623b5107f094c6f6" time="2018-06-27"/>
-					<Chart name="Sprint 25 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b333ecc623b5107f094c6f7" time="2018-06-27"/>
-					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b333ecc623b5107f094c6f8" time="2018-06-27"/>
-					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b333f7a623b5107f094c6f9" time="2018-06-27"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-07-20">
+					<Chart name="FTAC Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b51479dc9b8cc083c39ad48" time="2018-07-20"/>
+					<Chart name="Sprint 26 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b333ecc623b5107f094c6f7" time="2018-07-20"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b51479dc9b8cc083c39ad4a" time="2018-07-20"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b51487cc9b8cc083c39ad4b" time="2018-07-20"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
@@ -80,14 +80,14 @@
 		<Product name="CCW" title="CCW" id="CCW">
 			<!-- Charts for PM -->
 			<Charts name="PROGRESS MATRIX" title="PROGRESS MATRIX">
-				<ChartGroup name="Overall" title="Overall" time="2018-06-01">
-					<Chart name="Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b10b8a190c8c204541aaf16" time="2018-06-01"/>
+				<ChartGroup name="Overall" title="Overall" time="2018-07-20">
+					<Chart name="CCW Project Metrics" title="Project Metrics" url="http://apcndaec3ycs12:8080/#!/chart-sets/5b4dae53c9b8cc083c39ac94" time="2018-07-20"/>
 				</ChartGroup>
-				<ChartGroup name="Detail" title="Detail" time="2018-06-01">
-					<Chart name="CCW Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b10b81690c8c204541aaf12" time="2018-06-01"/>
-					<Chart name="R12-PI1 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b10b81690c8c204541aaf13" time="2018-06-01"/>
-					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b10b81690c8c204541aaf14" time="2018-06-01"/>
-					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b10b8a190c8c204541aaf15" time="2018-06-01"/>
+				<ChartGroup name="Detail" title="Detail" time="2018-07-20">
+					<Chart name="CCW Release Burnup" title="Release BurnUp" url="http://apcndaec3ycs12:8080/#!/charts/5b5143f0c9b8cc083c39ad43" time="2018-07-20"/>
+					<Chart name="R12-PI2 Burn Down" title="PI BurnDown" url="http://apcndaec3ycs12:8080/#!/charts/5b10b81690c8c204541aaf13" time="2018-07-20"/>
+					<Chart name="Plan vs Actual by Sprint" title="Planned vs Actual" url="http://apcndaec3ycs12:8080/#!/charts/5b5143f0c9b8cc083c39ad45" time="2018-07-20"/>
+					<Chart name="Top 10 Epics" title="Top 10 Epics" url="http://apcndaec3ycs12:8080/#!/charts/5b5146dfc9b8cc083c39ad46" time="2018-07-20"/>
 				</ChartGroup>	
 			</Charts>
 			<!-- Charts for QA -->
